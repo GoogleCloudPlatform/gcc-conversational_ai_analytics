@@ -32,7 +32,7 @@ resource "google_project_iam_binding" "project" {
 
 ## Service Account used by Cloud Functions
 module "ccai_insights_sa" {
-  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/iam-service-account?ref=v31.1.0&depth=1"
+  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/iam-service-account?ref=v36.1.0&depth=1"
   project_id = var.project_id
   name       = "ccai-insights-demo1"
 
@@ -62,7 +62,7 @@ resource "google_project_iam_member" "gcs_pubsub_publisher" {
 
 # This bucket will be used for storing the Cloud Functions bundle (.zip file with source code)
 module "cf_bundle_bucket" {
-  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v31.1.0&depth=1"
+  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v36.1.0&depth=1"
   project_id = var.project_id
   name       = "cf-bucket-24812"
   location   = "US"
