@@ -1,0 +1,51 @@
+project_id="gsd-ccai-insights-offering"
+bq_project_id = "gsd-ccai-insights-offering"
+service_account_email="dialogflow-analytics-2@gsd-ccai-insights-offering.iam.gserviceaccount.com"
+region="us-central1"
+bq_dataset_name = "dfcx_analytics"
+
+nlu_testing_execution_instances = [ 
+  {
+      schedule_name = "dfcx-nlu-testing-test1"
+      agent_id = "projects/gsd-ccai-insights-offering/locations/us-central1/agents/cd2fda66-f78a-4cdd-8ddf-64717f5a1922"
+      test_config_gcs_uri = "gs://test-julian-5432523/fbl/test_config.csv"
+      cron_schedule = "0 * * * *" #hourly
+      timezone = "America/New_York"
+    },
+    {
+      schedule_name = "dfcx-nlu-testing-car-rental"
+      agent_id = "projects/gsd-ccai-insights-offering/locations/us-central1/agents/b214419d-e7de-4b30-b53f-f272f1ed6636"
+      test_config_gcs_uri = "gs://test-julian-5432523/fbl/test_config.csv"
+      cron_schedule = "0 * * * *" #hourly
+      timezone = "America/New_York"
+    }
+]
+cx_test_cases_execution_instances = [ 
+  {
+      schedule_name = "dfcx-cx-test-cases-small-talk"
+      agent_id = "projects/gsd-ccai-insights-offering/locations/us-central1/agents/cd2fda66-f78a-4cdd-8ddf-64717f5a1922"
+      cron_schedule = "0 * * * *" #hourly
+      timezone = "America/New_York"
+    },
+    {
+      schedule_name = "dfcx-cx-test-cases-car-rental"
+      agent_id = "projects/gsd-ccai-insights-offering/locations/us-central1/agents/b214419d-e7de-4b30-b53f-f272f1ed6636"
+      cron_schedule = "0 * * * *" #hourly
+      timezone = "America/New_York"
+    } 
+]
+agent_structure_execution_instances = [ 
+    {
+      schedule_name = "dfcx-agent-structure-small-talk"
+      agent_id = "projects/gsd-ccai-insights-offering/locations/us-central1/agents/cd2fda66-f78a-4cdd-8ddf-64717f5a1922"
+      cron_schedule = "0 * * * *" #hourly
+      timezone = "America/New_York"
+    },
+    {
+      schedule_name = "dfcx-agent-structure-car-rental"
+      agent_id = "projects/gsd-ccai-insights-offering/locations/us-central1/agents/b214419d-e7de-4b30-b53f-f272f1ed6636"
+      cron_schedule = "0 * * * *" #hourly
+      timezone = "America/New_York"
+    }
+]
+
