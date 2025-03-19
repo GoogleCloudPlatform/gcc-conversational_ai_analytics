@@ -27,6 +27,31 @@ variable "service_account_email" {
   description = "Service Account ID to be used as identity"
 }
 
+variable "dataform_repository_name" {
+  description = "Name for the Dataform repository"
+  type        = string
+}
+
+variable "dataform_github_token_secret_id" {
+  description = "ID of the secret in Secret Manager that contains the Private Key used for connecting to Github"
+  type        = string
+}
+
+variable "dataform_git_repo_url" {
+  description = "Git repo url for Dataform code"
+  type        = string
+}
+
+variable "dataform_git_repo_default_branch" {
+  description = "Git repo default branch"
+  type        = string
+}
+
+variable "dfcx_export_table" {
+  description = "BigQuert table to which DialogFlow exports the raw DFCX logs"
+  type        = string
+}
+
 variable "bq_project_id" {
   type = string
   description = "BigQuery Project"
@@ -64,3 +89,4 @@ variable "agent_structure_execution_instances" {
     timezone = string
   }))
 }
+

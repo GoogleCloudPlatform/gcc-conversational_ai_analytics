@@ -95,3 +95,39 @@ module "agent_structure" {
 
   scheduled_test_instances = var.agent_structure_execution_instances
 }
+
+module "dataform" {
+  source  = "../../modules/dataform"
+
+  repository_name = var.dataform_repository_name
+  project_id      = var.project_id
+  region          = var.region
+
+  remote_repository_settings = {
+    url            = var.dataform_git_repo_url
+    branch         = var.dataform_git_repo_default_branch
+    secret_version = var.dataform_github_token_secret_id
+  }
+
+  workspace_compilation_overrides = {
+    default_database = var.project_id
+  }
+
+  repository_release_configs = [
+    {
+      name          = "dev"
+      git_commitish = "dev"
+      cron_schedule = null
+      time_zone     = null
+      code_compilation_config = {
+        default_database = var.project_id
+        vars = {
+          dialogflowExport = var.dfcx_export_table
+          backfillDate     = "DATE_TRUNC(DATE_SUB(CURRENT_DATE(), INTERVAL 12 MONTH), MONTH)"
+        }
+      }
+    }
+  ]
+
+  service_account = var.service_account_email
+}
