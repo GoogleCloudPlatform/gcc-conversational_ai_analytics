@@ -36,6 +36,21 @@ gcloud projects add-iam-policy-binding ${PROJECT_ID} --member="serviceAccount:${
 
 #BigQuery Data Viewer
 gcloud projects add-iam-policy-binding ${PROJECT_ID} --member="serviceAccount:${SERVICE_ACCOUNT_EMAIL}" --role="roles/bigquery.dataViewer"
+
+# Write data to BigQuery
+gcloud projects add-iam-policy-binding ${PROJECT_ID} --member="serviceAccount:${SERVICE_ACCOUNT_EMAIL}" --role="roles/bigquery.dataEditor"
+
+#Invoke Cloud Run Functions
+gcloud projects add-iam-policy-binding ${PROJECT_ID} --member="serviceAccount:${SERVICE_ACCOUNT_EMAIL}" --role="roles/run.invoker"
+
+# DFCX APIs
+gcloud projects add-iam-policy-binding ${PROJECT_ID} --member="serviceAccount:${SERVICE_ACCOUNT_EMAIL}" --role="roles/dialogflow.serviceAgent"
+
+# Execute DFCX test
+gcloud projects add-iam-policy-binding ${PROJECT_ID} --member="serviceAccount:${SERVICE_ACCOUNT_EMAIL}" --role="roles/dialogflow.testCaseAdmin"
+
+# Execute DFCX test
+gcloud projects add-iam-policy-binding ${PROJECT_ID} --member="serviceAccount:${SERVICE_ACCOUNT_EMAIL}" --role="roles/logging.logWriter"
 ```
 
 ## Additional permissions
@@ -64,7 +79,7 @@ We need to update the `infra-as-code/environments/<name of the environment>/terr
 | Variable    | Description | Example | 
 | -------- | ------- | ------- |
 | `dataform_repository_name` | Name for the Dataform repository | `dfcx_analytics` |
-| `dataform_github_token_secret_id` | ID of the secret in Secret Manager that contains the Private Key used for connecting to Github | `projects/7863122225/secrets/dataform_github_token/versions/latest` |
+| `dataform_git_token_secret_id` | ID of the secret in Secret Manager that contains the Private Key used for connecting to Github | `projects/7863122225/secrets/dataform_github_token/versions/latest` |
 | `dataform_git_repo_default_branch` | Git repo default branch | `main` |
 | `dfcx_export_table` | Name of BigQuery table that contains the raw Dialogflow exports | `dialogflow.dialogflow_conversation_data` |
 
@@ -89,6 +104,22 @@ repository_release_configs = [
     }
 ]
 ```
+
+## Terraform deployment
+For deploying the solution in each environment, we need to execute:
+```sh
+cd infra-as-code/environments/dev
+terraform init
+terraform plan
+terraform apply
+```
+
+## Dataform Development Workspace
+In order to make changes to the **Dataform** code, we need to create a **Development Workspace** in the `dev` environment. [Documentation](https://cloud.google.com/dataform/docs/create-workspace)
+
+
+
+The name of the **Development Workspace** will be used as a branch name when commiting the changes to the Git repo.
 
 ## Create Scheduled Workflows
 **Scheduled Workflows** may or may not be handled with Terraform. Our preference is to manually create this kind of resource because usually there are some previous steps you need to perform in each environment before a **Scheduled Workflow** gets created/triggered.
