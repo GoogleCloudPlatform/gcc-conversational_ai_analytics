@@ -32,7 +32,7 @@ variable "dataform_repository_name" {
   type        = string
 }
 
-variable "dataform_github_token_secret_id" {
+variable "dataform_git_secret_id" {
   description = "ID of the secret in Secret Manager that contains the Private Key used for connecting to Github"
   type        = string
 }
@@ -50,11 +50,6 @@ variable "dataform_git_repo_default_branch" {
 variable "dfcx_export_table" {
   description = "BigQuert table to which DialogFlow exports the raw DFCX logs"
   type        = string
-}
-
-variable "bq_project_id" {
-  type = string
-  description = "BigQuery Project"
 }
 
 variable "bq_dataset_name" {

@@ -1,12 +1,11 @@
 project_id="gsd-ccai-insights-offering"
-bq_project_id = "gsd-ccai-insights-offering"
 service_account_email="dialogflow-analytics-2@gsd-ccai-insights-offering.iam.gserviceaccount.com"
 region="us-central1"
 bq_dataset_name = "dfcx_analytics"
 
-dataform_github_token_secret_id = "projects/78635/secrets/dataform_github_token/versions/latest"
+dataform_git_token_secret_id = "projects/78635/secrets/dataform_github_token/versions/latest"
 dataform_repository_name        = "dfcx_analytics"
-dataform_git_repo_url              = "https://github.com/jogando/dfcx-analytics-dataform"
+dataform_git_repo_url              = "https://github.com/jogando-goog/dfcx_analytics.git"
 dataform_git_repo_default_branch   = "main"
 dfcx_export_table               = "dialogflow.dialogflow_conversation_data"
 
