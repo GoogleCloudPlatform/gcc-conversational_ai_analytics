@@ -21,7 +21,7 @@ resource "random_id" "bucket_ext" {
 }
 
 module "cf_audio_bundle_bucket" {
-  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v31.1.0&depth=1"
+  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v38.1.0&depth=1"
   project_id = var.project_id
   name       = "cf-bucket-${random_id.bucket_ext.id}"
   location   = "US"
@@ -30,7 +30,7 @@ module "cf_audio_bundle_bucket" {
 #Cloud function
 module "cf_audio_format_flac" {
 
-  source      = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/cloud-function-v2?ref=v31.1.0&depth=1"
+  source      = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/cloud-function-v2?ref=v38.1.0&depth=1"
   project_id  = var.project_id
   region      = var.region
   name        = var.function_name

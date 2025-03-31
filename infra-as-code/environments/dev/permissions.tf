@@ -51,7 +51,7 @@ resource "google_project_iam_member" "gcp_ccai_service" {
 # Terraform SA
 # Service account for project with PII information
 module "ccai_insights_sa" {
-  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/iam-service-account?ref=v31.1.0&depth=1"
+  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/iam-service-account?ref=v38.1.0&depth=1"
   project_id = var.project_id
   name       = "asset-ccai-cm-sa"
 

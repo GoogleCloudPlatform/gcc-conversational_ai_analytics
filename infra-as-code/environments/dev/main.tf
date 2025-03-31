@@ -70,7 +70,7 @@ resource "random_id" "export_to_bq_bundle_ext" {
 
 # This bucket will be used for storing the Cloud Functions bundle (.zip file with source code)
 module "cf_bundle_bucket" {
-  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v31.1.0&depth=1"
+  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v38.1.0&depth=1"
   project_id = var.project_id
   name       = "cf-bucket-${random_id.export_to_bq_bundle_ext.id}"
   location   = "US"

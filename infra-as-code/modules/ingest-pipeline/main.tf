@@ -70,7 +70,7 @@ resource "random_string" "random" {
 }
 
 module "cf_bundle_bucket" {
-  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v31.1.0&depth=1"
+  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v38.1.0&depth=1"
   project_id = var.project_id
   name       = "cf-ccai-conversation-upload-bucket-${random_string.random.result}"
   location   = "US"
@@ -78,7 +78,7 @@ module "cf_bundle_bucket" {
 }
 
 module "cf_conversation_upload" {
-  source      = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/cloud-function-v2?ref=v31.1.0&depth=1"
+  source      = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/cloud-function-v2?ref=v38.1.0&depth=1"
   project_id  = var.project_id
   region      = var.region
   name        = var.pipeline_name
@@ -338,7 +338,7 @@ resource "random_id" "bucket_ext" {
 }
 
 module "cf_stt_bundle_bucket" {
-  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v31.1.0&depth=1"
+  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v38.1.0&depth=1"
   project_id = var.project_id
   name       = "cf-stt-bucket-${random_id.bucket_ext.id}"
   location   = "US"
@@ -346,7 +346,7 @@ module "cf_stt_bundle_bucket" {
 }
 
 module "cf_stt_transcript" {
-  source      = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/cloud-function-v2?ref=v31.1.0&depth=1"
+  source      = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/cloud-function-v2?ref=v38.1.0&depth=1"
   project_id  = var.project_id
   region      = var.region
   name        = var.stt_function_name
@@ -379,7 +379,7 @@ resource "random_id" "genai_bucket_ext" {
 }
 
 module "cf_genai_bundle_bucket" {
-  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v31.1.0&depth=1"
+  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v38.1.0&depth=1"
   project_id = var.project_id
   name       = "cf-genai-bucket-${random_id.genai_bucket_ext.id}"
   location   = "US"
@@ -387,7 +387,7 @@ module "cf_genai_bundle_bucket" {
 }
 
 module "cf_genai_transcript_fix" {
-  source      = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/cloud-function-v2?ref=v31.1.0&depth=1"
+  source      = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/cloud-function-v2?ref=v38.1.0&depth=1"
   project_id  = var.project_id
   region      = var.region
   name        = var.genai_function_name
@@ -419,7 +419,7 @@ module "cf_genai_transcript_fix" {
 }
 
 module "cf_feedback_generator_bundle_bucket" {
-  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v31.1.0&depth=1"
+  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v38.1.0&depth=1"
   project_id = var.project_id
   name       = "cf-feedback-generator-bucket-${random_id.bucket_ext.id}"
   location   = "US"
@@ -427,7 +427,7 @@ module "cf_feedback_generator_bundle_bucket" {
 }
 
 module "cf_feedback_generator" {
-  source      = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/cloud-function-v2?ref=v31.1.0&depth=1"
+  source      = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/cloud-function-v2?ref=v38.1.0&depth=1"
   project_id  = var.project_id
   region      = var.region
   name        = var.feedback_generator_function_name
@@ -474,7 +474,7 @@ resource "random_id" "audio_redaction_bucket_ext" {
 }
 
 module "cf_audio_redaction_bundle_bucket" {
-  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v31.1.0&depth=1"
+  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v38.1.0&depth=1"
   project_id = var.project_id
   name       = "cf-audio-redaction-bucket-${random_id.audio_redaction_bucket_ext.id}"
   location   = "US"
@@ -482,7 +482,7 @@ module "cf_audio_redaction_bundle_bucket" {
 }
 
 module "cf_audio_redaction" {
-  source      = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/cloud-function-v2?ref=v31.1.0&depth=1"
+  source      = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/cloud-function-v2?ref=v38.1.0&depth=1"
   project_id  = var.project_id
   region      = var.region
   name        = var.audio_redaction_function_name
@@ -510,7 +510,7 @@ module "cf_audio_redaction" {
 
 #Bucket for the output of the STT Transcript in json format
 module "transcript_bucket" {
-  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v31.1.0&depth=1"
+  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v38.1.0&depth=1"
   project_id = var.project_id
   name     = "stt-transcript-${random_id.bucket_ext.id}-${var.env}"
   location = "US"
@@ -519,7 +519,7 @@ module "transcript_bucket" {
 
 # Buckets for the audio formatting cloud function
 module "trigger_bucket" {
-  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v31.1.0&depth=1"
+  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v38.1.0&depth=1"
   project_id = var.project_id
   name     = "original-audio-files-${random_id.bucket_ext.id}-${var.env}"
   location = var.region # The trigger must be in the same location as the bucket
@@ -528,7 +528,7 @@ module "trigger_bucket" {
 }
 
 module "formatted_bucket" {
-  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v31.1.0&depth=1"
+  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v38.1.0&depth=1"
   project_id = var.project_id
   name     = "formatted-audio-files-${random_id.bucket_ext.id}-${var.env}"
   location = var.region 
@@ -537,7 +537,7 @@ module "formatted_bucket" {
 }
 
 module "meta_bucket" {
-  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v31.1.0&depth=1"
+  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v38.1.0&depth=1"
   project_id = var.project_id
   name     = "formatted-audio-metadata-${random_id.bucket_ext.id}-${var.env}"
   location = var.region 
@@ -546,7 +546,7 @@ module "meta_bucket" {
 }
 
 module "redacted_audio_bucket" {
-  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v31.1.0&depth=1"
+  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v38.1.0&depth=1"
   project_id = var.project_id
   name     = "redacted-audio-files"
   location = var.region 
@@ -556,7 +556,7 @@ module "redacted_audio_bucket" {
 
 # Secret manager
 module "secret_manager_hash_key" {
-  source  = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/secret-manager?ref=v31.1.0&depth=1"
+  source  = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/secret-manager?ref=v38.1.0&depth=1"
   project_id = var.project_id 
 
   secrets = {
@@ -596,7 +596,7 @@ module "audio_data_format_change" {
 }
 
 module "ingest_record_bucket" {
-  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v31.1.0&depth=1"
+  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v38.1.0&depth=1"
   project_id = var.project_id
   name     = "ingest-record-bucket-${random_id.bucket_ext.id}-${var.env}"
   location = var.region 
