@@ -20,7 +20,6 @@ def main(request) -> None:
 	
 	try:
 		agent_id = request_json['agent_id']
-		# agent_id = "projects/gsd-ccai-insights-offering/locations/us-central1/agents/cd2fda66-f78a-4cdd-8ddf-64717f5a1922"
 		bq_output_project_id = os.environ.get("BQ_PROJECT_ID")
 		bq_output_dataset_name = os.environ.get("BQ_DATASET_NAME")
 

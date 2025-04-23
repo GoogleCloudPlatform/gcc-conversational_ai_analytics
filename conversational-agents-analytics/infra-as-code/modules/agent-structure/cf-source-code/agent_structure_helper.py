@@ -52,7 +52,6 @@ class AgentStructureHelper:
         
         self.webhooks_map = Webhooks(agent_id=self.agent_id_full).get_webhooks_map(agent_id=self.agent_id_full)
 
-
     def get_test_guid(self):
         return self.test_guid
 
@@ -239,62 +238,62 @@ class AgentStructureHelper:
 
     def write_to_bigquery(self, bigquery_data):
         """
-            Writes data into BigQuery
+            Writes data into BigQuery 
         """
-        agents_table_id = f"{self.bq_project_id}.{self.bq_dataset_name}.dfcx_agents"
+        # agents_table_id = f"{self.bq_project_id}.{self.bq_dataset_name}.dfcx_agents"
 
-        logging.info(f"Writing data to Bigquery table {agents_table_id}")
+        # logging.info(f"Writing data to Bigquery table {agents_table_id}")
 
-        pandas_gbq.to_gbq(
-            bigquery_data['agent'],
-            agents_table_id, 
-            project_id=self.bq_project_id,
-            if_exists='append', 
-            table_schema=agents_schema,
-            progress_bar=False
-        )
+        # pandas_gbq.to_gbq(
+        #     bigquery_data['agent'],
+        #     agents_table_id, 
+        #     project_id=self.bq_project_id,
+        #     if_exists='append', 
+        #     table_schema=agents_schema,
+        #     progress_bar=False
+        # )
 
-        # Intents
-        intents_table_id = f"{self.bq_project_id}.{self.bq_dataset_name}.dfcx_intents"
+        # # Intents
+        # intents_table_id = f"{self.bq_project_id}.{self.bq_dataset_name}.dfcx_intents"
 
-        logging.info(f"Writing data to Bigquery table {intents_table_id}")
+        # logging.info(f"Writing data to Bigquery table {intents_table_id}")
 
-        pandas_gbq.to_gbq(
-            bigquery_data['intents'],
-            intents_table_id, 
-            project_id=self.bq_project_id,
-            if_exists='append', 
-            table_schema=intents_schema,
-            progress_bar=False
-        )
+        # pandas_gbq.to_gbq(
+        #     bigquery_data['intents'],
+        #     intents_table_id, 
+        #     project_id=self.bq_project_id,
+        #     if_exists='append', 
+        #     table_schema=intents_schema,
+        #     progress_bar=False
+        # )
 
-        # Playbooks
-        playbooks_table_id = f"{self.bq_project_id}.{self.bq_dataset_name}.dfcx_playbooks"
+        # # Playbooks
+        # playbooks_table_id = f"{self.bq_project_id}.{self.bq_dataset_name}.dfcx_playbooks"
 
-        logging.info(f"Writing data to Bigquery table {playbooks_table_id}")
+        # logging.info(f"Writing data to Bigquery table {playbooks_table_id}")
 
-        pandas_gbq.to_gbq(
-            bigquery_data['playbooks'],
-            playbooks_table_id, 
-            project_id=self.bq_project_id,
-            if_exists='append', 
-            table_schema=playbooks_schema,
-            progress_bar=False
-        )
+        # pandas_gbq.to_gbq(
+        #     bigquery_data['playbooks'],
+        #     playbooks_table_id, 
+        #     project_id=self.bq_project_id,
+        #     if_exists='append', 
+        #     table_schema=playbooks_schema,
+        #     progress_bar=False
+        # )
 
-        # Tools
-        tools_table_id = f"{self.bq_project_id}.{self.bq_dataset_name}.dfcx_tools"
+        # # Tools
+        # tools_table_id = f"{self.bq_project_id}.{self.bq_dataset_name}.dfcx_tools"
 
-        logging.info(f"Writing data to Bigquery table {tools_table_id}")
+        # logging.info(f"Writing data to Bigquery table {tools_table_id}")
 
-        pandas_gbq.to_gbq(
-            bigquery_data['tools'],
-            tools_table_id, 
-            project_id=self.bq_project_id,
-            if_exists='append', 
-            table_schema=tools_schema,
-            progress_bar=False
-        )
+        # pandas_gbq.to_gbq(
+        #     bigquery_data['tools'],
+        #     tools_table_id, 
+        #     project_id=self.bq_project_id,
+        #     if_exists='append', 
+        #     table_schema=tools_schema,
+        #     progress_bar=False
+        # )
 
         # Flows
         flows_table_id = f"{self.bq_project_id}.{self.bq_dataset_name}.dfcx_flows"
@@ -310,19 +309,19 @@ class AgentStructureHelper:
             progress_bar=False
         )
 
-        # pages
-        pages_table_id = f"{self.bq_project_id}.{self.bq_dataset_name}.dfcx_pages"
+        # # pages
+        # pages_table_id = f"{self.bq_project_id}.{self.bq_dataset_name}.dfcx_pages"
 
-        logging.info(f"Writing data to Bigquery table {pages_table_id}")
+        # logging.info(f"Writing data to Bigquery table {pages_table_id}")
 
-        pandas_gbq.to_gbq(
-            bigquery_data['pages'],
-            pages_table_id, 
-            project_id=self.bq_project_id,
-            if_exists='append', 
-            table_schema=pages_schema,
-            progress_bar=False
-        )
+        # pandas_gbq.to_gbq(
+        #     bigquery_data['pages'],
+        #     pages_table_id, 
+        #     project_id=self.bq_project_id,
+        #     if_exists='append', 
+        #     table_schema=pages_schema,
+        #     progress_bar=False
+        # )
     
     def convert_protobuf(self, obj):
         """Recursive function to convert protobuf object to
