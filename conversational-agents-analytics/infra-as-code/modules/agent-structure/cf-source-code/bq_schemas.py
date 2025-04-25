@@ -355,3 +355,75 @@ pages_schema = [
         "mode": "REPEATED"
     }
 ]
+
+entity_types_schema = [
+    {
+        "name": "entity_type_id",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "description": "Unique identifier for the Dialogflow CX Entity Type."
+    },
+    {
+        "name": "display_name",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "description": "The human-readable name for the entity type displayed in the console."
+    },
+    {
+        "name": "kind",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "description": "The kind of entity type (e.g., KIND_MAP, KIND_LIST, KIND_REGEXP)."
+    },
+    {
+        "name": "auto_expansion_mode",
+        "type": "BOOLEAN",
+        "mode": "NULLABLE",
+        "description": "Indicates if automatic expansion is enabled for the entity type."
+    },
+    {
+        "name": "fuzzy_extraction",
+        "type": "BOOLEAN",
+        "mode": "NULLABLE",
+        "description": "Indicates if fuzzy matching is enabled for the entity type."
+    },
+    {
+        "name": "redact",
+        "type": "BOOLEAN",
+        "mode": "NULLABLE",
+        "description": "Indicates if entity values should be redacted in logs and storage."
+    },
+    {
+        "name": "entity_value",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "description": "The specific canonical value for an entity entry within the entity type."
+    },
+    {
+        "name": "synonyms",
+        "type": "STRING",  
+        "mode": "NULLABLE", 
+        "description": "A list of alternative strings that map to the entity_value."
+    }
+]
+
+entity_exclusions_schema = [
+    {
+        "name": "entity_type_id",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "description": "Unique ID for the Dialogflow CX Entity Type to which this exclusion applies."
+    },
+    {
+        "name": "display_name",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "description": "The human-readable name for the entity type (at the time of data extraction)."
+    },
+    {
+        "name": "excluded_phrase",
+        "type": "STRING",
+        "mode": "NULLABLE",
+        "description": "A specific phrase that should *not* be matched as part of this entity type."
+    }
+]

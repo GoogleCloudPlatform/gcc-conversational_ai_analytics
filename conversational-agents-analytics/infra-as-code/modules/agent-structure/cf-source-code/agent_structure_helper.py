@@ -15,6 +15,7 @@ from dfcx_scrapi.core.intents import Intents
 from dfcx_scrapi.core.flows import Flows
 from dfcx_scrapi.core.pages import Pages
 from dfcx_scrapi.core.webhooks import Webhooks
+from dfcx_scrapi.core.entity_types import EntityTypes
 
 
 from proto.marshal.collections.maps import MapComposite
@@ -54,7 +55,16 @@ class AgentStructureHelper:
 
     def get_schema(self, resource_type):
         """Gets the schema for the given resource type (flows, pages, etc)"""
-        pass
+        return {
+            'agent':agents_schema, 
+            'intents':intents_schema, 
+            'playbooks':playbooks_schema, 
+            'tools':tools_schema, 
+            'flows':flows_schema, 
+            'pages':pages_schema,
+            'entity_types':entity_types_schema, 
+            'entity_exclusions':entity_exclusions_schema
+        }.get(resource_type)
 
     def get_test_guid(self):
         return self.test_guid
@@ -65,7 +75,7 @@ class AgentStructureHelper:
         """
         agent = Agents().get_agent(agent_id=self.agent_id_full)
         intents = Intents(agent_id=self.agent_id_full).list_intents(agent_id=self.agent_id_full)
-        # entity_types = EntityTypes(agent_id=self.agent_id).list_entity_types(agent_id=self.agent_id)
+        entity_types = EntityTypes(agent_id=self.agent_id_full).entity_types_to_df(mode='advanced')
         playbooks = Playbooks(agent_id=self.agent_id_full).list_playbooks(agent_id=self.agent_id_full)
         tools = Tools(agent_id=self.agent_id_full).list_tools(agent_id=self.agent_id_full)
         flows = Flows(agent_id=self.agent_id_full).list_flows(agent_id=self.agent_id_full)
@@ -73,7 +83,8 @@ class AgentStructureHelper:
         agent_data = {
             'agent': agent,
             'intents': intents,
-            # 'entity_types': entity_types,
+            'entity_types': entity_types['entity_types'],
+            'entity_exclusions':entity_types['excluded_phrases'],
             'playbooks': playbooks,
             'tools': tools,
             'flows': flows,
@@ -224,6 +235,10 @@ class AgentStructureHelper:
 
         return pages_df
 
+    # def get_entity_types_dfs(self):
+    #     """ Gets entity types dataframes in advanced mode: (entity_types, excluded_phrases)"""
+    #     return self.agent_data['entity_types']
+
     def parse_agent_data(self):
         """
             Prepares data for loading into BigQuery
@@ -235,59 +250,36 @@ class AgentStructureHelper:
             'playbooks': self.get_playbooks_df(),
             'tools': self.get_tools_df(),
             'flows': self.get_flows_df(),
-            'pages': self.get_pages_df()
+            'pages': self.get_pages_df(),
+            'entity_types': self.agent_data['entity_types'],
+            'entity_exclusions': self.agent_data['entity_exclusions']
         }
 
         return bigquery_data
-
-    def write_to_staging(self, bigquery_data):
-        # for table in ['agent', 'intents', 'playbooks', 'tools', 'flows', 'pages', etc etc] (or bigquery_data.keys() depending)
-        for resource_type in ['flows']: #dev
-            table_name = f'dfcx_{resource_type}_staging'
-            flows_table_id = f"{self.bq_project_id}.{self.bq_dataset_name}.{table_name}"
-            schema = self.get_schema(resource_type)
-
-            logging.info(f"Writing data to Bigquery table {flows_table_id}")
-
-            pandas_gbq.to_gbq(
-                bigquery_data[resource_type],
-                flows_table_id, 
-                project_id=self.bq_project_id,
-                if_exists='fail', #TODO vs replace
-                table_schema=schema,
-                progress_bar=False
-            )
-
-            #TODO status of write, accompanying logic, log
-            #old enumerated logic saved, can delete after testing shows Sean's output has been reproduced
-
-    def bq_merge_staging_with_dim(self):
-        # outline:
-        for table in tables:
-        # 1. define BQ script:
-        #   - compare staging with dim and get
-        #     - entries to sunset (dim entries [not found or found changed] in staging)
-        #     - entries to leave unaltered (dim entries found in staging unchanged) (no action needed)
-        #     - entries to append to dim (new staging entries not found in dim)
-        # 2. run script
-        #   - log changes, quality checks
-            pass
-
-    def delete_staging(self):
-        pass
 
     def write_to_bigquery(self, bigquery_data):
         """
             Writes data into BigQuery 
         """
-        self.write_to_staging(bigquery_data)
+        for resource_type in ['agent', 'intents', 'playbooks', 'tools', 'flows', 'pages', 'entity_types', 'entity_exclusions']: #(or bigquery_data.keys() depending)
+            table_name = f'dfcx_{resource_type}'
+            table_id = f"{self.bq_project_id}.{self.bq_dataset_name}.{table_name}"
+            schema = self.get_schema(resource_type)
 
-        self.bq_merge_staging_with_dim()
+            logging.info(f"Writing data to Bigquery table {table_id}")
 
-        self.delete_staging()
+            pandas_gbq.to_gbq(
+                bigquery_data[resource_type],
+                table_id, 
+                project_id=self.bq_project_id,
+                if_exists='replace', 
+                table_schema=schema,
+                progress_bar=False
+            )
 
-        
-    
+            #TODO status of write, log
+            #old enumerated logic saved, can delete after testing shows Sean's output has been reproduced
+
     def convert_protobuf(self, obj):
         """Recursive function to convert protobuf object to
         python object with lists and/or dictionaries"""
