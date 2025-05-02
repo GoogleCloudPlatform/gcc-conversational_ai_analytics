@@ -74,6 +74,7 @@ flows_schema = [
     {"name": "flow_id", "type": "STRING", "mode": "NULLABLE"},
     {"name": "flow_name", "type": "STRING", "mode": "NULLABLE"},
     {"name": "description", "type": "STRING", "mode": "NULLABLE"},
+    {"name":"flow_settings", "type":"JSON", "mode":"NULLABLE"}
 ]
 
 pages_schema = [

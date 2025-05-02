@@ -258,6 +258,12 @@ class AgentStructureHelper:
 
     def get_flows_df(self):
         # Flows parse
+        attrs = ['advanced_settings',
+        'knowledge_connector_settings',
+        'multi_language_settings',
+        'nlu_settings']
+
+
         flows_data = [
             {
                 "test_run_guid": self.test_guid,
@@ -269,6 +275,7 @@ class AgentStructureHelper:
                 "flow_id": data.name.split("/")[7],
                 "flow_name": data.display_name,
                 "description": data.description,
+                "flow_settings": json.dumps({attr: str(getattr(data, attr)) for attr in attrs})
             }
             for data in self.agent_data["flows"]
         ]
