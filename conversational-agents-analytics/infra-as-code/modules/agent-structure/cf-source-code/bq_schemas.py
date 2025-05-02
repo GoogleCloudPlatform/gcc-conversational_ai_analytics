@@ -5,6 +5,7 @@ agents_schema = [
     {"name": "agent_location_id", "type": "STRING", "mode": "NULLABLE"},
     {"name": "agent_id", "type": "STRING", "mode": "NULLABLE"},
     {"name": "agent_name", "type": "STRING", "mode": "NULLABLE"},
+    {"name": "agent_settings", "type":"JSON", "mode":"NULLABLE"}
 ]
 
 intents_schema = [

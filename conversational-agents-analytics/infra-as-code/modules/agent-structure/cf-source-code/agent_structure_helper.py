@@ -155,6 +155,18 @@ class AgentStructureHelper:
 
     def get_agent_df(self):
         # Agent parse
+
+        attrs = ["default_language_code",
+            "time_zone",
+            "speech_to_text_settings",
+            "start_flow",
+            "security_settings",
+            "enable_stackdriver_logging",
+            "enable_spell_correction",
+            "advanced_settings",
+            "text_to_speech_settings",
+            "answer_feedback_settings"
+        ]
         agent_info_data = [
             {
                 "test_run_guid": self.test_guid,
@@ -163,6 +175,7 @@ class AgentStructureHelper:
                 "agent_location_id": self.agent_location_id,
                 "agent_id": self.agent_id,
                 "agent_name": self.agent_name,
+                "agent_settings": json.dumps({attr: str(getattr(self.agent_data['agent'], attr)) for attr in attrs})
             }
         ]
 
