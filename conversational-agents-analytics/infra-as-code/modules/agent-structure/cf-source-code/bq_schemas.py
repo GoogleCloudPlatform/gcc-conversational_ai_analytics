@@ -62,6 +62,8 @@ tools_schema = [
     {"name": "tool_id", "type": "STRING", "mode": "NULLABLE"},
     {"name": "tool_name", "type": "STRING", "mode": "NULLABLE"},
     {"name": "description", "type": "STRING", "mode": "NULLABLE"},
+    {"name": "tool_settings", "type": "JSON", "mode": "NULLABLE"},
+
 ]
 
 flows_schema = [

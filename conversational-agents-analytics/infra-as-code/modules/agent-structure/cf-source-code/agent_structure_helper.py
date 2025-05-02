@@ -246,6 +246,12 @@ class AgentStructureHelper:
                 "tool_id": data.name.split("/")[7],
                 "tool_name": data.display_name,
                 "description": data.description,
+                "tool_settings": json.dumps({
+                    attr: str(getattr(data, attr)) for attr in [
+                        "data_store_spec", "extension_spec", "function_spec",
+                        "open_api_spec", "tool_type"
+                    ]
+                })
             }
             for data in self.agent_data["tools"]
         ]
@@ -293,10 +299,6 @@ class AgentStructureHelper:
         pages_df = pd.DataFrame(pages_data)
 
         return pages_df
-
-    # def get_entity_types_dfs(self):
-    #     """ Gets entity types dataframes in advanced mode: (entity_types, excluded_phrases)"""
-    #     return self.agent_data['entity_types']
 
     def parse_agent_data(self):
         """
