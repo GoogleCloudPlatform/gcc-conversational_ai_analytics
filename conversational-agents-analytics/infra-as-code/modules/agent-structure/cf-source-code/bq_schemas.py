@@ -85,6 +85,7 @@ pages_schema = [
     {"name": "agent_id", "type": "STRING", "mode": "NULLABLE"},
     {"name": "agent_name", "type": "STRING", "mode": "NULLABLE"},
     {"name": "flow_id", "type": "STRING", "mode": "NULLABLE"},
+    {"name": "flow_name", "type": "STRING", "mode": "NULLABLE"},
     {"name": "page_id", "type": "STRING", "mode": "NULLABLE"},
     {"name": "page_name", "type": "STRING", "mode": "NULLABLE"},
     {"name": "webhook_id", "type": "STRING", "mode": "NULLABLE"},
@@ -95,6 +96,9 @@ pages_schema = [
     {"name": "parameter_presets", "type": "STRING", "mode": "REPEATED"},
     {"name": "routes", "type": "STRING", "mode": "REPEATED"},
     {"name": "route_groups", "type": "STRING", "mode": "REPEATED"},
+    {"name": "description", "type": "STRING", "mode": "NULLABLE"},
+    {"name": "page_settings", "type": "JSON", "mode": "NULLABLE"},
+
 ]
 
 entity_types_schema = [

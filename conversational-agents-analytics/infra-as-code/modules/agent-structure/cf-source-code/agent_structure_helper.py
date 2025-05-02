@@ -382,6 +382,7 @@ class AgentStructureHelper:
             page_result["test_run_guid"] = self.test_guid
             page_result["test_run_timestamp"] = self.test_start_time
             page_result["flow_id"] = flow_id
+            page_result["flow_name"] = flow.display_name
             page_result["page_id"] = page.name.split("/")[9]
             page_result["page_name"] = page.display_name
             page_result["webhook_id"] = fulfillment["webhook_id"]
@@ -390,6 +391,12 @@ class AgentStructureHelper:
             page_result["fulfillment"] = fulfillment["messages"]
             page_result["partial_response"] = fulfillment["partial_response"]
             page_result["parameter_presets"] = fulfillment["parameter_presets"]
+            page_result["description"] = page.description
+            page_result["page_settings"] = json.dumps({
+                attr: str(getattr(page, attr)) for attr in [
+                    "advanced_settings", "knowledge_connector_settings"
+                ]
+            })
 
             result.append(page_result)
 
