@@ -223,6 +223,18 @@ class AgentStructureHelper:
                 "playbook_id": data.name.split("/")[7],
                 "playbook_name": data.display_name,
                 "goal": data.goal,
+                "input_parameter_definitions":json.dumps([str(item) for item in self.convert_protobuf(data.input_parameter_definitions)]),
+                "output_parameter_definitions": json.dumps([str(item) for item in self.convert_protobuf(data.output_parameter_definitions)]),
+                "instruction": str(data.instruction),
+                "referenced_flows": list(data.referenced_flows),
+                "referenced_playbooks": list(data.referenced_playbooks),
+                "referenced_tools": list(data.referenced_tools), 
+                "playbook_settings": json.dumps({
+                    attr: str(getattr(data, attr)) for attr in [
+                        "token_count", "llm_model_settings", "create_time",
+                        "update_time"
+                    ]
+                })
             }
             for data in self.agent_data["playbooks"]
         ]

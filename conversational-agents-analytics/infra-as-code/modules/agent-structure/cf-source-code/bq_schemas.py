@@ -50,6 +50,14 @@ playbooks_schema = [
     {"name": "playbook_name", "type": "STRING", "mode": "NULLABLE"},
     {"name": "description", "type": "STRING", "mode": "NULLABLE"},
     {"name": "goal", "type": "STRING", "mode": "NULLABLE"},
+
+    {"name": "input_parameter_definitions", "type": "JSON", "mode": "NULLABLE"},
+    {"name": "output_parameter_definitions", "type": "JSON", "mode": "NULLABLE"},
+    {"name": "instruction", "type": "STRING", "mode": "NULLABLE"},
+    {"name": "referenced_flows", "type": "STRING", "mode": "REPEATED"},
+    {"name": "referenced_playbooks", "type": "STRING", "mode": "REPEATED"},
+    {"name": "referenced_tools", "type": "STRING", "mode": "REPEATED"},
+    {"name": "playbook_settings", "type": "JSON", "mode": "NULLABLE"},
 ]
 
 tools_schema = [
