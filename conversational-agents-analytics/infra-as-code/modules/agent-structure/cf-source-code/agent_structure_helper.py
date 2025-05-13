@@ -27,7 +27,7 @@ DFCXFlow = dfcx_types.flow.Flow
 DFCXPage = dfcx_types.page.Page
 DFCXRoute = dfcx_types.page.TransitionRoute
 
-from bq_schemas import *
+# from bq_schemas import *
 
 logging.basicConfig(
     level=logging.INFO,
@@ -57,16 +57,19 @@ class AgentStructureHelper:
 
     def get_schema(self, resource_type):
         """Gets the schema for the given resource type (flows, pages, etc)"""
-        return {
-            "agent": agents_schema,
-            "intents": intents_schema,
-            "playbooks": playbooks_schema,
-            "tools": tools_schema,
-            "flows": flows_schema,
-            "pages": pages_schema,
-            "entity_types": entity_types_schema,
-            "entity_exclusions": entity_exclusions_schema,
-        }.get(resource_type)
+        path = f'schemas/{resource_type}.json'
+        with open(path, 'r') as f:
+            return json.load(f)
+        # return {
+        #     "agent": agents_schema,
+        #     "intents": intents_schema,
+        #     "playbooks": playbooks_schema,
+        #     "tools": tools_schema,
+        #     "flows": flows_schema,
+        #     "pages": pages_schema,
+        #     "entity_types": entity_types_schema,
+        #     "entity_exclusions": entity_exclusions_schema,
+        # }.get(resource_type)
 
     def get_test_guid(self):
         return self.test_guid
@@ -318,7 +321,7 @@ class AgentStructureHelper:
         """
 
         bigquery_data = {
-            "agent": self.get_agent_df(),
+            "agents": self.get_agent_df(),
             "intents": self.get_intent_df(),
             "playbooks": self.get_playbooks_df(),
             "tools": self.get_tools_df(),
@@ -334,17 +337,8 @@ class AgentStructureHelper:
         """
         Writes data into BigQuery
         """
-        for resource_type in [
-            "agent",
-            "intents",
-            "playbooks",
-            "tools",
-            "flows",
-            "pages",
-            "entity_types",
-            "entity_exclusions",
-        ]:  # (or bigquery_data.keys() depending)
-            table_name = f"dfcx_{resource_type}"
+        for resource_type in bigquery_data.keys():
+            table_name = f"{resource_type}"
             table_id = f"{self.bq_project_id}.{self.bq_dataset_name}.{table_name}"
             schema = self.get_schema(resource_type)
 
