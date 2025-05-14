@@ -23,11 +23,9 @@ from proto.marshal.collections.repeated import RepeatedComposite
 import google.cloud.dialogflowcx_v3beta1.types as dfcx_types
 
 DFCXCase = dfcx_types.Fulfillment.ConditionalCases.Case
-DFCXFlow = dfcx_types.flow.Flow
-DFCXPage = dfcx_types.page.Page
-DFCXRoute = dfcx_types.page.TransitionRoute
-
-# from bq_schemas import *
+# DFCXFlow = dfcx_types.flow.Flow
+# DFCXPage = dfcx_types.page.Page
+# DFCXRoute = dfcx_types.page.TransitionRoute
 
 logging.basicConfig(
     level=logging.INFO,
@@ -60,16 +58,6 @@ class AgentStructureHelper:
         path = f'schemas/{resource_type}.json'
         with open(path, 'r') as f:
             return json.load(f)
-        # return {
-        #     "agent": agents_schema,
-        #     "intents": intents_schema,
-        #     "playbooks": playbooks_schema,
-        #     "tools": tools_schema,
-        #     "flows": flows_schema,
-        #     "pages": pages_schema,
-        #     "entity_types": entity_types_schema,
-        #     "entity_exclusions": entity_exclusions_schema,
-        # }.get(resource_type)
 
     def get_test_guid(self):
         return self.test_guid
@@ -172,8 +160,8 @@ class AgentStructureHelper:
         ]
         agent_info_data = [
             {
-                "test_run_guid": self.test_guid,
-                "test_run_timestamp": self.test_start_time,
+                # "test_run_guid": self.test_guid,
+                # "test_run_timestamp": self.test_start_time,
                 "agent_project_id": self.agent_project_id,
                 "agent_location_id": self.agent_location_id,
                 "agent_id": self.agent_id,
@@ -192,8 +180,8 @@ class AgentStructureHelper:
         # Intent parse
         intent_data = [
             {
-                "test_run_guid": self.test_guid,
-                "test_run_timestamp": self.test_start_time,
+                # "test_run_guid": self.test_guid,
+                # "test_run_timestamp": self.test_start_time,
                 "agent_project_id": self.agent_project_id,
                 "agent_location_id": self.agent_location_id,
                 "agent_id": self.agent_id,
@@ -217,8 +205,8 @@ class AgentStructureHelper:
         # Playbook parse
         playbook_data = [
             {
-                "test_run_guid": self.test_guid,
-                "test_run_timestamp": self.test_start_time,
+                # "test_run_guid": self.test_guid,
+                # "test_run_timestamp": self.test_start_time,
                 "agent_project_id": self.agent_project_id,
                 "agent_location_id": self.agent_location_id,
                 "agent_id": self.agent_id,
@@ -252,8 +240,8 @@ class AgentStructureHelper:
         # Tool parse
         tool_data = [
             {
-                "test_run_guid": self.test_guid,
-                "test_run_timestamp": self.test_start_time,
+                # "test_run_guid": self.test_guid,
+                # "test_run_timestamp": self.test_start_time,
                 "agent_project_id": self.agent_project_id,
                 "agent_location_id": self.agent_location_id,
                 "agent_id": self.agent_id,
@@ -287,8 +275,8 @@ class AgentStructureHelper:
 
         flows_data = [
             {
-                "test_run_guid": self.test_guid,
-                "test_run_timestamp": self.test_start_time,
+                # "test_run_guid": self.test_guid,
+                # "test_run_timestamp": self.test_start_time,
                 "agent_project_id": self.agent_project_id,
                 "agent_location_id": self.agent_location_id,
                 "agent_id": self.agent_id,
@@ -330,6 +318,13 @@ class AgentStructureHelper:
             "entity_types": self.agent_data["entity_types"],
             "entity_exclusions": self.agent_data["entity_exclusions"],
         }
+
+        #add date, test_guid column
+        for key in bigquery_data.keys():
+            df = bigquery_data[key]
+            df.insert(0, 'date', [pd.to_datetime(str(self.test_start_time))]*df.shape[0])
+            df.insert(1, 'test_run_guid', [self.get_test_guid()]*df.shape[0])
+            bigquery_data[key] = df
 
         return bigquery_data
 
@@ -387,8 +382,8 @@ class AgentStructureHelper:
             page_result["agent_location_id"] = self.agent_location_id
             page_result["agent_id"] = self.agent_id
             page_result["agent_name"] = self.agent_name
-            page_result["test_run_guid"] = self.test_guid
-            page_result["test_run_timestamp"] = self.test_start_time
+            # page_result["test_run_guid"] = self.test_guid
+            # page_result["test_run_timestamp"] = self.test_start_time
             page_result["flow_id"] = flow_id
             page_result["flow_name"] = flow.display_name
             page_result["page_id"] = page.name.split("/")[9]
