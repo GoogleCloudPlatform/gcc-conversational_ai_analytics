@@ -21,6 +21,7 @@ from proto.marshal.collections.maps import MapComposite
 from proto.marshal.collections.repeated import RepeatedComposite
 
 import google.cloud.dialogflowcx_v3beta1.types as dfcx_types
+from google.cloud import bigquery
 
 DFCXCase = dfcx_types.Fulfillment.ConditionalCases.Case
 # DFCXFlow = dfcx_types.flow.Flow
@@ -332,21 +333,33 @@ class AgentStructureHelper:
         """
         Writes data into BigQuery
         """
+        client = bigquery.Client()
+        job_config = bigquery.LoadJobConfig()
+        job_config.autodetect = False
+        # job_config.source_format = 'CSV'
+
+
         for resource_type in bigquery_data.keys():
-            table_name = f"{resource_type}"
+            table_name = resource_type
             table_id = f"{self.bq_project_id}.{self.bq_dataset_name}.{table_name}"
             schema = self.get_schema(resource_type)
 
             logging.info(f"Writing data to Bigquery table {table_id}")
-
-            pandas_gbq.to_gbq(
-                bigquery_data[resource_type],
-                table_id,
-                project_id=self.bq_project_id,
-                if_exists="replace",
-                table_schema=schema,
-                progress_bar=False,
-            )
+            job_config.schema = schema
+            job = client.load_table_from_dataframe(
+                bigquery_data[resource_type], 
+                table_id, 
+                project=self.bq_project_id,
+                job_config=job_config
+                )
+            # pandas_gbq.to_gbq(
+            #     bigquery_data[resource_type],
+            #     table_id,
+            #     project_id=self.bq_project_id,
+            #     if_exists="replace",
+            #     table_schema=schema,
+            #     progress_bar=False,
+            # )
 
             # TODO status of write, log
             # old enumerated logic saved, can delete after testing shows Sean's output has been reproduced
