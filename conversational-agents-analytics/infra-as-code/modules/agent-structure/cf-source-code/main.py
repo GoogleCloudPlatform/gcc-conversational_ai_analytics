@@ -6,7 +6,7 @@ import traceback
 
 import functions_framework
 
-from agent_structure_helper import AgentStructureHelper
+from agent_structure_helper import *
 
 logging.basicConfig(
     level=logging.INFO,
@@ -14,7 +14,7 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 
-#useful need for local testing
+# useful for local testing
 # @functions_framework.http 
 # def main(request) -> None:
 #     request_json = request.get_json(silent=True)
@@ -24,9 +24,7 @@ logging.basicConfig(
 @functions_framework.cloud_event
 def main(cloud_event) -> None:
     try:
-        pubsub_message = cloud_event.data["message"]
-        attributes = pubsub_message['attributes']
-        agent_id = attributes.get("agent_id")
+        agent_id = get_agent_id_from_encoded_log(cloud_event.data['message']['data'])
 
         bq_output_project_id = os.environ.get("BQ_PROJECT")
         bq_output_dataset_name = os.environ.get("BQ_DATASET_NAME")

@@ -1,11 +1,10 @@
 import logging
-import base64
 import json
 import pandas as pd
 import pandas_gbq
 import uuid
-
 from datetime import datetime
+from base64 import standard_b64decode
 
 from dfcx_scrapi.core.agents import Agents
 from dfcx_scrapi.core.playbooks import Playbooks
@@ -24,9 +23,6 @@ import google.cloud.dialogflowcx_v3beta1.types as dfcx_types
 from google.cloud import bigquery
 
 DFCXCase = dfcx_types.Fulfillment.ConditionalCases.Case
-# DFCXFlow = dfcx_types.flow.Flow
-# DFCXPage = dfcx_types.page.Page
-# DFCXRoute = dfcx_types.page.TransitionRoute
 
 logging.basicConfig(
     level=logging.INFO,
@@ -556,3 +552,9 @@ class AgentStructureHelper:
             return res
         else:
             return obj
+
+def get_agent_id_from_encoded_log(data):
+    log = json.loads(standard_b64decode(data).decode('utf-8'))
+    payload = log.get('protoPayload')
+    agent_id = payload.get("resourceName")
+    return agent_id
