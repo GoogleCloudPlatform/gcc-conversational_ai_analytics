@@ -36,7 +36,7 @@ class AgentStructureHelper:
     def __init__(self, agent_id, bq_project_id, bq_dataset_name):
         self.agent_id_full = agent_id
         self.test_guid = str(uuid.uuid4())
-        self.test_start_time = datetime.now()
+        self.test_start_time = pd.Timestamp.now()
         self.bq_project_id = bq_project_id
         self.bq_dataset_name = bq_dataset_name
         self.agent_data = self.fetch_agent_data()
