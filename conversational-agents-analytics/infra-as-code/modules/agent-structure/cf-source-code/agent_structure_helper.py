@@ -1,4 +1,5 @@
 import logging
+import google.cloud.logging
 import json
 import pandas as pd
 import pandas_gbq
@@ -24,6 +25,8 @@ from google.cloud import bigquery
 
 DFCXCase = dfcx_types.Fulfillment.ConditionalCases.Case
 
+client = google.cloud.logging.Client()
+client.setup_logging()
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s %(levelname)-8s %(message)s",
