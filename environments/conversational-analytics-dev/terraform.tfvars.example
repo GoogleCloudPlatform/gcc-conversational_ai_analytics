@@ -1,5 +1,4 @@
 project_id="gsd-ccai-insights-offering"
-service_account_email="dialogflow-analytics-2@gsd-ccai-insights-offering.iam.gserviceaccount.com"
 region="us-central1"
 bq_dataset_name = "dfcx_analytics"
 
@@ -25,6 +24,7 @@ nlu_testing_execution_instances = [
       timezone = "America/New_York"
     }
 ]
+
 cx_test_cases_execution_instances = [ 
   {
       schedule_name = "dfcx-cx-test-cases-small-talk"
@@ -39,6 +39,7 @@ cx_test_cases_execution_instances = [
       timezone = "America/New_York"
     } 
 ]
+
 agent_structure_execution_instances = [ 
     {
       schedule_name = "dfcx-agent-structure-small-talk"
@@ -53,4 +54,3 @@ agent_structure_execution_instances = [
       timezone = "America/New_York"
     }
 ]
-

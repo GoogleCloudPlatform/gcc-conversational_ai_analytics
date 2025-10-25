@@ -8,7 +8,6 @@ variable "region" {
   description = "Region in which GCP resources will be deployed"
 }
 
-
 variable "bq_project_id" {
   type = string
   description = "BigQuery Project Id"
@@ -39,4 +38,3 @@ variable "scheduled_test_instances" {
   }))
   description = "List of tests to be scheduled"
 }
-

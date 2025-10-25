@@ -14,7 +14,7 @@
 
 terraform {
   backend "gcs" {
-    bucket = "ccai-insights-offering-tfstate"
-    prefix = "env/conversational-agents-analytics/dev/"
+    # bucket = "your-terraform-state-bucket-name"
+    prefix = "conversational-analytics/dev"
   }
 }

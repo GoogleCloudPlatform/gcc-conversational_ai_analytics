@@ -11,7 +11,7 @@ resource "google_dataform_repository" "repo" {
     content {
       url                                 = var.remote_repository_settings.url
       default_branch                      = var.remote_repository_settings.branch
-      authentication_token_secret_version = var.remote_repository_settings.secret_version
+      authentication_token_secret_version = "${google_secret_manager_secret.dataform_git_repo_secret.id}/versions/latest"
     }
   }
 
@@ -95,3 +95,18 @@ resource "google_dataform_repository_release_config" "releases" {
     )
   }
 }
+
+resource "google_secret_manager_secret" "dataform_git_repo_secret" {
+  secret_id = "${var.repository_name}-repo-pat"
+
+  replication {
+    auto {}
+  }
+}
+
+# resource "google_secret_manager_secret_iam_member" "member" {
+#   project   = var.project_id
+#   secret_id = google_secret_manager_secret.dataform_git_repo_secret.secret_id
+#   role      = "roles/secretmanager.secretAccessor"
+#   member    = "test@google.com"
+# }

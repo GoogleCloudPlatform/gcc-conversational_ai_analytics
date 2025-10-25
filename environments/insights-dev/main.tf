@@ -20,10 +20,40 @@ data "google_project" "project" {
   project_id = var.project_id
 }
 
+resource "google_project_service" "contact_center_insights_api" {
+  project = var.project_id
+  service = "contactcenterinsights.googleapis.com"
+  disable_on_destroy = false
+}
+
+resource "google_project_service" "bigquery_api" {
+  project = var.project_id
+  service = "bigquery.googleapis.com"
+  disable_on_destroy = false
+}
+
+resource "google_project_service" "run_api" {
+  project = var.project_id
+  service = "run.googleapis.com"
+  disable_on_destroy = false
+}
+
+resource "google_project_service" "cloud_build_api" {
+  project = var.project_id
+  service = "cloudbuild.googleapis.com"
+  disable_on_destroy = false
+}
+
+resource "google_project_service" "artifact_registry_api" {
+  project = var.project_id
+  service = "artifactregistry.googleapis.com"
+  disable_on_destroy = false
+}
+
 ## CCAI Insights Service Account BigQuery access
 resource "google_project_iam_binding" "project" {
   project = var.project_id
-  role    = "roles/bigquery.admin"
+  role    = "roles/bigquery.dataEditor"
 
   members = [
     "serviceAccount:service-${data.google_project.project.number}@gcp-sa-contactcenterinsights.iam.gserviceaccount.com",
@@ -60,11 +90,17 @@ resource "google_project_iam_member" "gcs_pubsub_publisher" {
   member  = "serviceAccount:service-${data.google_project.project.number}@gs-project-accounts.iam.gserviceaccount.com"
 }
 
+resource "random_string" "random" {
+  length  = 6
+  special = false
+  lower   = true
+}
+
 # This bucket will be used for storing the Cloud Functions bundle (.zip file with source code)
 module "cf_bundle_bucket" {
   source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/gcs?ref=v31.1.0&depth=1"
   project_id = var.project_id
-  name       = "cf-bucket-24812"
+  name       = "cloud-function-bucket-${random_string.random.result}"
   location   = "US"
 }
 

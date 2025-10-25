@@ -22,18 +22,8 @@ variable "region" {
   description = "Region in which GCP resources will be deployed"
 }
 
-variable "service_account_email" {
-  type = string
-  description = "Service Account ID to be used as identity"
-}
-
 variable "dataform_repository_name" {
   description = "Name for the Dataform repository"
-  type        = string
-}
-
-variable "dataform_git_secret_id" {
-  description = "ID of the secret in Secret Manager that contains the Private Key used for connecting to Github"
   type        = string
 }
 
