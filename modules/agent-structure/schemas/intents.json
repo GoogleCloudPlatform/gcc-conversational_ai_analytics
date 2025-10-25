@@ -1,0 +1,110 @@
+{
+  "description": "Contains Dialogflow CX intent definitions, including their training phrases and associated entities.",
+  "time_partitioning": {
+    "field": null,
+    "type": null
+  },
+  "require_partition_filter": null,
+  "schema": [
+    {
+      "name": "runtime",
+      "type": "TIMESTAMP",
+      "mode": "NULLABLE",
+      "description": "The timestamp when the data extraction process was run."
+    },
+    {
+      "name": "run_guid",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "A unique identifier for each execution run of the data extraction process."
+    },
+    {
+      "name": "agent_project_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The Google Cloud project ID of the Dialogflow CX agent."
+    },
+    {
+      "name": "agent_location_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The GCP region or location of the Dialogflow CX agent (e.g., 'us-central1')."
+    },
+    {
+      "name": "agent_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The unique identifier (UUID) for the Dialogflow CX agent."
+    },
+    {
+      "name": "agent_name",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The human-readable display name of the Dialogflow CX agent."
+    },
+    {
+      "name": "intent_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The unique identifier (UUID) for the Dialogflow CX intent."
+    },
+    {
+      "name": "intent_name",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The human-readable display name of the Dialogflow CX intent."
+    },
+    {
+      "name": "description",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The user-provided description of the intent's purpose."
+    },
+    {
+      "name": "labels",
+      "type": "STRING",
+      "mode": "REPEATED",
+      "description": "A list of key-value pairs used to categorize and filter intents."
+    },
+    {
+      "name": "training_phrases",
+      "type": "RECORD",
+      "mode": "REPEATED",
+      "description": "A list of user utterances that trigger this intent.",
+      "fields": [
+        {
+          "name": "phrase_text",
+          "mode": "NULLABLE",
+          "type": "STRING",
+          "description": "The raw text of the training phrase."
+        },
+        {
+          "name": "phrase_annotated",
+          "mode": "NULLABLE",
+          "type": "STRING",
+          "description": "The training phrase with annotations for any identified entities."
+        },
+        {
+          "name": "entity_types",
+          "type": "RECORD",
+          "mode": "REPEATED",
+          "description": "A list of entity types that are annotated within this training phrase.",
+          "fields": [
+            {
+              "name": "id",
+              "mode": "NULLABLE",
+              "type": "STRING",
+              "description": "The unique identifier of the annotated entity type."
+            },
+            {
+              "name": "display_name",
+              "mode": "NULLABLE",
+              "type": "STRING",
+              "description": "The display name of the annotated entity type."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "description": "Contains a snapshot of Dialogflow CX page configurations within a flow.",
+  "time_partitioning": {
+    "field": null,
+    "type": null
+  },
+  "require_partition_filter": null,
+  "schema": [
+    {
+      "name": "runtime",
+      "type": "TIMESTAMP",
+      "mode": "NULLABLE",
+      "description": "The timestamp when the data extraction process was run."
+    },
+    {
+      "name": "run_guid",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "A unique identifier for each execution run of the data extraction process."
+    },
+    {
+      "name": "agent_project_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The Google Cloud project ID of the Dialogflow CX agent."
+    },
+    {
+      "name": "agent_location_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The GCP region or location of the Dialogflow CX agent (e.g., 'us-central1')."
+    },
+    {
+      "name": "agent_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The unique identifier (UUID) for the Dialogflow CX agent."
+    },
+    {
+      "name": "agent_name",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The human-readable display name of the Dialogflow CX agent."
+    },
+    {
+      "name": "flow_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The unique identifier (UUID) for the parent Dialogflow CX flow."
+    },
+    {
+      "name": "flow_name",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The human-readable display name of the parent Dialogflow CX flow."
+    },
+    {
+      "name": "page_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The unique identifier (UUID) for the Dialogflow CX page."
+    },
+    {
+      "name": "page_name",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The human-readable display name of the Dialogflow CX page."
+    },
+    {
+      "name": "webhook_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The unique identifier of a webhook called by this page's fulfillment."
+    },
+    {
+      "name": "webhook_name",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The display name of a webhook called by this page's fulfillment."
+    },
+    {
+      "name": "webhook_tag",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The tag associated with a webhook call in this page's fulfillment."
+    },
+    {
+      "name": "fulfillment",
+      "type": "STRING",
+      "mode": "REPEATED",
+      "description": "A JSON string representing the fulfillment configuration, which defines the agent's response when the page is entered."
+    },
+    {
+      "name": "partial_response",
+      "type": "BOOLEAN",
+      "mode": "NULLABLE",
+      "description": "Indicates if the fulfillment can send a partial response to the user."
+    },
+    {
+      "name": "parameter_presets",
+      "type": "STRING",
+      "mode": "REPEATED",
+      "description": "A list of parameters that are set when the user transitions to this page."
+    },
+    {
+      "name": "description",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "User-provided description for the page's purpose."
+    },
+    {
+      "name": "page_settings",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "A JSON string containing detailed configuration for the page, such as form parameters, entry fulfillment, and transition routes."
+    }
+  ]
+}

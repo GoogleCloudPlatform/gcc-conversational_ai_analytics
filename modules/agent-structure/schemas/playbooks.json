@@ -1,0 +1,106 @@
+{
+  "description": "Contains definitions for Dialogflow CX Playbooks, which are used to orchestrate conversational flows and tool usage.",
+  "time_partitioning": {
+    "field": null,
+    "type": null
+  },
+  "require_partition_filter": null,
+  "schema": [
+    {
+      "name": "runtime",
+      "type": "TIMESTAMP",
+      "mode": "NULLABLE",
+      "description": "The timestamp when the data extraction process was run."
+    },
+    {
+      "name": "run_guid",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "A unique identifier for each execution run of the data extraction process."
+    },
+    {
+      "name": "agent_project_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The Google Cloud project ID of the Dialogflow CX agent."
+    },
+    {
+      "name": "agent_location_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The GCP region or location of the Dialogflow CX agent (e.g., 'us-central1')."
+    },
+    {
+      "name": "agent_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The unique identifier (UUID) for the Dialogflow CX agent."
+    },
+    {
+      "name": "agent_name",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The human-readable display name of the Dialogflow CX agent."
+    },
+    {
+      "name": "playbook_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The unique identifier for the Dialogflow CX playbook."
+    },
+    {
+      "name": "playbook_name",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The human-readable display name of the Dialogflow CX playbook."
+    },
+    {
+      "name": "goal",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The user-defined goal or objective of the playbook."
+    },
+    {
+      "name": "input_parameter_definitions",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "A JSON string defining the input parameters that the playbook accepts."
+    },
+    {
+      "name": "output_parameter_definitions",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "A JSON string defining the output parameters that the playbook can return."
+    },
+    {
+      "name": "instruction",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The natural language instruction that guides the execution of the playbook."
+    },
+    {
+      "name": "referenced_flows",
+      "type": "STRING",
+      "mode": "REPEATED",
+      "description": "A list of Dialogflow CX flows that are referenced or can be called by this playbook."
+    },
+    {
+      "name": "referenced_playbooks",
+      "type": "STRING",
+      "mode": "REPEATED",
+      "description": "A list of other Dialogflow CX playbooks that are referenced or can be called by this playbook."
+    },
+    {
+      "name": "referenced_tools",
+      "type": "STRING",
+      "mode": "REPEATED",
+      "description": "A list of Dialogflow CX tools that are referenced or can be used by this playbook."
+    },
+    {
+      "name": "playbook_settings",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "A JSON string containing detailed configuration for the playbook, such as LLM model settings."
+    }
+  ]
+}

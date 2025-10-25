@@ -1,0 +1,76 @@
+{
+  "description": "Chat UUIDs",
+  "time_partitioning": {
+    "field": null,
+    "type": null
+  },
+  "require_partition_filter": null,
+  "schema": [
+    {
+      "name": "dict_keys",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "uuid",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "channel",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "message",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "button_labels",
+      "type": "STRING"
+    },
+    {
+      "name": "CardList_labels",
+      "type": "STRING"
+    },
+    {
+      "name": "Card_labels",
+      "type": "STRING"
+    },
+    {
+      "name": "Tip_labels",
+      "type": "STRING"
+    },
+    {
+      "name": "ChoiceList_labels",
+      "type": "STRING"
+    },
+    {
+      "name": "Form_labels",
+      "type": "STRING"
+    },
+    {
+      "name": "MultiForm_labels",
+      "type": "STRING"
+    },
+    {
+      "name": "Modal_labels",
+      "type": "STRING"
+    },
+    {
+      "name": "LiveAgentEscalation",
+      "type": "STRING"
+    },
+    {
+      "name": "valid_from",
+      "type": "TIMESTAMP",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "valid_to",
+      "type": "TIMESTAMP",
+      "mode": "NULLABLE"
+    }
+  ]
+}

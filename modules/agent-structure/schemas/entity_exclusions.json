@@ -1,0 +1,40 @@
+{
+  "description": "Stores phrases that are explicitly excluded from matching for a given entity type.",
+  "time_partitioning": {
+    "field": null,
+    "type": null
+  },
+  "require_partition_filter": null,
+  "schema": [
+    {
+      "name": "runtime",
+      "type": "TIMESTAMP",
+      "mode": "NULLABLE",
+      "description": "The timestamp when the data extraction process was run."
+    },
+    {
+      "name": "run_guid",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "A unique identifier for each execution run of the data extraction process."
+    },
+    {
+      "name": "entity_type_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The unique identifier (UUID) for the Dialogflow CX Entity Type to which this exclusion applies."
+    },
+    {
+      "name": "display_name",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The human-readable display name of the entity type at the time of data extraction."
+    },
+    {
+      "name": "excluded_phrase",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "A specific phrase that should not be matched as part of this entity type."
+    }
+  ]
+}

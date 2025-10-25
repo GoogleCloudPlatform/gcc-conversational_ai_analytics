@@ -79,6 +79,12 @@ resource "google_project_service" "artifact_registry_api" {
   disable_on_destroy = false
 }
 
+resource "google_project_service" "eventarc_api" {
+  project = var.project_id
+  service = "eventarc.googleapis.com"
+  disable_on_destroy = false
+}
+
 resource "google_service_account" "conversational_analytics_sa" {
   project      = var.project_id
   account_id   = "convo-analytics-sa"
@@ -223,7 +229,8 @@ module "agent_structure" {
     google_project_service.cloud_build_api,
     google_project_service.cloud_scheduler_api,
     google_project_service.dialogflow_api,
-    google_project_service.bigquery_api
+    google_project_service.bigquery_api,
+    google_project_service.eventarc_api
   ]
 }
 

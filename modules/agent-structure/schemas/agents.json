@@ -1,0 +1,52 @@
+{
+  "description": "Contains a snapshot of Dialogflow CX agent configurations.",
+  "time_partitioning": {
+    "field": null,
+    "type": null
+  },
+  "require_partition_filter": null,
+  "schema": [
+    {
+      "name": "runtime",
+      "type": "TIMESTAMP",
+      "mode": "NULLABLE",
+      "description": "The timestamp when the data extraction process was run."
+    },
+    {
+      "name": "run_guid",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "A unique identifier for each execution run of the data extraction process."
+    },
+    {
+      "name": "agent_project_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The Google Cloud project ID of the Dialogflow CX agent."
+    },
+    {
+      "name": "agent_location_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The GCP region or location of the Dialogflow CX agent (e.g., 'us-central1')."
+    },
+    {
+      "name": "agent_id",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The unique identifier (UUID) for the Dialogflow CX agent."
+    },
+    {
+      "name": "agent_name",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "The human-readable display name of the Dialogflow CX agent."
+    },
+    {
+      "name": "agent_settings",
+      "type": "STRING",
+      "mode": "NULLABLE",
+      "description": "A JSON string containing detailed configuration settings for the agent, such as speech-to-text settings, logging settings, and advanced settings."
+    }
+  ]
+}

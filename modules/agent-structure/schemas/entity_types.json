@@ -1,0 +1,70 @@
+{
+    "description": "Contains detailed definitions of Dialogflow CX entity types, including their values and synonyms.",
+    "time_partitioning": {
+        "field": null,
+        "type": null
+    },
+    "require_partition_filter": null,
+    "schema": [
+        {
+            "name": "runtime",
+            "type": "TIMESTAMP",
+            "mode": "NULLABLE",
+            "description": "The timestamp when the data extraction process was run."
+        },
+        {
+            "name": "run_guid",
+            "type": "STRING",
+            "mode": "NULLABLE",
+            "description": "A unique identifier for each execution run of the data extraction process."
+        },
+        {
+            "name": "entity_type_id",
+            "type": "STRING",
+            "mode": "NULLABLE",
+            "description": "The unique identifier (UUID) for the Dialogflow CX Entity Type."
+        },
+        {
+            "name": "display_name",
+            "type": "STRING",
+            "mode": "NULLABLE",
+            "description": "The human-readable display name for the entity type as shown in the Dialogflow CX console."
+        },
+        {
+            "name": "kind",
+            "type": "STRING",
+            "mode": "NULLABLE",
+            "description": "The kind of entity type, indicating how it matches input. Common values include KIND_MAP, KIND_LIST, and KIND_REGEXP."
+        },
+        {
+            "name": "auto_expansion_mode",
+            "type": "BOOLEAN",
+            "mode": "NULLABLE",
+            "description": "Indicates whether the entity type can be automatically expanded to cover synonyms. Values can be AUTO_EXPANSION_MODE_DEFAULT or AUTO_EXPANSION_MODE_UNSPECIFIED."
+        },
+        {
+            "name": "fuzzy_extraction",
+            "type": "BOOLEAN",
+            "mode": "NULLABLE",
+            "description": "Indicates if fuzzy matching is enabled for the entity type, allowing for approximate matches."
+        },
+        {
+            "name": "redact",
+            "type": "BOOLEAN",
+            "mode": "NULLABLE",
+            "description": "Indicates if the extracted entity value should be redacted in logs and data storage."
+        },
+        {
+            "name": "entity_value",
+            "type": "STRING",
+            "mode": "NULLABLE",
+            "description": "The specific canonical value for an entity entry within the entity type."
+        },
+        {
+            "name": "synonyms",
+            "type": "STRING",
+            "mode": "NULLABLE",
+            "description": "A list of alternative strings (synonyms) that map to the canonical entity_value."
+        }
+    ]
+}
