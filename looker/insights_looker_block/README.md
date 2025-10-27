@@ -1,4 +1,4 @@
-# CCAI Insights Looker Dashboards
+# Insights Looker Block
 
 ## Overview
 
@@ -23,3 +23,13 @@ This CCAI Insights Looker Block uses the BQ export to provide a more holistic vi
 ## Troubleshooting
 Common LookML Error: "Ensure the database connection is working and the modeled syntax is appropriate to the connections SQL dialect. Query execution failed: - Name agents not found insight insights_data at [13:32]"
 The Insights BQ export schema is still on v3 whereas the field "agents" is a nested field in v4+ schemas. You may need to request to allowlist your instance to a later version and recreate the BQ export.
+
+## Dashboards
+
+- **Conversation Overview**: Provides a high-level overview of your conversations, including the number of conversations, average conversation length, and sentiment analysis.
+- **Topic Analysis**: Allows you to analyze the topics that are being discussed in your conversations.
+- **Agent Performance**: Provides insights into the performance of your agents, including their handling of different topics and their impact on customer satisfaction.
+
+## How to Use
+
+To use this block, you'll need to have a Looker instance with a connection to your BigQuery data. You can then install this block from the Looker Marketplace or by copying the files into your Looker project.

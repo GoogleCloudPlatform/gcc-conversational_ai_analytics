@@ -1,3 +1,17 @@
+# Incremental Export to BigQuery Terraform Module
+
+This module provisions a Cloud Function that incrementally exports conversation data from CCAI Insights to BigQuery. The function is triggered by a Cloud Scheduler job and uses a staging table to merge new and updated conversations into a final BigQuery table.
+
+## Prerequisites
+
+- A Google Cloud project with the Cloud Functions, Cloud Build, Cloud Storage, Cloud Scheduler, and BigQuery APIs enabled.
+- A service account with the following roles:
+    - `roles/cloudfunctions.invoker`
+    - `roles/dialogflow.admin`
+    - `roles/bigquery.dataEditor`
+- A GCS bucket to store the Cloud Function source code.
+
+
 ## Create the CCAI tables
 The CCAI Insights export process has a limit of 100000 conversations per export. This is why we need to implement an incremental load process.
 We will be working with 2 tables: 
@@ -23,20 +37,24 @@ gcloud config set project <your-project-id>
 bq update --clustering_fields=conversationName mydataset.export
 ```
 
-## Terraform variables
+## Inputs
 
-| name | description | type | required | default | example |
-|---|---|:---:|:---:|:---:|:---:|
-|project_id|Project ID in which the resources will be provisioned|`string`|Yes|||
-|region|Region in which the resources will be provisioned|`string`|Yes||`us-central1`|
-|ccai_insights_project_id|Project ID of CCAI Insights|`string`|Yes|||
-|ccai_insights_location_id|Location ID of CCAI Insights|`string`|Yes||`global`|
-|bigquery_project_id|Project ID to which we will be sending the CCAI Insights data to BigQuery|`string`|Yes|||
-|bigquery_staging_dataset|BigQuery dataset in which we will be writing the Staging data|`string`|Yes||`mydatasetname`|
-|bigquery_final_dataset|BigQuery dataset in which we will be writing the data|`string`|Yes||`mydatasetname`|
-|bigquery_staging_table|BigQuery table in which we will be writing the Staging data|`string`|Yes||`mytablename`|
-|bigquery_final_table|BigQuery table in which we will be writing the data|`string`|Yes||`mytablename`|
-|export_to_bq_cron|CRON expression that defines how often the CCAI Insights data will be exported|`string`|Yes||`0 * * * *`|
-|service_account_email|Service Account used as identity by the Cloud Function|`string`|Yes||`ccai-insights-demo1@gsd-ccai-insights-offering.iam.gserviceaccount.com`|
-|cf_bucket_name|Bucket name to use for storing the Cloud Function bundle|`string`|Yes||`my-cloudfunction-bucket`|
-|function_name|Cloud Function name|`string`|Yes||`export-to-bq-incremental`|
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| `project_id` | The ID of the project in which to provision resources. | `string` | n/a | yes |
+| `region` | The region in which to provision resources. | `string` | n/a | yes |
+| `ccai_insights_project_id` | The ID of the project that contains the CCAI Insights data. | `string` | n/a | yes |
+| `ccai_insights_location_id` | The location of the CCAI Insights data. | `string` | n/a | yes |
+| `bigquery_project_id` | The ID of the project that contains the BigQuery dataset. | `string` | n/a | yes |
+| `bigquery_staging_dataset` | The name of the BigQuery dataset for the staging table. | `string` | n/a | yes |
+| `bigquery_final_dataset` | The name of the BigQuery dataset for the final table. | `string` | n/a | yes |
+| `bigquery_staging_table` | The name of the BigQuery staging table. | `string` | n/a | yes |
+| `bigquery_final_table` | The name of the BigQuery final table. | `string` | n/a | yes |
+| `export_to_bq_cron` | A cron expression that defines how often the export should run. | `string` | n/a | yes |
+| `service_account_email` | The email address of the service account to use for the Cloud Function. | `string` | n/a | yes |
+| `cf_bucket_name` | The name of the GCS bucket to use for storing the Cloud Function source code. | `string` | n/a | yes |
+| `function_name` | The name of the Cloud Function. | `string` | n/a | yes |
+
+## Outputs
+
+This module does not have any outputs.

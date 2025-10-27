@@ -28,16 +28,6 @@ variable "cf_bucket_name" {
   description = "Bucket name to use for storing the Cloud Function bundle"
 }
 
-variable "scheduled_test_instances" {
-  type = list(object({
-    schedule_name = string
-    agent_id      = string
-    cron_schedule = string
-    timezone      = string
-  }))
-  description = "List of tests to be scheduled"
-}
-
 variable "pub_sub_publishers_agent_structure" {
   type        = list(string)
   default     = []

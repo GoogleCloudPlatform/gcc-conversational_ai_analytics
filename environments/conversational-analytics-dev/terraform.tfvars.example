@@ -1,12 +1,12 @@
-project_id="gsd-ccai-insights-offering"
-region="us-central1"
+project_id      = "gsd-ccai-insights-offering"
+region.         = "us-central1"
 bq_dataset_name = "dfcx_analytics"
 
-dataform_git_token_secret_id = "projects/78635/secrets/dataform_github_token/versions/latest"
-dataform_repository_name        = "dfcx_analytics"
+dataform_git_token_secret_id       = "projects/78635/secrets/dataform_github_token/versions/latest"
+dataform_repository_name           = "dfcx_analytics"
 dataform_git_repo_url              = "https://github.com/jogando-goog/dfcx_analytics.git"
 dataform_git_repo_default_branch   = "main"
-dfcx_export_table               = "dialogflow.dialogflow_conversation_data"
+dfcx_export_table                  = "dialogflow.dialogflow_conversation_data"
 
 nlu_testing_execution_instances = [ 
   {
@@ -38,19 +38,4 @@ cx_test_cases_execution_instances = [
       cron_schedule = "0 * * * *" #hourly
       timezone = "America/New_York"
     } 
-]
-
-agent_structure_execution_instances = [ 
-    {
-      schedule_name = "dfcx-agent-structure-small-talk"
-      agent_id = "projects/gsd-ccai-insights-offering/locations/us-central1/agents/cd2fda66-f78a-4cdd-8ddf-64717f5a1922"
-      cron_schedule = "0 * * * *" #hourly
-      timezone = "America/New_York"
-    },
-    {
-      schedule_name = "dfcx-agent-structure-car-rental"
-      agent_id = "projects/gsd-ccai-insights-offering/locations/us-central1/agents/b214419d-e7de-4b30-b53f-f272f1ed6636"
-      cron_schedule = "0 * * * *" #hourly
-      timezone = "America/New_York"
-    }
 ]

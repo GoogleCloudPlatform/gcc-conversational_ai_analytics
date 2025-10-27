@@ -65,13 +65,3 @@ variable "cx_test_cases_execution_instances" {
     timezone = string
   }))
 }
-
-variable "agent_structure_execution_instances" {
-  type = list(object({
-    schedule_name = string
-    agent_id = string
-    cron_schedule = string
-    timezone = string
-  }))
-}
-

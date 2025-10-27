@@ -222,7 +222,6 @@ module "agent_structure" {
   bq_dataset_name = var.bq_dataset_name
   service_account_email = google_service_account.conversational_analytics_sa.email
 
-  scheduled_test_instances = var.agent_structure_execution_instances
   depends_on = [
     google_project_service.cloud_functions_api,
     google_project_service.run_api,
