@@ -43,3 +43,8 @@ variable "pubsub_topic_name" {
   type        = string
   default     = "dfcx-simulation-trigger"
 }
+
+variable "cf_bucket_name" {
+  description = "The name of the Cloud Functions source bucket."
+  type        = string
+}

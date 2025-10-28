@@ -282,6 +282,7 @@ module "dataform" {
     max_turns         = var.conversation_generator_max_turns
     num_conversations = var.conversation_generator_num_conversations
     pubsub_topic_name = var.conversation_generator_pubsub_topic_name
+    cf_bucket_name    = module.cf_bundle_bucket.name
   
     depends_on = [
       google_project_service.run_api,
