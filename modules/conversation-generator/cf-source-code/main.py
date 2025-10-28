@@ -106,7 +106,7 @@ def run_conversation_simulation(simulation_id, customer_context, user_personalit
         agent_response_text, current_page = detect_dfcx_intent(
             agent_path=agent_path,
             session_id=session_id,
-            text=""  # Send an empty text to get the welcome message
+            text="hi"  # Send an empty text to get the welcome message
         )
         conversation_history.append(f"AGENT: {agent_response_text}")
         logging.info(f"[{simulation_id}] Turn 1 (AGENT): {agent_response_text} (Page: {current_page})")
