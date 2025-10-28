@@ -8,10 +8,9 @@ import logging
 import uuid
 import functions_framework
 import google.cloud.logging
-
-from google.cloud import aiplatform
-from google.cloud import dialogflowcx_v3beta1 as cx
 import vertexai
+
+from google.cloud import dialogflowcx_v3beta1 as cx
 from vertexai.generative_models import GenerativeModel, GenerationConfig, HarmCategory, HarmBlockThreshold
 
 # --- Configuration (Load from Environment Variables) ---
@@ -61,6 +60,7 @@ ISSUES = [
     "Is asking about pet travel policies."
 ]
 
+
 @functions_framework.cloud_event
 def main(cloud_event):
     """
@@ -81,7 +81,7 @@ def main(cloud_event):
         issue = random.choice(ISSUES)
         simulation_id = f"sim-{int(time.time())}-{i}"
 
-        logging.info(f"[{simulation_id}] Starting simulation {i+1}/{num_conversations_to_run} with: "
+        logging.info(f"[{simulation_id}] Starting simulation {i + 1}/{num_conversations_to_run} with: "
                      f"Context: '{context}', Personality: '{personality}', Issue: '{issue}'")
 
         run_conversation_simulation(
@@ -91,6 +91,7 @@ def main(cloud_event):
             issue=issue
         )
         time.sleep(2)
+
 
 def run_conversation_simulation(simulation_id, customer_context, user_personality, issue):
     """
@@ -168,13 +169,14 @@ def run_conversation_simulation(simulation_id, customer_context, user_personalit
                 break
             user_utterance = response.text
             conversation_history.append(f"USER: {user_utterance}")
-            logging.info(f"[{simulation_id}] Turn {turn+1} (USER): {user_utterance}")
+            logging.info(f"[{simulation_id}] Turn {turn + 1} (USER): {user_utterance}")
 
         logging.info(f"[{simulation_id}] Simulation complete. Full transcript:\n" + "\n".join(conversation_history))
 
     except Exception as e:
         logging.error(f"[{simulation_id}] Error during conversation loop: {e}", exc_info=True)
         logging.info(f"[{simulation_id}] Final transcript before error:\n{''.join(conversation_history)}")
+
 
 def detect_dfcx_intent(agent_path, session_id, text, language_code="en"):
     """
@@ -200,4 +202,3 @@ def detect_dfcx_intent(agent_path, session_id, text, language_code="en"):
     except Exception as e:
         logging.error(f"Failed to detect intent for session {session_id}: {e}", exc_info=True)
         return "ERROR: Could not get agent response.", "ErrorPage"
-
