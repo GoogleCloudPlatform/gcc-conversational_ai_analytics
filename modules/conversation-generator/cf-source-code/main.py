@@ -62,7 +62,7 @@ ISSUES = [
 ]
 
 @functions_framework.cloud_event
-def handle_pubsub_trigger(cloud_event):
+def main(cloud_event):
     """
     Cloud Function trigger for Pub/Sub messages.
     """
