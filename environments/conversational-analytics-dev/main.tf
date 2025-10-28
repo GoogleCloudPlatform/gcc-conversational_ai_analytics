@@ -265,8 +265,30 @@ module "dataform" {
       }
     }
   ]
-  depends_on = [
-    google_project_service.dataform_api,
-    google_project_service.secret_manager_api
-  ]
-}
+    depends_on = [
+      google_project_service.dataform_api,
+      google_project_service.secret_manager_api
+    ]
+  }
+  
+  module "conversation_generator" {
+    source = "../../modules/conversation-generator"
+  
+    project_id        = var.project_id
+    region            = var.region
+    dfcx_location     = var.region
+    dfcx_agent_id     = var.conversation_generator_dfcx_agent_id
+    gemini_model_name = var.conversation_generator_gemini_model_name
+    max_turns         = var.conversation_generator_max_turns
+    num_conversations = var.conversation_generator_num_conversations
+    pubsub_topic_name = var.conversation_generator_pubsub_topic_name
+  
+    depends_on = [
+      google_project_service.run_api,
+      google_project_service.cloud_build_api,
+      google_project_service.dialogflow_api,
+      google_project_service.artifact_registry_api,
+      google_project_service.eventarc_api
+    ]
+  }
+  

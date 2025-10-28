@@ -65,3 +65,29 @@ variable "cx_test_cases_execution_instances" {
     timezone = string
   }))
 }
+
+variable "conversation_generator_dfcx_agent_id" {
+  description = "The Dialogflow CX Agent ID (UUID) for the conversation generator."
+  type        = string
+}
+
+variable "conversation_generator_gemini_model_name" {
+  description = "The Gemini model name to use for conversation generation."
+  type        = string
+}
+
+variable "conversation_generator_max_turns" {
+  description = "Maximum number of turns for each simulated conversation in the conversation generator."
+  type        = number
+}
+
+variable "conversation_generator_num_conversations" {
+  description = "Default number of conversations to generate per Pub/Sub trigger if not specified in the message."
+  type        = number
+}
+
+variable "conversation_generator_pubsub_topic_name" {
+  description = "The name of the Pub/Sub topic to trigger the Cloud Run service for conversation generation."
+  type        = string
+  default     = "dfcx-simulation-trigger"
+}
