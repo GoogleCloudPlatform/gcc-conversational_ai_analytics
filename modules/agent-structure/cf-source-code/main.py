@@ -1,13 +1,9 @@
 import logging
 import google.cloud.logging
 import os
-import json
-import traceback
-
-
 import functions_framework
 
-from agent_structure_helper import *
+from agent_structure_helper import AgentStructureHelper, get_agent_id_from_encoded_log
 
 client = google.cloud.logging.Client()
 client.setup_logging()
@@ -19,10 +15,11 @@ logging.basicConfig(
 )
 
 # # useful for local testing
-# @functions_framework.http 
+# @functions_framework.http
 # def main(request) -> None:
 #     request_json = request.get_json(silent=True)
 #     agent_id = request_json["agent_id"]
+
 
 @functions_framework.cloud_event
 def main(cloud_event):

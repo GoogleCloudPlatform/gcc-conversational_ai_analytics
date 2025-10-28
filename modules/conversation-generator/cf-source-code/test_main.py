@@ -6,6 +6,7 @@ import json
 
 from main import handle_pubsub_trigger
 
+
 class TestConversationGenerator(unittest.TestCase):
 
     @patch('main.run_conversation_simulation')
@@ -50,6 +51,7 @@ class TestConversationGenerator(unittest.TestCase):
 
         # Check if run_conversation_simulation was called three times
         self.assertEqual(mock_run_simulation.call_count, 3)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -5,7 +5,8 @@ This module deploys a 2nd Generation Cloud Function that simulates user conversa
 ## Architecture
 
 - **Pub/Sub Topic**: Receives trigger messages to start simulations.
-- **Cloud Function (2nd Gen) (`dfcx-simulator`)**: A Pub/Sub trigger invokes this function. It orchestrates multi-turn conversations between Gemini and a Dialogflow CX agent, logging transcripts to Cloud Logging. Being a 2nd Gen Cloud Function, it runs on Cloud Run infrastructure, providing scalability and performance.
+- **Cloud Function (2nd Gen) (`dfcx-simulator`)**: A Pub/Sub trigger invokes this function. It orchestrates multi-turn conversations between Gemini and a Dialogflow CX agent, logging transcripts to Cloud Logging.
+- **Cloud Scheduler**: A Cloud Scheduler job is created to trigger the Pub/Sub topic on a regular schedule.
 
 ## Features
 
@@ -13,6 +14,7 @@ This module deploys a 2nd Generation Cloud Function that simulates user conversa
 - **Randomized Scenarios**: Each simulation uses randomly selected user personas, contexts, and issues.
 - **Multi-turn Simulation**: Gemini generates user utterances based on conversation history and agent responses.
 - **Detailed Logging**: Full conversation transcripts are logged to Cloud Logging for analysis.
+- **Automated Scheduling**: A Cloud Scheduler job is created to trigger the conversation generation every 4 minutes.
 
 ## Deployment
 
@@ -31,6 +33,7 @@ This module is designed to be deployed as part of a larger Terraform environment
     -   Vertex AI API
     -   Pub/Sub API
     -   Cloud Storage API
+    -   Cloud Scheduler API
 
 ### Module Variables
 
@@ -64,9 +67,13 @@ module "conversation_generator" {
 }
 ```
 
-## Triggering Simulations
+## Scheduling
 
-To trigger a simulation, publish a message to the `dfcx-simulation-trigger` Pub/Sub topic. You can optionally specify the number of conversations to generate in the message data.
+This module automatically creates a Cloud Scheduler job that triggers the conversation generation every 4 minutes. The scheduler sends a Pub/Sub message to the `dfcx-simulation-trigger` topic with a payload of `{"num_conversations":1}`.
+
+## Manual Triggering
+
+For testing purposes, you can also manually trigger a simulation by publishing a message to the `dfcx-simulation-trigger` Pub/Sub topic. You can optionally specify the number of conversations to generate in the message data.
 
 ### Example Pub/Sub Message (JSON payload)
 

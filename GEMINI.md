@@ -29,9 +29,17 @@ The primary goal of this repository is to provide a set of reusable modules for:
 * `/looker/`: Contains Looker blocks for exploring visualizing the data.
 * `/dataform/`: Contains Dataorm blocks for transforming the data.
 
-## 4. Terraform Modules Overview
+## 4. Development Workflow
 
-### 4.1. `agent-structure`
+When making any changes to this repository, you MUST follow this workflow:
+
+1.  **Terraform Validation:** Before applying any changes, you MUST run `terraform validate` and `terraform plan` to ensure your configuration is valid and to review the planned changes.
+2.  **Python Testing:** If you modify any Python code, you MUST run the corresponding `pytest` tests to ensure that your changes have not broken any existing functionality.
+3.  **Update Documentation:** If your changes affect the behavior of a module or environment, you MUST update the corresponding `README.md` file to reflect these changes.
+
+## 5. Terraform Modules Overview
+
+### 5.1. `agent-structure`
 
 This module provisions a Cloud Function that is triggered by a Cloud Logging sink. The sink is configured to detect when a Dialogflow CX agent is restored. When triggered, the Cloud Function extracts the agent's structure and saves it to a set of BigQuery tables.
 
@@ -41,7 +49,7 @@ This module provisions a Cloud Function that is triggered by a Cloud Logging sin
 - Cloud Logging sink
 - BigQuery dataset and tables
 
-### 4.2. `cx-test-cases`
+### 5.2. `cx-test-cases`
 
 This module provisions a Cloud Function that runs Dialogflow CX test cases on a schedule. The schedule is defined by a Cloud Scheduler job, which triggers the Cloud Function via an HTTP request. The results of the test cases are written to a BigQuery table.
 
@@ -50,7 +58,7 @@ This module provisions a Cloud Function that runs Dialogflow CX test cases on a 
 - Cloud Scheduler jobs
 - BigQuery table
 
-### 4.3. `dataform`
+### 5.3. `dataform`
 
 This module provisions a Dataform repository and connects it to a remote Git repository. It also configures release schedules and compilation overrides, allowing you to manage your data transformation workflows as code.
 
@@ -59,7 +67,7 @@ This module provisions a Dataform repository and connects it to a remote Git rep
 - Secret Manager secret for Git authentication
 - Dataform release configurations
 
-### 4.4. `export-to-bq-incremental`
+### 5.4. `export-to-bq-incremental`
 
 This module provisions a Cloud Function that incrementally exports conversation data from CCAI Insights to BigQuery. The function is triggered by a Cloud Scheduler job and uses a staging table to merge new and updated conversations into a final BigQuery table.
 
@@ -68,7 +76,7 @@ This module provisions a Cloud Function that incrementally exports conversation 
 - Cloud Scheduler job
 - BigQuery tables (staging and final)
 
-### 4.5. `nlu-testing`
+### 5.5. `nlu-testing`
 
 This module provisions a Cloud Function that performs NLU testing on a Dialogflow CX agent. The function is triggered by a Cloud Scheduler job and uses a test configuration file from a GCS bucket. The results of the NLU tests are written to a BigQuery table.
 
@@ -77,7 +85,16 @@ This module provisions a Cloud Function that performs NLU testing on a Dialogflo
 - Cloud Scheduler jobs
 - BigQuery table
 
-## 5. Key Commands
+### 5.6. `conversation-generator`
+
+This module deploys a 2nd Generation Cloud Function that simulates user conversations with a Dialogflow CX agent using Gemini. It is triggered by a Pub/Sub message, which can be sent manually for testing or automatically by a Cloud Scheduler job.
+
+**Key Components:**
+- Gen2 Cloud Function (`dfcx-simulator`)
+- Pub/Sub topic (`dfcx-simulation-trigger`)
+- Cloud Scheduler job
+
+## 6. Key Commands
 
 ### Terraform Workflow
 
@@ -90,7 +107,7 @@ When performing any Terraform-related tasks, you MUST follow this exact sequence
     ```
 
 2.  **Validate Terraform:**
-    This command checks for configuration syntax errors and internal consistency.
+    This command checks for configuration syntax errors and internal consistency. It is a crucial step to ensure your code is valid before planning or applying changes.
     ```bash
     terraform validate
     ```
@@ -102,7 +119,7 @@ When performing any Terraform-related tasks, you MUST follow this exact sequence
     ```
 
 4.  **Generate an Execution Plan:**
-    This command shows you what changes will be made without applying them.
+    This command shows you what changes will be made without applying them. It is a critical step to review the potential impact of your changes before applying them.
     ```bash
     terraform plan
     ```
@@ -113,7 +130,7 @@ When performing any Terraform-related tasks, you MUST follow this exact sequence
     terraform apply
     ```
 
-## 6. Python Standards & Testing
+## 7. Python Standards & Testing
 
 ### Environment Setup
 
@@ -143,4 +160,4 @@ source .venv/bin/activate
 pytest
 ```
 
-You MUST run these tests for any function you modify before submitting changes.
+You MUST run these tests for any function you modify before submitting changes. This is a critical step to ensure that your changes have not introduced any regressions.

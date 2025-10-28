@@ -2,9 +2,7 @@ import logging
 import google.cloud.logging
 import json
 import pandas as pd
-import pandas_gbq
 import uuid
-from datetime import datetime
 from base64 import standard_b64decode
 
 from dfcx_scrapi.core.agents import Agents
@@ -33,6 +31,7 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
 )
 QUERY_LABELS = {"requestor": "agent-structure"}
+
 
 class AgentStructureHelper:
 
@@ -147,7 +146,8 @@ class AgentStructureHelper:
     def get_agent_df(self):
         # Agent parse
 
-        attrs = ["default_language_code",
+        attrs = [
+            "default_language_code",
             "time_zone",
             "speech_to_text_settings",
             "start_flow",
@@ -212,12 +212,12 @@ class AgentStructureHelper:
                 "playbook_id": data.name.split("/")[7],
                 "playbook_name": data.display_name,
                 "goal": data.goal,
-                "input_parameter_definitions":json.dumps([str(item) for item in self.convert_protobuf(data.input_parameter_definitions)]),
+                "input_parameter_definitions": json.dumps([str(item) for item in self.convert_protobuf(data.input_parameter_definitions)]),
                 "output_parameter_definitions": json.dumps([str(item) for item in self.convert_protobuf(data.output_parameter_definitions)]),
                 "instruction": str(data.instruction),
                 "referenced_flows": list(data.referenced_flows),
                 "referenced_playbooks": list(data.referenced_playbooks),
-                "referenced_tools": list(data.referenced_tools), 
+                "referenced_tools": list(data.referenced_tools),
                 "playbook_settings": json.dumps({
                     attr: str(getattr(data, attr)) for attr in [
                         "token_count", "llm_model_settings", "create_time",
@@ -228,11 +228,24 @@ class AgentStructureHelper:
             for data in self.agent_data["playbooks"]
         ]
 
-        cols = ['agent_project_id', 'agent_location_id', 'agent_id', 'agent_name', 'playbook_id', 'playbook_name', 'goal', 
-        'input_parameter_definitions', 'output_parameter_definitions', 'instruction', 'referenced_flows', 'referenced_playbooks', 'referenced_tools', 'playbook_settings']
+        cols = [
+            'agent_project_id',
+            'agent_location_id',
+            'agent_id',
+            'agent_name',
+            'playbook_id',
+            'playbook_name',
+            'goal',
+            'input_parameter_definitions',
+            'output_parameter_definitions',
+            'instruction',
+            'referenced_flows',
+            'referenced_playbooks',
+            'referenced_tools',
+            'playbook_settings'
+        ]
         playbook_df = pd.DataFrame(playbook_data, columns=cols)
         logging.info(f"Playbooks:{playbook_df.shape}")
-
 
         return playbook_df
 
@@ -267,11 +280,12 @@ class AgentStructureHelper:
 
     def get_flows_df(self):
         # Flows parse
-        attrs = ['advanced_settings',
-        'knowledge_connector_settings',
-        'multi_language_settings',
-        'nlu_settings']
-
+        attrs = [
+            'advanced_settings',
+            'knowledge_connector_settings',
+            'multi_language_settings',
+            'nlu_settings'
+        ]
 
         flows_data = [
             {
@@ -319,11 +333,11 @@ class AgentStructureHelper:
             "entity_exclusions": self.agent_data["entity_exclusions"],
         }
 
-        #add date, test_guid column
+        # add date, test_guid column
         for key in bigquery_data.keys():
             df = bigquery_data[key]
-            df.insert(0, 'runtime', [pd.to_datetime(str(self.test_start_time))]*df.shape[0])
-            df.insert(1, 'run_guid', [self.get_test_guid()]*df.shape[0])
+            df.insert(0, 'runtime', [pd.to_datetime(str(self.test_start_time))] * df.shape[0])
+            df.insert(1, 'run_guid', [self.get_test_guid()] * df.shape[0])
             bigquery_data[key] = df
 
         return bigquery_data
@@ -346,12 +360,12 @@ class AgentStructureHelper:
             table_id = f"{self.bq_project_id}.{self.bq_dataset_name}.{resource_type}"
 
             logging.info(f"Writing data to Bigquery table {table_id}")
-            job = client.load_table_from_dataframe(
-                bigquery_data[resource_type], 
-                table_id, 
+            client.load_table_from_dataframe(
+                bigquery_data[resource_type],
+                table_id,
                 project=self.bq_project_id,
                 job_config=job_config
-                )
+            )
 
     def convert_protobuf(self, obj):
         """Recursive function to convert protobuf object to
@@ -529,22 +543,6 @@ class AgentStructureHelper:
                     tabs -= 1
         return cond_res_text
 
-    def convert_protobuf(self, obj):
-        """Recursive function to convert protobuf object to
-        python object with lists and/or dictionaries"""
-
-        if isinstance(obj, MapComposite):
-            res = {}
-            for key, value in obj.items():
-                res[key] = self.convert_protobuf(value)
-            return res
-        elif isinstance(obj, RepeatedComposite):
-            res = []
-            for value in obj:
-                res.append(self.convert_protobuf(value))
-            return res
-        else:
-            return obj
 
 def get_agent_id_from_encoded_log(data):
     log = json.loads(standard_b64decode(data).decode('utf-8'))
