@@ -90,3 +90,27 @@ resource "google_cloudfunctions2_function" "dfcx_simulator" {
     google_project_iam_member.dfcx_simulator_sa_roles
   ]
 }
+
+resource "google_pubsub_topic_iam_member" "scheduler_pubsub_publisher" {
+  project = google_pubsub_topic.dfcx_simulation_trigger.project
+  topic   = google_pubsub_topic.dfcx_simulation_trigger.name
+  role    = "roles/pubsub.publisher"
+  member  = "serviceAccount:service-${data.google_project.project.number}@gcp-sa-cloudscheduler.iam.gserviceaccount.com"
+}
+
+resource "google_cloud_scheduler_job" "conversation_generator_scheduler" {
+  project  = var.project_id
+  region   = var.region
+  name     = "conversation-generator-scheduler"
+  schedule = "*/4 * * * *"
+  time_zone = "Etc/UTC"
+
+  pubsub_target {
+    topic_name = google_pubsub_topic.dfcx_simulation_trigger.id
+    data       = base64encode("{\"num_conversations\":1}")
+  }
+
+  depends_on = [
+    google_pubsub_topic_iam_member.scheduler_pubsub_publisher
+  ]
+}

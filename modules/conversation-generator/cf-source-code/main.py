@@ -96,34 +96,34 @@ def run_conversation_simulation(simulation_id, customer_context, user_personalit
     """
     Orchestrates the multi-turn conversation between Gemini and Dialogflow CX.
     """
-    gemini_model = GenerativeModel(GEMINI_MODEL_NAME)
     agent_path = f"projects/{PROJECT_ID}/locations/{DFCX_LOCATION}/agents/{DFCX_AGENT_ID}"
     session_id = str(uuid.uuid4())
     conversation_history = []
 
     try:
-        # Get the initial welcome message from the agent
-        agent_response_text, current_page = detect_dfcx_intent(
-            agent_path=agent_path,
-            session_id=session_id,
-            text="hi"  # Send an empty text to get the welcome message
-        )
-        conversation_history.append(f"AGENT: {agent_response_text}")
-        logging.info(f"[{simulation_id}] Turn 1 (AGENT): {agent_response_text} (Page: {current_page})")
-
         system_prompt = f"""
         You are a simulated customer interacting with a virtual agent.
         Your persona: {user_personality}
         Your context: {customer_context}
         Your goal: {issue}
         Keep your responses short and natural.
-        The agent just said: "{agent_response_text}"
-        What is your first response?
         """
+        gemini_model = GenerativeModel(GEMINI_MODEL_NAME, system_instruction=[system_prompt])
+        chat = gemini_model.start_chat()
 
+        # Get the initial welcome message from the agent
+        agent_response_text, current_page = detect_dfcx_intent(
+            agent_path=agent_path,
+            session_id=session_id,
+            text="hi"
+        )
+        conversation_history.append(f"AGENT: {agent_response_text}")
+        logging.info(f"[{simulation_id}] Turn 1 (AGENT): {agent_response_text} (Page: {current_page})")
+
+        # Generate the first user utterance based on the agent's welcome message
         logging.info(f"[{simulation_id}] Turn 1: Generating initial user utterance...")
-        first_utterance_response = gemini_model.generate_content(
-            system_prompt,
+        response = chat.send_message(
+            f"The agent just said: \"{agent_response_text}\". What is your first response?",
             generation_config=GenerationConfig(temperature=0.8, max_output_tokens=512),
             safety_settings={
                 HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
@@ -132,10 +132,10 @@ def run_conversation_simulation(simulation_id, customer_context, user_personalit
                 HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
             }
         )
-        if not first_utterance_response.candidates or not first_utterance_response.candidates[0].content.parts:
+        if not response.candidates or not response.candidates[0].content.parts:
             logging.warning(f"[{simulation_id}] Gemini returned an empty first utterance. Ending simulation.")
             return
-        user_utterance = first_utterance_response.text
+        user_utterance = response.text
         conversation_history.append(f"USER: {user_utterance}")
         logging.info(f"[{simulation_id}] Turn 2 (USER): {user_utterance}")
 
@@ -152,21 +152,9 @@ def run_conversation_simulation(simulation_id, customer_context, user_personalit
                 logging.info(f"[{simulation_id}] Conversation ended at page: {current_page}.")
                 break
 
-            gemini_prompt = f"""
-            You are a simulated customer interacting with a virtual agent.
-            Your persona: {user_personality}
-            Your context: {customer_context}
-            Your goal: {issue}
-            Keep your responses short and natural.
-            Conversation history:
-            {"\n".join(conversation_history)}
-            AGENT just said: "{agent_response_text}"
-            What is your next response?
-            """
-
             time.sleep(1)
-            next_response = gemini_model.generate_content(
-                gemini_prompt,
+            response = chat.send_message(
+                f"AGENT just said: \"{agent_response_text}\". What is your next response?",
                 generation_config=GenerationConfig(temperature=0.7, max_output_tokens=512),
                 safety_settings={
                     HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
@@ -175,10 +163,10 @@ def run_conversation_simulation(simulation_id, customer_context, user_personalit
                     HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
                 }
             )
-            if not next_response.candidates or not next_response.candidates[0].content.parts:
+            if not response.candidates or not response.candidates[0].content.parts:
                 logging.warning(f"[{simulation_id}] Gemini returned an empty response. Ending simulation.")
                 break
-            user_utterance = next_response.text
+            user_utterance = response.text
             conversation_history.append(f"USER: {user_utterance}")
             logging.info(f"[{simulation_id}] Turn {turn+1} (USER): {user_utterance}")
 
