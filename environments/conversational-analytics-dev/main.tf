@@ -141,7 +141,8 @@ resource "google_project_iam_member" "dataform_sa_permissions" {
   project = var.project_id
   for_each = toset([
     "roles/secretmanager.secretAccessor",
-    "roles/iam.serviceAccountTokenCreator"
+    "roles/iam.serviceAccountTokenCreator",
+    "roles/iam.serviceAccountUser"
   ])
   role   = each.key
   member  = "serviceAccount:service-${data.google_project.project.number}@gcp-sa-dataform.iam.gserviceaccount.com"
