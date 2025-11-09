@@ -172,7 +172,7 @@ module "nlu_testing" {
   cf_bucket_name = module.cf_bundle_bucket.name
   
   bq_project_id = var.project_id
-  bq_table_id = "${var.bq_dataset_name}.nlu_testing"
+  bq_table_id = "${var.bq_testing_dataset_name}.nlu_testing"
 
   service_account_email = google_service_account.conversational_analytics_sa.email
 
@@ -196,7 +196,7 @@ module "cx_test_cases" {
   cf_bucket_name = module.cf_bundle_bucket.name
   
   bq_project_id = var.project_id
-  bq_table_id = "${var.bq_dataset_name}.cx_test_cases" 
+  bq_table_id = "${var.bq_testing_dataset_name}.cx_test_cases" 
   
   service_account_email = google_service_account.conversational_analytics_sa.email
 
@@ -220,7 +220,8 @@ module "agent_structure" {
   cf_bucket_name = module.cf_bundle_bucket.name
   
   bq_project_id = var.project_id
-  bq_dataset_name = var.bq_dataset_name
+  bq_dataset_region = var.bq_dataset_region
+  bq_agent_dataset_name = var.bq_agent_dataset_name
   service_account_email = google_service_account.conversational_analytics_sa.email
 
   depends_on = [

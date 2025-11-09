@@ -22,6 +22,25 @@ variable "region" {
   description = "Region in which GCP resources will be deployed"
 }
 
+variable "bq_dataset_region" {
+  type = string
+  description = "BigQuery dataset region"
+}
+
+variable "bq_testing_dataset_name" {
+  type        = string
+  description = "BigQuery dataset name for testing data"
+}
+
+variable "bq_agent_dataset_name" {
+  type        = string
+  description = "BigQuery dataset name for agent data"
+}
+
+variable "bq_dataform_dataset_name" {
+  type        = string
+  description = "BigQuery dataset name for dataform data"
+}
 variable "dataform_repository_name" {
   description = "Name for the Dataform repository"
   type        = string
@@ -40,11 +59,6 @@ variable "dataform_git_repo_default_branch" {
 variable "dfcx_export_table" {
   description = "BigQuert table to which DialogFlow exports the raw DFCX logs"
   type        = string
-}
-
-variable "bq_dataset_name" {
-  type = string
-  description = "BigQuery Dataset"
 }
 
 variable "nlu_testing_execution_instances" {

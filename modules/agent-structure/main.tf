@@ -43,7 +43,7 @@ module "cf_agent_structure" {
 
   environment_variables = {
     BQ_PROJECT_ID   = var.bq_project_id
-    BQ_DATASET_NAME = var.bq_dataset_name
+    BQ_DATASET_NAME = var.bq_agent_dataset_name
   }
 
   trigger_config = {
@@ -76,8 +76,8 @@ resource "google_pubsub_topic_iam_member" "agent_structure_sink_publisher" {
 module "bigquery-dataset" {
   source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/bigquery-dataset?ref=v34.1.0&depth=1"
   project_id = var.bq_project_id
-  id         = var.bq_dataset_name
-  location   = var.region
+  id         = var.bq_agent_dataset_name
+  location   = var.bq_dataset_region
   tables = {
     for name, config in local.tables :
     name => {

@@ -13,9 +13,14 @@ variable "bq_project_id" {
   description = "BigQuery Project ID for output data"
 }
 
-variable "bq_dataset_name" {
+variable "bq_dataset_region" {
   type        = string
-  description = "BigQuery dataset name for output data"
+  description = "Region in which GCP resources will be deployed"
+}
+
+variable "bq_agent_dataset_name" {
+  type = string
+  description = "BigQuery dataset region"
 }
 
 variable "service_account_email" {
