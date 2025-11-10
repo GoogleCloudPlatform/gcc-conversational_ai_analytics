@@ -1,0 +1,153 @@
+config {
+   type: "incremental",
+   bigquery: {
+     partitionBy: "TIMESTAMP_TRUNC(session_start_time, DAY)",
+     requirePartitionFilter : true
+   },
+    tags: ["high-frequency"]
+}
+
+pre_operations {
+  DECLARE insert_time_checkpoint DEFAULT ( SELECT COALESCE(MAX(latest_insert_time),${dataform.projectConfig.vars.backfillTimestamp}) FROM ${self()} WHERE session_start_time IS NOT NULL );
+  DECLARE session_start_time_checkpoint DEFAULT ( SELECT COALESCE(MIN(session_start_time),${dataform.projectConfig.vars.backfillTimestamp}) FROM ${ref("dfcx_transcript")} WHERE session_start_time IS NOT NULL AND insert_time > insert_time_checkpoint );
+  CREATE TEMP TABLE sessions_to_update AS (
+        SELECT DISTINCT session_id
+        FROM ${ref("dfcx_transcript")}
+        WHERE session_start_time >= session_start_time_checkpoint AND insert_time > insert_time_checkpoint
+  );
+  DELETE FROM ${self()} WHERE session_start_time >= session_start_time_checkpoint AND session_id IN (SELECT session_id FROM sessions_to_update);
+}
+
+WITH 
+
+defined_head_intents AS (
+  SELECT intent_name as head_intent FROM ${ref("intents")} WHERE head_intent = TRUE
+),
+
+defined_non_self_service_flows AS (
+  SELECT 'Default Start Flow' as flow_display_name
+),
+
+base_data AS (
+    SELECT
+        *,
+        -- Flag if this turn matches a defined head intent
+        CASE WHEN intent_display_name IN (SELECT head_intent FROM defined_head_intents)
+             THEN intent_display_name
+             ELSE NULL
+        END AS detected_head_intent
+    FROM ${ref("dfcx_transcript")}
+    WHERE session_start_time >= session_start_time_checkpoint
+    AND session_id IN (SELECT session_id FROM sessions_to_update) 
+),
+
+interaction_grouping AS (
+    SELECT
+        session_start_time,
+        project_id,
+        location,
+        agent_id,
+        session_id,
+        request_time,
+        detected_head_intent,
+        -- Calculate a raw group ID based on cumulative count of head intents
+        COUNT(detected_head_intent) OVER (PARTITION BY session_id ORDER BY request_time ASC) AS raw_group_id
+    FROM base_data
+),
+
+interaction_ids AS (
+    SELECT
+        *,
+        -- Force turns occurring before the first head intent (raw_group_id = 0) into the first interaction (1)
+        GREATEST(1, raw_group_id) AS interaction_position
+    FROM interaction_grouping
+),
+
+interaction_base AS (
+    SELECT
+        session_start_time,
+        project_id,
+        location,
+        agent_id,
+        session_id,
+        interaction_position,
+        -- The head intent for the interaction is the one that started it (min request time with a non-null intent in this group)
+        ARRAY_AGG(detected_head_intent IGNORE NULLS ORDER BY request_time ASC LIMIT 1)[SAFE_OFFSET(0)] AS interaction_head_intent,
+        MIN(request_time) AS start_interaction_time,
+        MAX(request_time) AS end_interaction_time
+    FROM interaction_ids
+    GROUP BY 1, 2, 3, 4, 5, 6
+),
+
+-- Flatten all actions to track Flow Start/End events
+flattened_flow_events AS (
+    SELECT
+        t.session_id,
+        t.request_time,
+        action.action_flow_id AS flow_id,
+        action.action_flow_display_name AS flow_display_name,
+        CASE WHEN action.action_page_display_name = 'Start Page' THEN TRUE ELSE FALSE END AS is_flow_start,
+        CASE WHEN action.action_page_display_name = 'Success' THEN TRUE ELSE FALSE END AS is_flow_success,
+        action.action_start_time
+    FROM base_data t,
+        UNNEST(blocks) AS block,
+        UNNEST(block.actions) AS action
+    WHERE action.action_flow_display_name NOT IN (SELECT flow_display_name FROM defined_non_self_service_flows) -- Exclude non-self-service flows from action tracking
+),
+
+-- Aggregate flow events per interaction
+interaction_flows AS (
+    SELECT
+        ib.session_id,
+        ib.interaction_position,
+        ffe.flow_id,
+        ffe.flow_display_name,
+        -- Did it start in this interaction?
+        LOGICAL_OR(ffe.is_flow_start) AS action_started,
+        MIN(CASE WHEN ffe.is_flow_start THEN ffe.action_start_time END) AS action_started_time,
+        -- Did it end (success) in this interaction?
+        LOGICAL_OR(ffe.is_flow_success) AS action_ended,
+        MAX(CASE WHEN ffe.is_flow_success THEN ffe.action_start_time END) AS action_ended_time
+    FROM interaction_base ib
+    JOIN flattened_flow_events ffe
+      ON ib.session_id = ffe.session_id
+     AND ffe.request_time BETWEEN ib.start_interaction_time AND ib.end_interaction_time
+    GROUP BY 1, 2, 3, 4
+),
+
+session_metadata AS (
+    SELECT DISTINCT
+        session_id,
+        MAX(insert_time) as latest_insert_time
+    FROM base_data
+    GROUP BY 1
+)
+
+SELECT
+    base.session_start_time,
+    base.project_id,
+    base.location,
+    base.agent_id,
+    base.session_id,
+    base.interaction_position,
+    -- Calculate reverse position
+    ROW_NUMBER() OVER (PARTITION BY base.session_id ORDER BY base.interaction_position DESC) AS interaction_position_reverse,
+    base.interaction_head_intent,
+    base.start_interaction_time,
+    base.end_interaction_time,
+    -- Construct the nested flows array
+    ARRAY(
+        SELECT AS STRUCT
+            flow.flow_id,
+            flow.flow_display_name,
+            flow.action_started,
+            flow.action_started_time,
+            flow.action_ended,
+            flow.action_ended_time
+        FROM interaction_flows flow
+        WHERE flow.session_id = base.session_id
+          AND flow.interaction_position = base.interaction_position
+    ) AS flows,
+    md.latest_insert_time
+FROM interaction_base base
+LEFT JOIN session_metadata md ON base.session_id = md.session_id

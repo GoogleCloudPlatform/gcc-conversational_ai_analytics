@@ -1,0 +1,95 @@
+config {
+    type: "incremental",
+    bigquery: {
+        partitionBy: "TIMESTAMP_TRUNC(insert_time, DAY)",
+        requirePartitionFilter : true
+    },
+    tags: ["high-frequency"]
+}
+
+pre_operations {
+  DECLARE part_hours ARRAY<TIMESTAMP>;
+  DECLARE part_end TIMESTAMP;
+  DECLARE insert_time_checkpoint DEFAULT ( SELECT COALESCE(MAX(insert_time),${dataform.projectConfig.vars.backfillTimestamp}) FROM ${self()} WHERE insert_time IS NOT NULL );
+}
+
+WITH
+  recent_insert_data AS (
+  SELECT
+      ARRAY_REVERSE(SPLIT(dfcx.conversation_name,'/'))[SAFE_OFFSET(0)] AS session_id
+    , request_time
+    , insert_time
+  FROM
+    `${dataform.projectConfig.defaultDatabase}.${dataform.projectConfig.vars.dialogflowExport}` AS dfcx
+  WHERE TRUE
+    AND insert_time IS NOT NULL
+    AND insert_time > insert_time_checkpoint
+  GROUP BY 1,2,3
+)
+, original_session_start_time AS (
+  SELECT
+      session_id
+    , MIN(session_start_time) AS session_start_time
+  FROM ${self()}
+  WHERE TRUE
+    AND insert_time >= TIMESTAMP_SUB(insert_time_checkpoint, INTERVAL ${dataform.projectConfig.vars.sessionMaxSeconds} SECOND)
+    AND session_id IN (SELECT session_id FROM recent_insert_data)
+  GROUP BY 1
+)
+, session_start_time AS (
+    SELECT 
+        session_id,
+        MIN(IF(original_session_start_time.session_start_time < recent_insert_data.request_time, original_session_start_time.session_start_time, recent_insert_data.request_time)) as session_start_time
+    FROM recent_insert_data
+        LEFT JOIN original_session_start_time USING (session_id)
+    GROUP BY 1
+)
+SELECT
+    session_start_time.session_start_time,
+    recent_insert_data.session_id,
+    recent_insert_data.request_time,
+    recent_insert_data.insert_time
+FROM recent_insert_data
+  LEFT JOIN session_start_time
+    USING (session_id)
+WHERE TRUE
+
+post_operations {
+  -- Step 1: Identify sessions that need fixing
+  CREATE TEMP TABLE sessions_to_fix AS
+  SELECT
+    session_id,
+    ARRAY_AGG(DISTINCT session_start_time ORDER BY session_start_time) AS distinct_start_times,
+    MIN(session_start_time) AS new_start_time,
+    COUNT(DISTINCT session_start_time) AS num_start_times
+  FROM ${self()}
+  WHERE insert_time >= TIMESTAMP_SUB(insert_time_checkpoint, INTERVAL ${dataform.projectConfig.vars.sessionMaxSeconds} SECOND)
+  GROUP BY session_id
+  HAVING num_start_times > 1;
+  
+  -- Step 1a: Bail out early if nothing to do
+  IF (SELECT COUNT(*) FROM sessions_to_fix) = 0 THEN
+    RETURN;
+  END IF;
+
+  -- Step 2: Build the full partition list
+  SET part_hours = (
+    SELECT ARRAY_AGG(DISTINCT TIMESTAMP_TRUNC(ts, HOUR))
+    FROM sessions_to_fix, UNNEST(distinct_start_times) AS ts
+  );
+
+  -- Step 3: One partition-filtered UPDATE per hour
+  FOR part_row IN (
+    SELECT ts
+    FROM UNNEST(part_hours) AS ts
+  ) DO
+    SET part_end = TIMESTAMP_ADD(part_row.ts, INTERVAL 1 HOUR);
+
+    UPDATE  ${self()} AS tgt
+    SET     session_start_time = src.new_start_time
+    FROM    sessions_to_fix AS src
+    WHERE   tgt.session_id  = src.session_id
+      AND   tgt.insert_time >= part_row.ts
+      AND   tgt.insert_time <  part_end;
+  END FOR;
+}

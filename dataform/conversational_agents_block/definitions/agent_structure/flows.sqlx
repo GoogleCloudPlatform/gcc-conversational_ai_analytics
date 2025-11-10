@@ -1,0 +1,45 @@
+config {
+    type: "incremental",
+    tags: ["high-frequency"]
+}
+
+pre_operations {
+    TRUNCATE TABLE ${self()};
+}
+
+WITH flows AS (
+  SELECT
+    agent_id,
+    flow_id,
+    flow_name,
+    runtime,
+    LAG(flow_name) OVER (PARTITION BY agent_id, flow_id ORDER BY runtime) AS prev_flow_name,
+    LAG(runtime) OVER (PARTITION BY agent_id, flow_id ORDER BY runtime) AS prev_runtime
+  FROM agent_structure.flows
+),
+filtered AS (
+  SELECT
+    agent_id,
+    flow_id,
+    flow_name,
+    runtime as valid_from
+  FROM flows
+  WHERE prev_flow_name IS NULL OR flow_name != prev_flow_name
+),
+with_end_date AS (
+  SELECT
+    agent_id,
+    flow_id,
+    flow_name,
+    valid_from,
+    LEAD(valid_from) OVER (PARTITION BY agent_id, flow_id ORDER BY valid_from) AS next_start_date,
+    ROW_NUMBER() OVER (PARTITION BY agent_id, flow_id ORDER BY valid_from) as incremental_order
+  FROM filtered
+)
+SELECT
+  flow_id,
+  flow_name,
+  IF(incremental_order = 1, TIMESTAMP('2000-01-01'), valid_from) as valid_from,
+  IF(next_start_date IS NULL, TIMESTAMP('2050-01-01'), TIMESTAMP_SUB(next_start_date, INTERVAL 1 SECOND)) AS valid_to,
+  agent_id,
+FROM with_end_date

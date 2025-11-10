@@ -1,0 +1,113 @@
+config {
+    type: "incremental",
+    bigquery: {
+      partitionBy: "TIMESTAMP_TRUNC(session_start_time, DAY)",
+      requirePartitionFilter : true
+    },
+    tags: ["high-frequency"]
+}
+
+pre_operations {
+  DECLARE insert_time_checkpoint DEFAULT ( SELECT COALESCE(MAX(latest_insert_time),${dataform.projectConfig.vars.backfillTimestamp}) FROM ${self()} WHERE session_start_time IS NOT NULL );
+  DECLARE session_start_time_checkpoint DEFAULT ( SELECT COALESCE(MIN(session_start_time),${dataform.projectConfig.vars.backfillTimestamp}) FROM ${ref("dfcx_transcript")} WHERE session_start_time IS NOT NULL AND insert_time > insert_time_checkpoint );
+  CREATE TEMP TABLE sessions_to_update AS (
+        SELECT DISTINCT session_id
+        FROM ${ref("dfcx_transcript")}
+        WHERE session_start_time >= session_start_time_checkpoint AND insert_time > insert_time_checkpoint
+  );
+  DELETE FROM ${self()} WHERE session_start_time >= session_start_time_checkpoint AND session_id IN (SELECT session_id FROM sessions_to_update);
+}
+
+WITH
+  dfcx_transcript AS (
+  SELECT
+      session_id
+    , project_id
+    , agent_id
+    , location
+    , session_start_time
+    , request_time
+    , language_code
+    , LAST_VALUE(language_code IGNORE NULLS) OVER (PARTITION BY session_id ORDER BY request_time ASC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS final_language_code
+    , LAST_VALUE(session_parameters IGNORE NULLS) OVER (PARTITION BY session_id ORDER BY request_time ASC ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS final_session_parameters
+    , insert_time
+  FROM
+    ${ref("dfcx_transcript")} AS dfcx_transcript
+  WHERE TRUE
+    AND dfcx_transcript.session_start_time >= session_start_time_checkpoint
+    AND session_id IN (SELECT session_id FROM sessions_to_update)  
+)
+, session_info as (
+  SELECT
+      session_id
+    , project_id
+    , agent_id
+    , location
+    , session_start_time
+    , MAX(request_time) as session_end_time
+    , COUNT(*) AS number_of_turns
+    , COALESCE(MAX(final_language_code),'en-us') as final_language_code
+    , MAX(insert_time) as latest_insert_time
+    , ANY_VALUE(final_session_parameters) as final_session_parameters
+  FROM dfcx_transcript
+  GROUP BY 1,2,3,4,5
+)
+
+, dfcx_interaction AS (
+  SELECT
+      session_id
+    , interaction_position
+    , interaction_position_reverse
+    , interaction_head_intent
+  FROM
+    ${ref("dfcx_interaction")} as dfcx_interaction
+  WHERE TRUE
+    AND dfcx_interaction.session_start_time >= session_start_time_checkpoint
+    AND session_id IN (SELECT session_id FROM sessions_to_update)  
+    AND interaction_position_reverse = 1
+)
+
+, final_action AS (
+    SELECT
+        dfcx_interaction.session_id,
+        flow.flow_display_name AS action,
+        flow.action_started,
+        flow.action_ended
+    FROM ${ref("dfcx_interaction")} as dfcx_interaction
+    LEFT JOIN UNNEST(dfcx_interaction.flows) AS flow
+    WHERE dfcx_interaction.session_start_time >= session_start_time_checkpoint
+      AND session_id IN (SELECT session_id FROM sessions_to_update)
+    QUALIFY
+        ROW_NUMBER() OVER (
+            PARTITION BY
+                dfcx_interaction.session_id
+            ORDER BY
+                COALESCE(flow.action_ended_time, CURRENT_TIMESTAMP()) DESC,
+                flow.action_started DESC,
+                flow.flow_display_name DESC
+        ) = 1
+)
+
+SELECT
+    session_info.session_start_time
+  , session_info.session_id
+  , session_info.project_id
+  , session_info.agent_id
+  , agents.agent_name
+  , session_info.location
+  , session_info.session_end_time
+  , dfcx_interaction.interaction_head_intent AS final_interaction_head_intent
+  , final_action.action AS final_action
+  , final_action.action_started AS final_action_started
+  , final_action.action_ended AS final_action_ended
+  , session_info.final_language_code
+  , session_info.final_session_parameters
+  , session_info.number_of_turns
+  , FALSE as is_escalated
+  , session_info.latest_insert_time
+FROM session_info
+LEFT JOIN dfcx_interaction USING (session_id)
+LEFT JOIN final_action USING (session_id)
+LEFT JOIN ${ref("agents")} as agents 
+  ON session_info.agent_id = agents.agent_id
+  AND session_info.session_start_time BETWEEN agents.valid_from AND agents.valid_to

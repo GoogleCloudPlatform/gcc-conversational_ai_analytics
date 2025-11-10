@@ -1,0 +1,43 @@
+config {
+    type: "incremental",
+    tags: ["high-frequency"]
+}
+
+pre_operations {
+    TRUNCATE TABLE ${self()};
+}
+
+-- CTE: agent_structure_action_id_list
+-- This CTE constructs a comprehensive list of action UUIDs and their corresponding human-readable names.
+-- Each is from the agent_structure tables and retrieves the most recent deployed name
+WITH agent_structure_action_id_list AS (
+    SELECT
+        agent_id,
+        flow_id AS action_id,
+        flow_name AS action_name
+    FROM ${ref("flows")}
+    WHERE CURRENT_TIMESTAMP BETWEEN valid_from AND valid_to
+    UNION ALL
+    SELECT
+        agent_id,
+        playbook_id AS action_id,
+        playbook_name AS action_name
+    FROM ${ref("playbooks")}
+    WHERE CURRENT_TIMESTAMP BETWEEN valid_from AND valid_to
+    UNION ALL
+    SELECT
+        agent_id,
+        tool_id AS action_id,
+        tool_name AS action_name
+    FROM ${ref("tools")}
+    WHERE CURRENT_TIMESTAMP BETWEEN valid_from AND valid_to
+)
+-- Final Selection:
+-- This query selects the MAX(action_name) for each action_id to ensure each
+-- is listed only once in the final output table.
+SELECT
+    action_id,
+    MAX(action_name) as action_name,
+    agent_id,
+FROM agent_structure_action_id_list
+GROUP BY 1,3

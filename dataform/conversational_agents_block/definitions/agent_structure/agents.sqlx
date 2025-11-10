@@ -1,0 +1,21 @@
+config {
+    type: "incremental",
+    tags: ["high-frequency"]
+}
+
+pre_operations {
+    TRUNCATE TABLE ${self()};
+}
+
+SELECT
+    agent_project_id,
+    agent_location_id,
+    agent_id,
+    agent_name,
+    agent_settings,
+    CASE 
+        WHEN ROW_NUMBER() OVER (PARTITION BY agent_id ORDER BY runtime) = 1 THEN TIMESTAMP('2000-01-01') --first restore imported it will default further back for historical dialogflow data for that agent id
+        ELSE runtime --subsequent restores will utilize runtime
+        END AS valid_from,
+    COALESCE(TIMESTAMP_SUB(LEAD(runtime, 1) OVER (PARTITION BY agent_id ORDER BY runtime), INTERVAL 1 SECOND), TIMESTAMP('2050-01-01')) as valid_to
+FROM agent_structure.agents

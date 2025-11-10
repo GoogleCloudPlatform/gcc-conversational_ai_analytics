@@ -1,0 +1,80 @@
+config {
+    type: "incremental",
+    tags: ["high-frequency"]
+}
+
+pre_operations {
+    TRUNCATE TABLE ${self()};
+}
+
+WITH source_intents AS (
+  SELECT
+    agent_project_id,
+    agent_location_id,
+    agent_id,
+    intent_id,
+    intent_name,
+    COALESCE('sys-head' IN UNNEST(labels), FALSE) AS head_intent,
+    runtime
+  FROM agent_structure.intents
+),
+
+intents_with_lag AS (
+  SELECT
+    agent_project_id,
+    agent_location_id,
+    agent_id,
+    intent_id,
+    intent_name,
+    head_intent,
+    runtime,
+    -- Look back at previous version to detect changes in either name OR head status
+    LAG(intent_name) OVER (PARTITION BY agent_id, intent_id ORDER BY runtime) AS prev_display_name,
+    LAG(head_intent) OVER (PARTITION BY agent_id, intent_id ORDER BY runtime) AS prev_head_intent
+  FROM source_intents
+),
+
+filtered_changes AS (
+  SELECT
+    agent_project_id,
+    agent_location_id,
+    agent_id,
+    intent_id,
+    intent_name,
+    head_intent,
+    runtime AS valid_from
+  FROM intents_with_lag
+  WHERE
+    -- Keep row if it's the first ever version OR if key fields changed
+    prev_display_name IS NULL
+    OR intent_name != prev_display_name
+    OR head_intent != prev_head_intent
+),
+
+with_end_date AS (
+  SELECT
+    agent_project_id,
+    agent_location_id,
+    agent_id,
+    intent_id,
+    intent_name,
+    head_intent,
+    valid_from,
+    -- Identify the start of the NEXT version to determine END of this version
+    LEAD(valid_from) OVER (PARTITION BY agent_id, intent_id ORDER BY valid_from) AS next_start_date,
+    ROW_NUMBER() OVER (PARTITION BY agent_id, intent_id ORDER BY valid_from) as incremental_order
+  FROM filtered_changes
+)
+
+SELECT
+  agent_project_id,
+  agent_location_id,
+  agent_id,
+  intent_id,
+  intent_name,
+  head_intent,
+  -- Anchor the first historical record to year 2000
+  IF(incremental_order = 1, TIMESTAMP('2000-01-01'), valid_from) as valid_from,
+  -- Set currently active record to year 2050, otherwise close record 1 second before next starts
+  IF(next_start_date IS NULL, TIMESTAMP('2050-01-01'), TIMESTAMP_SUB(next_start_date, INTERVAL 1 SECOND)) AS valid_to
+FROM with_end_date

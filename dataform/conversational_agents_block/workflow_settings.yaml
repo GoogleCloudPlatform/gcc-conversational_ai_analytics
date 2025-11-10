@@ -1,0 +1,11 @@
+defaultProject: whisper-test-378918
+defaultLocation: US
+defaultDataset: dataform_ccai
+defaultAssertionDataset: dataform_assertions
+dataformCoreVersion: 3.0.27
+vars:
+  dialogflowExport: conversation_export.dialogflow_bigquery_export_data
+  backfillTimestamp: TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 4000 DAY)
+  insertDelaySeconds: "300"
+  sessionMaxSeconds: "40000"
+  checkpointSeconds: "86400"

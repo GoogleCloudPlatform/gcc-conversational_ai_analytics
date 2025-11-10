@@ -1,0 +1,95 @@
+config {
+    type: "incremental",
+    bigquery: {
+        partitionBy: "TIMESTAMP_TRUNC(session_start_time, DAY)",
+        requirePartitionFilter : true
+    },
+    tags: ["high-frequency"]
+}
+
+pre_operations {
+  DECLARE insert_time_checkpoint DEFAULT ( SELECT COALESCE(MAX(insert_time),${dataform.projectConfig.vars.backfillTimestamp}) FROM ${self()} WHERE session_start_time IS NOT NULL );
+  DECLARE session_start_time_checkpoint DEFAULT ( SELECT COALESCE(MIN(session_start_time),${dataform.projectConfig.vars.backfillTimestamp}) FROM ${ref("dfcx_transcript")} WHERE session_start_time IS NOT NULL AND insert_time > insert_time_checkpoint )
+}
+
+
+WITH
+  dfcx_transcript AS (
+  SELECT
+      session_start_time
+    , session_id
+    , response_id
+    , request_time
+    , insert_time
+    , match_type
+    , execution_sequence
+    , actions
+    , playbooks
+    , source_flow_display_name
+    , source_page_display_name
+    , flow_display_name
+    , page_display_name
+    , (SELECT ARRAY_AGG(playbook_name) FROM UNNEST(playbooks) WHERE playbook_name is not null)[SAFE_OFFSET(0)] as source_playbook
+    , (SELECT ARRAY_AGG(playbook_name) FROM UNNEST(ARRAY_REVERSE(playbooks)) WHERE playbook_name is not null)[SAFE_OFFSET(0)] as playbook
+    , LAG(agent_response) OVER (PARTITION BY session_id ORDER BY request_time ASC) as source_agent_response
+    , LAG(match_type) OVER (PARTITION BY session_id ORDER BY position ASC) as source_match_type
+    , CASE WHEN intent_display_name is not null THEN intent_display_name ELSE match_type END as matched_intent
+    , LAG(flow_display_name) OVER (PARTITION BY session_id ORDER BY position ASC) as source_playbook_flow
+    , LAG(page_display_name) OVER (PARTITION BY session_id ORDER BY position ASC) as source_playbook_page
+    , LAG((SELECT ARRAY_AGG(playbook_name) FROM UNNEST(ARRAY_REVERSE(playbooks)) WHERE playbook_name is not null)[SAFE_OFFSET(0)]) OVER (PARTITION BY session_id ORDER BY position ASC) as playbook_playbook_before
+  FROM ${ref("dfcx_transcript")} AS dfcx_transcript
+  WHERE TRUE
+    AND session_start_time >= session_start_time_checkpoint
+    AND insert_time > insert_time_checkpoint
+)
+, ai_indicators AS (
+SELECT
+    session_id
+  , response_id
+  , MAX(contain_ai_generated_content) AS contain_ai_generated_content
+  , MAX(contain_attempted_data_store_interactions) AS contain_attempted_data_store_interactions
+  , MAX(contain_data_store_content) AS contain_data_store_content
+  , MAX(contain_data_store_faq_content) AS contain_data_store_faq_content
+  , MAX(contain_generators_content) AS contain_generators_content
+  , MAX(contain_generative_fallback) AS contain_generative_fallback
+FROM (
+  SELECT
+      dfcx_transcript.session_id
+    , dfcx_transcript.response_id
+    , response_offset
+    , IF(JSON_VALUE(SAFE.PARSE_JSON(response),'$.text.containAiGeneratedContent')='true',TRUE,FALSE) AS contain_ai_generated_content
+    , IF(JSON_VALUE(SAFE.PARSE_JSON(response),'$.text.containAttemptedDataStoreInteractions')='true',TRUE,FALSE) AS contain_attempted_data_store_interactions
+    , IF(JSON_VALUE(SAFE.PARSE_JSON(response),'$.text.containDataStoreContent')='true',TRUE,FALSE) AS contain_data_store_content
+    , IF(JSON_VALUE(SAFE.PARSE_JSON(response),'$.text.containDataStoreFaqContent')='true',TRUE,FALSE) AS contain_data_store_faq_content
+    , IF(JSON_VALUE(SAFE.PARSE_JSON(response),'$.text.containGeneratorsContent')='true',TRUE,FALSE) AS contain_generators_content
+    , IF(JSON_VALUE(SAFE.PARSE_JSON(response),'$.text.containGenerativeFallback')='true',TRUE,FALSE) AS contain_generative_fallback
+  FROM dfcx_transcript
+    INNER JOIN UNNEST(execution_sequence)
+    LEFT JOIN UNNEST(responses) AS response WITH OFFSET AS response_offset
+  )
+GROUP BY 1,2
+)
+, business_logic as (
+  SELECT
+      dfcx_transcript.session_start_time
+    , dfcx_transcript.session_id
+    , dfcx_transcript.response_id
+    , dfcx_transcript.request_time
+    , dfcx_transcript.insert_time
+    , COALESCE(ai_indicators.contain_ai_generated_content, FALSE) AS contain_ai_generated_content
+    , COALESCE(ai_indicators.contain_attempted_data_store_interactions, FALSE) as contain_attempted_data_store_interactions
+    , COALESCE(ai_indicators.contain_data_store_content, FALSE) as contain_data_store_content
+    , COALESCE(ai_indicators.contain_data_store_faq_content, FALSE) AS contain_data_store_faq_content
+    , COALESCE(ai_indicators.contain_generators_content, FALSE) AS contain_generators_content
+    , COALESCE(ai_indicators.contain_generative_fallback, FALSE) AS contain_generative_fallback
+    , IF(dfcx_transcript.match_type='PLAYBOOK' OR 'toolUse' IN UNNEST(actions.action) OR 'playbookInvocation' IN UNNEST(actions.action) OR 'flowInvocation' IN UNNEST(actions.action),TRUE,FALSE) as contain_playbook
+    , dfcx_transcript.source_agent_response
+  FROM dfcx_transcript
+  LEFT JOIN ai_indicators
+    ON dfcx_transcript.session_id = ai_indicators.session_id
+    AND dfcx_transcript.response_id = ai_indicators.response_id
+)
+SELECT
+  *
+FROM business_logic
+WHERE TRUE
