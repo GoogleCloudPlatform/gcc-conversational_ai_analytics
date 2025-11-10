@@ -1,0 +1,64 @@
+{
+  "description": "Additional Transcript Transformations",
+  "partitioning": {
+    "time": {
+      "field": "session_start_time",
+      "type": "DAY"
+    }
+  },
+  "require_partition_filter": true,
+  "schema": [
+    {
+      "name": "session_start_time",
+      "type": "TIMESTAMP"
+    },
+    {
+      "name": "session_id",
+      "type": "STRING"
+    },
+    {
+      "name": "response_id",
+      "type": "STRING"
+    },
+    {
+      "name": "request_time",
+      "type": "TIMESTAMP"
+    },
+    {
+      "name": "insert_time",
+      "type": "TIMESTAMP"
+    },
+    {
+      "name": "contain_ai_generated_content",
+      "type": "BOOLEAN"
+    },
+    {
+      "name": "contain_attempted_data_store_interactions",
+      "type": "BOOLEAN"
+    },
+    {
+      "name": "contain_data_store_content",
+      "type": "BOOLEAN"
+    },
+    {
+      "name": "contain_data_store_faq_content",
+      "type": "BOOLEAN"
+    },
+    {
+      "name": "contain_generators_content",
+      "type": "BOOLEAN"
+    },
+    {
+      "name": "contain_generative_fallback",
+      "type": "BOOLEAN"
+    },
+    {
+      "name": "contain_playbook",
+      "type": "BOOLEAN"
+    },
+    {
+      "name": "source_agent_response",
+      "type": "STRING"
+    }
+  ]
+}

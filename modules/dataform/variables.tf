@@ -13,6 +13,21 @@ variable "region" {
   type        = string
 }
 
+variable "bq_project_id" {
+  type        = string
+  description = "BigQuery Project ID for output data"
+}
+
+variable "bq_dataset_region" {
+  type        = string
+  description = "Region in which GCP resources will be deployed"
+}
+
+variable "bq_dataform_dataset_name" {
+  type = string
+  description = "BigQuery dataset region"
+}
+
 variable "remote_repository_settings" {
   description = "Remote settings required to attach the repository to a remote repository."
   type = object({

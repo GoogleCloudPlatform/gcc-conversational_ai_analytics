@@ -1,0 +1,87 @@
+{
+  "description": "Aggregates Dialogflow CX transcript data into distinct user interactions, determines head intent, checks for self-service action completion, and captures interaction disposition.",
+  "partitioning": {
+    "time": {
+      "field": "session_start_time",
+      "type": "DAY"
+    }
+  },
+  "require_partition_filter": true,
+  "schema": [
+    {
+      "name": "project_id",
+      "type": "STRING"
+    },
+    {
+      "name": "location",
+      "type": "STRING"
+    },
+    {
+      "name": "agent_id",
+      "type": "STRING"
+    },
+    {
+      "name": "session_id",
+      "type": "STRING"
+    },
+    {
+      "name": "session_start_time",
+      "type": "TIMESTAMP"
+    },
+    {
+      "name": "interaction_position",
+      "type": "INTEGER"
+    },
+    {
+      "name": "interaction_position_reverse",
+      "type": "INTEGER"
+    },
+    {
+      "name": "interaction_head_intent",
+      "type": "STRING"
+    },
+    {
+      "name": "start_interaction_time",
+      "type": "TIMESTAMP"
+    },
+    {
+      "name": "end_interaction_time",
+      "type": "TIMESTAMP"
+    },
+    {
+      "fields": [
+        {
+          "name": "flow_id",
+          "type": "STRING"
+        },
+        {
+          "name": "flow_display_name",
+          "type": "STRING"
+        },
+        {
+          "name": "action_started",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "action_started_time",
+          "type": "TIMESTAMP"
+        },
+        {
+          "name": "action_ended",
+          "type": "BOOLEAN"
+        },
+        {
+          "name": "action_ended_time",
+          "type": "TIMESTAMP"
+        }
+      ],
+      "mode": "REPEATED",
+      "name": "flows",
+      "type": "RECORD"
+    },
+    {
+      "name": "latest_insert_time",
+      "type": "TIMESTAMP"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "description": "ETL helper table for decoding intents",
+  "schema": [
+    {
+      "name": "agent_project_id",
+      "type": "STRING"
+    },
+    {
+      "name": "agent_location_id",
+      "type": "STRING"
+    },
+    {
+      "name": "agent_id",
+      "type": "STRING"
+    },
+    {
+      "name": "intent_id",
+      "type": "STRING"
+    },
+    {
+      "name": "intent_name",
+      "type": "STRING"
+    },
+    {
+      "name": "head_intent",
+      "type": "BOOLEAN"
+    },
+    {
+      "name": "valid_from",
+      "type": "TIMESTAMP"
+    },
+    {
+      "name": "valid_to",
+      "type": "TIMESTAMP"
+    }
+  ]
+}

@@ -1,0 +1,775 @@
+{
+  "description": "Main reporting table for DFCX conversations",
+  "partitioning": {
+    "time": {
+      "field": "session_start_time",
+      "type": "DAY"
+    }
+  },
+  "require_partition_filter": true,
+  "schema": [
+    {
+      "description": "The GCP project ID",
+      "name": "project_id",
+      "type": "STRING"
+    },
+    {
+      "description": "The GCP project location",
+      "name": "location",
+      "type": "STRING"
+    },
+    {
+      "description": "The user-provided identifier for the agent who handled the conversation",
+      "name": "agent_id",
+      "type": "STRING"
+    },
+    {
+      "description": "The fully qualified unique ID for the session",
+      "name": "session_id",
+      "type": "STRING"
+    },
+    {
+      "description": "The time at which a session starts",
+      "name": "session_start_time",
+      "type": "TIMESTAMP"
+    },
+    {
+      "description": "The time of the conversational turn",
+      "name": "request_time",
+      "type": "TIMESTAMP"
+    },
+    {
+      "description": "The unique ID associated with the response from the agent",
+      "name": "response_id",
+      "type": "STRING"
+    },
+    {
+      "description": "The conversational turn number",
+      "name": "position",
+      "type": "INTEGER"
+    },
+    {
+      "description": "The turn level user's utterance with the agent",
+      "name": "user_utterance",
+      "type": "STRING"
+    },
+    {
+      "description": "The turn level user's input on phone key pad",
+      "name": "optional_dtmf_digits",
+      "type": "STRING"
+    },
+    {
+      "description": "The agent's response to user utterance at turn level for a particular conversation",
+      "name": "agent_response",
+      "type": "STRING"
+    },
+    {
+      "description": "The unique ID of the matched source flow at every turn in the conversation",
+      "name": "source_flow_id",
+      "type": "STRING"
+    },
+    {
+      "description": "The human readable name of the source flow at every turn in the conversation",
+      "name": "source_flow_display_name",
+      "type": "STRING"
+    },
+    {
+      "description": "The unique ID of the matched source page at every turn in the conversation",
+      "name": "source_page_id",
+      "type": "STRING"
+    },
+    {
+      "description": "The human readable name of the source page at every turn in the conversation",
+      "name": "source_page_display_name",
+      "type": "STRING"
+    },
+    {
+      "description": "The unique ID of the matched flow",
+      "name": "flow_id",
+      "type": "STRING"
+    },
+    {
+      "description": "The human readable name of the flow",
+      "name": "flow_display_name",
+      "type": "STRING"
+    },
+    {
+      "description": "The unique ID of the matched page",
+      "name": "page_id",
+      "type": "STRING"
+    },
+    {
+      "description": "The human readable name of the page",
+      "name": "page_display_name",
+      "type": "STRING"
+    },
+    {
+      "description": "The unique ID of the matched intent",
+      "name": "intent_display_id",
+      "type": "STRING"
+    },
+    {
+      "description": "The human readable name of the matched intent",
+      "name": "intent_display_name",
+      "type": "STRING"
+    },
+    {
+      "description": "The magnitude of the matched intent score in the scale of 0-1",
+      "name": "intent_confidence_score",
+      "type": "FLOAT"
+    },
+    {
+      "description": "The intent or playbook match associated with user utterance",
+      "name": "match_type",
+      "type": "STRING"
+    },
+    {
+      "description": "The trigger based on a specific action or flow in the agent based on something that happened, rather than direct user input",
+      "name": "event",
+      "type": "STRING"
+    },
+    {
+      "description": "The language tag",
+      "name": "language_code",
+      "type": "STRING"
+    },
+    {
+      "description": "The various session parameters as represented at the end of a turn",
+      "name": "session_parameters",
+      "type": "JSON"
+    },
+    {
+      "description": "The number of steps in the execution sequence",
+      "name": "execution_sequence_count",
+      "type": "INTEGER"
+    },
+    {
+      "description": "The individual processing steps through flows and pages",
+      "fields": [
+        {
+          "description": "Refers to a single action or processing unit that occurs during a conversation turn",
+          "name": "step",
+          "type": "INTEGER"
+        },
+        {
+          "description": "The unique ID of the matched flow",
+          "name": "flow_id",
+          "type": "STRING"
+        },
+        {
+          "description": "The human readable name of the flow",
+          "name": "flow_display_name",
+          "type": "STRING"
+        },
+        {
+          "description": "The unique ID of the matched page",
+          "name": "page_id",
+          "type": "STRING"
+        },
+        {
+          "description": "The human readable name of the page",
+          "name": "page_display_name",
+          "type": "STRING"
+        },
+        {
+          "description": "Refers to the outcome or result of a particular step",
+          "name": "status",
+          "type": "STRING"
+        },
+        {
+          "description": "The initial value of various session parameters used across the pages in the agent",
+          "name": "session_parameters_initial",
+          "type": "JSON"
+        },
+        {
+          "description": "The updated value of various session parameters used across the pages in the agent",
+          "name": "session_parameters_updated",
+          "type": "JSON"
+        },
+        {
+          "description": "The detailed information about the evaluation of system functions within your agent",
+          "name": "system_function_results",
+          "type": "JSON"
+        },
+        {
+          "description": "The output or result that a function produces after it has been executed",
+          "mode": "REPEATED",
+          "name": "responses",
+          "type": "STRING"
+        },
+        {
+          "description": "The human readable name of the matched intent",
+          "name": "matched_intent",
+          "type": "JSON"
+        },
+        {
+          "description": "A unique ID of the transition route on a page",
+          "name": "triggered_transition_route_id",
+          "type": "STRING"
+        },
+        {
+          "description": "The intent that is triggered based on the user utterance",
+          "name": "triggered_intent",
+          "type": "STRING"
+        },
+        {
+          "description": "The condition that is met based on the context & the user utterance",
+          "name": "triggered_condition",
+          "type": "STRING"
+        },
+        {
+          "description": "A unique ID of the flow that is triggered based on the user utterance",
+          "name": "target_flow_id",
+          "type": "STRING"
+        },
+        {
+          "description": "A unique ID of the page that is triggered based on the user utterance",
+          "name": "target_page_id",
+          "type": "STRING"
+        },
+        {
+          "description": "A unique ID of the triggered webhook function call",
+          "name": "webhook_id",
+          "type": "STRING"
+        },
+        {
+          "description": "The readable name of the triggered webhook function call",
+          "name": "webhook_display_name",
+          "type": "STRING"
+        },
+        {
+          "description": "The latency associated with a particular function call made from the agent",
+          "name": "webhook_latency_ms",
+          "type": "INTEGER"
+        },
+        {
+          "description": "The PASS or the FAILURE status associated with a particular function call made from the agent",
+          "name": "webhook_status",
+          "type": "STRING"
+        },
+        {
+          "name": "webhook_status_error_message",
+          "type": "STRING"
+        },
+        {
+          "description": "The entire URL associated with a particular function call made from the agent",
+          "name": "webhook_url",
+          "type": "STRING"
+        },
+        {
+          "description": "Describes how long it took, in milliseconds, to process a specific step within a function",
+          "name": "step_processing_ms",
+          "type": "INTEGER"
+        },
+        {
+          "description": "The tag associated with a webhook function call in the Dialogflow CX console.",
+          "name": "webhook_tag",
+          "type": "STRING"
+        }
+      ],
+      "mode": "REPEATED",
+      "name": "execution_sequence",
+      "type": "RECORD"
+    },
+    {
+      "description": "The webhook executed within a turn",
+      "fields": [
+        {
+          "description": "Refers to a single action or processing unit that occurs during a conversation turn",
+          "name": "step",
+          "type": "INTEGER"
+        },
+        {
+          "description": "The unique ID of the matched flow",
+          "name": "flow_id",
+          "type": "STRING"
+        },
+        {
+          "description": "The human readable name of the flow",
+          "name": "flow_display_name",
+          "type": "STRING"
+        },
+        {
+          "description": "The unique ID of the matched page",
+          "name": "page_id",
+          "type": "STRING"
+        },
+        {
+          "description": "The human readable name of the page",
+          "name": "page_display_name",
+          "type": "STRING"
+        },
+        {
+          "description": "A unique ID of the triggered webhook function call",
+          "name": "webhook_id",
+          "type": "STRING"
+        },
+        {
+          "description": "The readable name of the triggered webhook function call",
+          "name": "webhook_display_name",
+          "type": "STRING"
+        },
+        {
+          "description": "The latency associated with a particular function call made from the agent",
+          "name": "webhook_latency_ms",
+          "type": "INTEGER"
+        },
+        {
+          "description": "The PASS or the FAILURE status associated with a particular function call made from the agent",
+          "name": "webhook_status",
+          "type": "STRING"
+        },
+        {
+          "description": "The entire URL associated with a particular function call made from the agent",
+          "name": "webhook_url",
+          "type": "STRING"
+        },
+        {
+          "name": "webhook_status_error_message",
+          "type": "STRING"
+        },
+        {
+          "description": "The updated value of various session parameters used across the pages in the agent",
+          "name": "session_parameters_updated",
+          "type": "JSON"
+        },
+        {
+          "description": "The tag associated with a webhook function call in the Dialogflow CX console.",
+          "name": "webhook_tag",
+          "type": "STRING"
+        }
+      ],
+      "mode": "REPEATED",
+      "name": "webhooks",
+      "type": "RECORD"
+    },
+    {
+      "description": "The list of intents that are closely matched based on the user utterance",
+      "fields": [
+        {
+          "description": "The intent that is closely matched based on the user utterance",
+          "name": "alternative_matched_intent",
+          "type": "STRING"
+        },
+        {
+          "description": "The confidence score associated with the matched intent",
+          "name": "score",
+          "type": "NUMERIC"
+        }
+      ],
+      "mode": "REPEATED",
+      "name": "alternative_matched_intents",
+      "type": "RECORD"
+    },
+    {
+      "description": "The actions performed by the generative playbook for the current turn",
+      "fields": [
+        {
+          "description": "The order of the action",
+          "name": "action_step",
+          "type": "INTEGER"
+        },
+        {
+          "description": "The type of action executed",
+          "name": "action",
+          "type": "STRING"
+        },
+        {
+          "description": "The fully qualified unique ID for the action",
+          "name": "action_id",
+          "type": "STRING"
+        },
+        {
+          "description": "The name of the action",
+          "name": "action_name",
+          "type": "STRING"
+        },
+        {
+          "description": "The state of the action",
+          "name": "action_state",
+          "type": "STRING"
+        },
+        {
+          "description": "The input parameters to the action",
+          "name": "action_input",
+          "type": "JSON"
+        },
+        {
+          "description": "The output parameters of the action",
+          "name": "action_output",
+          "type": "JSON"
+        }
+      ],
+      "mode": "REPEATED",
+      "name": "actions",
+      "type": "RECORD"
+    },
+    {
+      "description": "The list of playbooks used within the agent",
+      "fields": [
+        {
+          "description": "The order of the playbooks entered",
+          "name": "playbook_step",
+          "type": "INTEGER"
+        },
+        {
+          "description": "The fully qualified unique ID for the triggered playbook",
+          "name": "playbook_id",
+          "type": "STRING"
+        },
+        {
+          "description": "The human readable name associated with the triggered playbook",
+          "name": "playbook_name",
+          "type": "STRING"
+        }
+      ],
+      "mode": "REPEATED",
+      "name": "playbooks",
+      "type": "RECORD"
+    },
+    {
+      "description": "Represents a response message that can be returned by a conversational agent",
+      "mode": "REPEATED",
+      "name": "response_messages",
+      "type": "JSON"
+    },
+    {
+      "description": "The user utterance voice latency",
+      "name": "input_audio_ms",
+      "type": "FLOAT"
+    },
+    {
+      "description": "The agent utterance voice latency",
+      "name": "output_audio_ms",
+      "type": "FLOAT"
+    },
+    {
+      "description": "The key metrics associated with the overall playbooks part of the agent",
+      "fields": [
+        {
+          "description": "The latency associated due to the payload context size associated with the playbook",
+          "name": "llm_latency_ms",
+          "type": "FLOAT"
+        },
+        {
+          "description": "The latency due to the tools being called from the playbook",
+          "name": "tool_latency_ms",
+          "type": "FLOAT"
+        },
+        {
+          "description": "The total latency associated with a playbook call",
+          "name": "total_latency_ms",
+          "type": "FLOAT"
+        },
+        {
+          "description": "The max incoming JSON payload context size into a playbook",
+          "name": "input_token_limit",
+          "type": "INTEGER"
+        },
+        {
+          "description": "The  max outgoing JSON payload context size from a playbook",
+          "name": "output_token_limit",
+          "type": "INTEGER"
+        },
+        {
+          "description": "The actual number of token numbers of incoming JSON payload into a playbook",
+          "mode": "REPEATED",
+          "name": "input_tokens_count",
+          "type": "INTEGER"
+        },
+        {
+          "description": "The actual number of token numbers of outgoing JSON payload from a playbook",
+          "mode": "REPEATED",
+          "name": "output_tokens_count",
+          "type": "INTEGER"
+        },
+        {
+          "description": "The multiple states associated with the playbook execution",
+          "mode": "REPEATED",
+          "name": "states",
+          "type": "STRING"
+        }
+      ],
+      "name": "playbook_metrics",
+      "type": "RECORD"
+    },
+    {
+      "description": "The individual processing steps through flows, pages, and playbooks",
+      "fields": [
+        {
+          "description": "The sequential order of this processing block within the conversational turn.",
+          "name": "block_step",
+          "type": "INTEGER"
+        },
+        {
+          "description": "The type of processing block, e.g., 'Flow Trace', 'Playbook Trace', 'Speech Processing'.",
+          "name": "block_type",
+          "type": "STRING"
+        },
+        {
+          "description": "The timestamp when this processing block began execution.",
+          "name": "block_start_time",
+          "type": "TIMESTAMP"
+        },
+        {
+          "description": "The timestamp when this processing block finished execution.",
+          "name": "block_complete_time",
+          "type": "TIMESTAMP"
+        },
+        {
+          "description": "The unique ID of the flow associated with this block, if applicable.",
+          "name": "block_flow_id",
+          "type": "STRING"
+        },
+        {
+          "description": "The human readable name of the flow associated with this block, if applicable.",
+          "name": "block_flow_display_name",
+          "type": "STRING"
+        },
+        {
+          "name": "actions",
+          "type": "RECORD",
+          "mode": "REPEATED",
+          "fields": [
+            {
+              "description": "The sequential order of this action within its parent block.",
+              "name": "action_step",
+              "type": "INTEGER"
+            },
+            {
+              "description": "The type of the action performed, e.g., 'toolUse', 'flowStateUpdate', 'llmCall'.",
+              "name": "action_type",
+              "type": "STRING"
+            },
+            {
+              "description": "The human readable name of the action from the trace log.",
+              "name": "action_display_name",
+              "type": "STRING"
+            },
+            {
+              "description": "The timestamp when this action began execution.",
+              "name": "action_start_time",
+              "type": "TIMESTAMP"
+            },
+            {
+              "description": "The timestamp when this action finished execution.",
+              "name": "action_complete_time",
+              "type": "TIMESTAMP"
+            },
+            {
+              "description": "The unique ID of the flow context for this action, propagated from the nearest 'flowStateUpdate'.",
+              "name": "action_flow_id",
+              "type": "STRING"
+            },
+            {
+              "description": "The human readable name of the flow context for this action, propagated from the nearest 'flowStateUpdate'.",
+              "name": "action_flow_display_name",
+              "type": "STRING"
+            },
+            {
+              "description": "The unique ID of the page context for this action, propagated from the nearest 'flowStateUpdate'.",
+              "name": "action_page_id",
+              "type": "STRING"
+            },
+            {
+              "description": "The human readable name of the page context for this action, propagated from the nearest 'flowStateUpdate'.",
+              "name": "action_page_display_name",
+              "type": "STRING"
+            },
+            {
+              "description": "The fully qualified unique ID for the playbook associated with this action's block.",
+              "name": "playbook_id",
+              "type": "STRING"
+            },
+            {
+              "description": "The human readable name associated with the playbook for this action's block.",
+              "name": "playbook_name",
+              "type": "STRING"
+            },
+            {
+              "description": "The fully qualified unique ID for the tool being used in this action.",
+              "name": "tool_id",
+              "type": "STRING"
+            },
+            {
+              "description": "The human readable name of the tool being used in this action.",
+              "name": "tool_name",
+              "type": "STRING"
+            },
+            {
+              "description": "The type of tool used, e.g., 'Webhook', 'Data Store'.",
+              "name": "tool_type",
+              "type": "STRING"
+            },
+            {
+              "description": "The entire URL associated with a webhook function call.",
+              "name": "webhook_url",
+              "type": "STRING"
+            },
+            {
+              "description": "The tag associated with a webhook function call in the Dialogflow CX console.",
+              "name": "webhook_tag",
+              "type": "STRING"
+            },
+            {
+              "description": "The latency in milliseconds for a 'toolUse' action, from start to complete.",
+              "name": "tool_latency_ms",
+              "type": "INTEGER"
+            },
+            {
+              "description": "The generative model used by a Data Store to synthesize the final answer.",
+              "name": "datastore_answer_generation_model",
+              "type": "STRING"
+            },
+            {
+              "description": "The model used by a Data Store to rewrite the user's query for better search results.",
+              "name": "datastore_rewriter_model",
+              "type": "STRING"
+            },
+            {
+              "description": "The specific LLM model version used in an 'llmCall' action.",
+              "name": "llm_model",
+              "type": "STRING"
+            },
+            {
+              "description": "The number of tokens from the conversation history used in the LLM prompt.",
+              "name": "llm_conversation_context_tokens",
+              "type": "INTEGER"
+            },
+            {
+              "description": "The number of tokens from examples (few-shot prompting) used in the LLM prompt.",
+              "name": "llm_example_tokens",
+              "type": "INTEGER"
+            },
+            {
+              "description": "The total number of tokens sent to the LLM in the prompt.",
+              "name": "llm_total_input_tokens",
+              "type": "INTEGER"
+            },
+            {
+              "description": "The total number of tokens generated by the LLM in the response.",
+              "name": "llm_total_output_tokens",
+              "type": "INTEGER"
+            },
+            {
+              "description": "The error message generated by a tool",
+              "name": "error_message",
+              "type": "STRING"
+            },
+            {
+              "description": "The PASS or the FAILURE state associated with a particular function call made from the agent.",
+              "name": "webhook_state",
+              "type": "STRING"
+            },
+            {
+              "description": "The error reason associated with a particular function call made from the agent.",
+              "name": "webhook_reason",
+              "type": "STRING"
+            }
+          ]
+        }
+      ],
+      "mode": "REPEATED",
+      "name": "blocks",
+      "type": "RECORD"
+    },
+    {
+      "description": "A flattened subset of actions specifically where tools were utilized.",
+      "fields": [
+        {
+          "name": "block_step",
+          "type": "INTEGER",
+          "description": "The sequential order of the parent block for this tool usage."
+        },
+        {
+          "name": "action_step",
+          "type": "INTEGER",
+          "description": "The sequential order of the action within its parent block."
+        },
+        {
+          "name": "action_flow_id",
+          "type": "STRING",
+          "description": "The unique ID of the flow context for this action."
+        },
+        {
+          "name": "action_flow_display_name",
+          "type": "STRING",
+          "description": "The human readable name of the flow context for this action."
+        },
+        {
+          "name": "action_page_id",
+          "type": "STRING",
+          "description": "The unique ID of the page context for this action."
+        },
+        {
+          "name": "action_page_display_name",
+          "type": "STRING",
+          "description": "The human readable name of the page context for this action."
+        },
+        {
+          "description": "The fully qualified unique ID for the playbook associated with this action's block.",
+          "name": "playbook_id",
+          "type": "STRING"
+        },
+        {
+          "description": "The human readable name associated with the playbook for this action's block.",
+          "name": "playbook_name",
+          "type": "STRING"
+        },
+        {
+          "name": "tool_id",
+          "type": "STRING",
+          "description": "The fully qualified unique ID for the tool being used."
+        },
+        {
+          "name": "tool_name",
+          "type": "STRING",
+          "description": "The human readable name of the tool being used."
+        },
+        {
+          "name": "tool_type",
+          "type": "STRING",
+          "description": "The type of tool used, e.g., 'Webhook', 'Data Store'."
+        },
+        {
+          "name": "tool_latency_ms",
+          "type": "INTEGER",
+          "description": "The latency in milliseconds for this tool action."
+        },
+        {
+          "name": "webhook_url",
+          "type": "STRING",
+          "description": "The entire URL associated with the webhook function call."
+        },
+        {
+          "name": "webhook_tag",
+          "type": "STRING",
+          "description": "The tag associated with the webhook in the Dialogflow CX console."
+        },
+        {
+          "name": "error_message",
+          "type": "STRING",
+          "description": "The error message generated by the tool, if any."
+        },
+        {
+          "name": "webhook_state",
+          "type": "STRING",
+          "description": "The PASS or FAILURE state associated with the function call."
+        },
+        {
+          "name": "webhook_reason",
+          "type": "STRING",
+          "description": "The error reason associated with the function call."
+        }
+      ],
+      "name": "tools",
+      "type": "RECORD",
+      "mode": "REPEATED"
+    },
+    {
+      "description": "The timestamp when the record was inserted into the raw conversation logs table.",
+      "name": "insert_time",
+      "type": "TIMESTAMP"
+    }
+  ]
+}

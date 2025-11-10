@@ -1,0 +1,17 @@
+{
+  "description": "ETL helper table for decoding action_id",
+  "schema": [
+    {
+      "name": "action_id",
+      "type": "STRING"
+    },
+    {
+      "name": "action_name",
+      "type": "STRING"
+    },
+    {
+      "name": "agent_id",
+      "type": "STRING"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "description": "ELT assistance table to create new position",
+  "partitioning": {
+    "time": {
+      "field": "insert_time",
+      "type": "DAY"
+    }
+  },
+  "require_partition_filter": true,
+  "schema": [
+    {
+      "name": "session_start_time",
+      "type": "TIMESTAMP"
+    },
+    {
+      "name": "session_id",
+      "type": "STRING"
+    },
+    {
+      "name": "request_time",
+      "type": "TIMESTAMP"
+    },
+    {
+      "name": "insert_time",
+      "type": "TIMESTAMP"
+    }
+  ]
+}

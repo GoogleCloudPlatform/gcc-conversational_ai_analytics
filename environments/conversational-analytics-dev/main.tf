@@ -242,6 +242,9 @@ module "dataform" {
   project_id      = var.project_id
   region          = var.region
   service_account = google_service_account.conversational_analytics_sa.email
+  bq_project_id = var.project_id
+  bq_dataset_region = var.bq_dataset_region
+  bq_dataform_dataset_name = var.bq_dataform_dataset_name
 
   remote_repository_settings = {
     url            = var.dataform_git_repo_url
@@ -255,7 +258,7 @@ module "dataform" {
   repository_release_configs = [
     {
       name          = "dev"
-      git_commitish = "dev"
+      git_commitish = var.dataform_git_repo_default_branch
       cron_schedule = null
       time_zone     = null
       code_compilation_config = {

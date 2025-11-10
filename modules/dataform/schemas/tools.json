@@ -1,0 +1,25 @@
+{
+  "description": "ETL helper table for decoding tool names",
+  "schema": [
+    {
+      "name": "tool_id",
+      "type": "STRING"
+    },
+    {
+      "name": "tool_name",
+      "type": "STRING"
+    },
+    {
+      "name": "valid_from",
+      "type": "TIMESTAMP"
+    },
+    {
+      "name": "valid_to",
+      "type": "TIMESTAMP"
+    },
+    {
+      "name": "agent_id",
+      "type": "STRING"
+    }
+  ]
+}

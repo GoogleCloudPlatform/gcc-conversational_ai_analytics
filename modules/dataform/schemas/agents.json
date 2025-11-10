@@ -1,0 +1,33 @@
+{
+  "description": "ETL helper table for decoding agent names",
+  "schema": [
+    {
+      "name": "agent_project_id",
+      "type": "STRING"
+    },
+    {
+      "name": "agent_location_id",
+      "type": "STRING"
+    },
+    {
+      "name": "agent_id",
+      "type": "STRING"
+    },
+    {
+      "name": "agent_name",
+      "type": "STRING"
+    },
+    {
+      "name": "agent_settings",
+      "type": "STRING"
+    },
+    {
+      "name": "valid_from",
+      "type": "TIMESTAMP"
+    },
+    {
+      "name": "valid_to",
+      "type": "TIMESTAMP"
+    }
+  ]
+}
