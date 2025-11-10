@@ -9,66 +9,82 @@
   "require_partition_filter": true,
   "schema": [
     {
+      "description": "The timestamp at which the session started",
       "name": "session_start_time",
       "type": "TIMESTAMP"
     },
     {
+      "description": "The fully qualified unique ID for the session",
       "name": "session_id",
       "type": "STRING"
     },
     {
+      "description": "The GCP project ID",
       "name": "project_id",
       "type": "STRING"
     },
     {
+      "description": "The user-provided identifier for the agent",
       "name": "agent_id",
       "type": "STRING"
     },
     {
+      "description": "The human readable name of the agent",
       "name": "agent_name",
       "type": "STRING"
     },
     {
+      "description": "The GCP location of the agent",
       "name": "location",
       "type": "STRING"
     },
     {
+      "description": "The timestamp at which the session ended",
       "name": "session_end_time",
       "type": "TIMESTAMP"
     },
     {
+      "description": "The head intent of the final interaction",
       "name": "final_interaction_head_intent",
       "type": "STRING"
     },
     {
+      "description": "The final action of the session",
       "name": "final_action",
       "type": "STRING"
     },
     {
+      "description": "Whether the final action started",
       "name": "final_action_started",
       "type": "BOOLEAN"
     },
     {
+      "description": "Whether the final action ended",
       "name": "final_action_ended",
       "type": "BOOLEAN"
     },
     {
+      "description": "The language code of the final interaction",
       "name": "final_language_code",
       "type": "STRING"
     },
     {
+      "description": "The session parameters of the final interaction",
       "name": "final_session_parameters",
       "type": "JSON"
     },
     {
+      "description": "The number of turns in the session",
       "name": "number_of_turns",
       "type": "INTEGER"
     },
     {
+      "description": "Whether the session was escalated",
       "name": "is_escalated",
       "type": "BOOLEAN"
     },
     {
+      "description": "The timestamp at which the record was last inserted",
       "name": "latest_insert_time",
       "type": "TIMESTAMP"
     }

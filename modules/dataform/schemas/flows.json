@@ -2,22 +2,27 @@
   "description": "ETL helper table for decoding flow names",
   "schema": [
     {
+      "description": "The unique ID of the flow",
       "name": "flow_id",
       "type": "STRING"
     },
     {
+      "description": "The human readable name of the flow",
       "name": "flow_name",
       "type": "STRING"
     },
     {
+      "description": "The timestamp from which the flow is valid",
       "name": "valid_from",
       "type": "TIMESTAMP"
     },
     {
+      "description": "The timestamp until which the flow is valid",
       "name": "valid_to",
       "type": "TIMESTAMP"
     },
     {
+      "description": "The user-provided identifier for the agent",
       "name": "agent_id",
       "type": "STRING"
     }

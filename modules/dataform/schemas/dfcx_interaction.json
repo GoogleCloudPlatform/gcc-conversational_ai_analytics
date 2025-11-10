@@ -9,68 +9,85 @@
   "require_partition_filter": true,
   "schema": [
     {
+      "description": "The GCP project ID",
       "name": "project_id",
       "type": "STRING"
     },
     {
+      "description": "The GCP location of the agent",
       "name": "location",
       "type": "STRING"
     },
     {
+      "description": "The user-provided identifier for the agent",
       "name": "agent_id",
       "type": "STRING"
     },
     {
+      "description": "The fully qualified unique ID for the session",
       "name": "session_id",
       "type": "STRING"
     },
     {
+      "description": "The timestamp at which the session started",
       "name": "session_start_time",
       "type": "TIMESTAMP"
     },
     {
+      "description": "The position of the interaction within the session",
       "name": "interaction_position",
       "type": "INTEGER"
     },
     {
+      "description": "The reverse position of the interaction within the session",
       "name": "interaction_position_reverse",
       "type": "INTEGER"
     },
     {
+      "description": "The head intent of the interaction",
       "name": "interaction_head_intent",
       "type": "STRING"
     },
     {
+      "description": "The timestamp at which the interaction started",
       "name": "start_interaction_time",
       "type": "TIMESTAMP"
     },
     {
+      "description": "The timestamp at which the interaction ended",
       "name": "end_interaction_time",
       "type": "TIMESTAMP"
     },
     {
+      "description": "The flows that were part of the interaction",
       "fields": [
         {
+          "description": "The unique ID of the flow",
           "name": "flow_id",
           "type": "STRING"
         },
         {
+          "description": "The human readable name of the flow",
           "name": "flow_display_name",
           "type": "STRING"
         },
         {
+          "description": "Whether the action started in the flow",
           "name": "action_started",
           "type": "BOOLEAN"
         },
         {
+          "description": "The timestamp at which the action started",
           "name": "action_started_time",
           "type": "TIMESTAMP"
         },
         {
+          "description": "Whether the action ended in the flow",
           "name": "action_ended",
           "type": "BOOLEAN"
         },
         {
+          "description": "The timestamp at which the action ended",
           "name": "action_ended_time",
           "type": "TIMESTAMP"
         }
@@ -80,6 +97,7 @@
       "type": "RECORD"
     },
     {
+      "description": "The timestamp at which the record was last inserted",
       "name": "latest_insert_time",
       "type": "TIMESTAMP"
     }

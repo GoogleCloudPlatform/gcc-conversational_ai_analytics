@@ -9,54 +9,67 @@
   "require_partition_filter": true,
   "schema": [
     {
+      "description": "The timestamp at which the session started",
       "name": "session_start_time",
       "type": "TIMESTAMP"
     },
     {
+      "description": "The fully qualified unique ID for the session",
       "name": "session_id",
       "type": "STRING"
     },
     {
+      "description": "The unique ID associated with the response from the agent",
       "name": "response_id",
       "type": "STRING"
     },
     {
+      "description": "The time of the conversational turn",
       "name": "request_time",
       "type": "TIMESTAMP"
     },
     {
+      "description": "The timestamp when the record was inserted",
       "name": "insert_time",
       "type": "TIMESTAMP"
     },
     {
+      "description": "Whether the turn contains AI generated content",
       "name": "contain_ai_generated_content",
       "type": "BOOLEAN"
     },
     {
+      "description": "Whether the turn contains attempted data store interactions",
       "name": "contain_attempted_data_store_interactions",
       "type": "BOOLEAN"
     },
     {
+      "description": "Whether the turn contains data store content",
       "name": "contain_data_store_content",
       "type": "BOOLEAN"
     },
     {
+      "description": "Whether the turn contains data store FAQ content",
       "name": "contain_data_store_faq_content",
       "type": "BOOLEAN"
     },
     {
+      "description": "Whether the turn contains generators content",
       "name": "contain_generators_content",
       "type": "BOOLEAN"
     },
     {
+      "description": "Whether the turn contains generative fallback",
       "name": "contain_generative_fallback",
       "type": "BOOLEAN"
     },
     {
+      "description": "Whether the turn contains a playbook",
       "name": "contain_playbook",
       "type": "BOOLEAN"
     },
     {
+      "description": "The source agent response",
       "name": "source_agent_response",
       "type": "STRING"
     }

@@ -2,14 +2,17 @@
   "description": "ETL helper table for decoding action_id",
   "schema": [
     {
+      "description": "The fully qualified unique ID for the action",
       "name": "action_id",
       "type": "STRING"
     },
     {
+      "description": "The human readable name of the action",
       "name": "action_name",
       "type": "STRING"
     },
     {
+      "description": "The user-provided identifier for the agent who handled the conversation",
       "name": "agent_id",
       "type": "STRING"
     }

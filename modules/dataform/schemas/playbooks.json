@@ -2,22 +2,27 @@
   "description": "ETL helper table for decoding playbook names",
   "schema": [
     {
+      "description": "The unique ID of the playbook",
       "name": "playbook_id",
       "type": "STRING"
     },
     {
+      "description": "The human readable name of the playbook",
       "name": "playbook_name",
       "type": "STRING"
     },
     {
+      "description": "The timestamp from which the playbook is valid",
       "name": "valid_from",
       "type": "TIMESTAMP"
     },
     {
+      "description": "The timestamp until which the playbook is valid",
       "name": "valid_to",
       "type": "TIMESTAMP"
     },
     {
+      "description": "The user-provided identifier for the agent",
       "name": "agent_id",
       "type": "STRING"
     }

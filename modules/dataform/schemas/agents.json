@@ -2,30 +2,37 @@
   "description": "ETL helper table for decoding agent names",
   "schema": [
     {
+      "description": "The GCP project ID of the agent",
       "name": "agent_project_id",
       "type": "STRING"
     },
     {
+      "description": "The GCP location of the agent",
       "name": "agent_location_id",
       "type": "STRING"
     },
     {
+      "description": "The user-provided identifier for the agent",
       "name": "agent_id",
       "type": "STRING"
     },
     {
+      "description": "The human readable name of the agent",
       "name": "agent_name",
       "type": "STRING"
     },
     {
+      "description": "The settings of the agent",
       "name": "agent_settings",
       "type": "STRING"
     },
     {
+      "description": "The timestamp from which the agent is valid",
       "name": "valid_from",
       "type": "TIMESTAMP"
     },
     {
+      "description": "The timestamp until which the agent is valid",
       "name": "valid_to",
       "type": "TIMESTAMP"
     }

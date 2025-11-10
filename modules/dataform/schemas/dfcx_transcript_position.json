@@ -9,18 +9,22 @@
   "require_partition_filter": true,
   "schema": [
     {
+      "description": "The timestamp at which the session started",
       "name": "session_start_time",
       "type": "TIMESTAMP"
     },
     {
+      "description": "The fully qualified unique ID for the session",
       "name": "session_id",
       "type": "STRING"
     },
     {
+      "description": "The time of the conversational turn",
       "name": "request_time",
       "type": "TIMESTAMP"
     },
     {
+      "description": "The timestamp when the record was inserted",
       "name": "insert_time",
       "type": "TIMESTAMP"
     }
