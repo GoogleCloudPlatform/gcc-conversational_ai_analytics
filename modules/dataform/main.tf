@@ -47,73 +47,47 @@ resource "google_dataform_repository" "repo" {
 resource "google_dataform_repository_release_config" "releases" {
   provider = google-beta
 
-  count = length(var.repository_release_configs)
+  for_each = local.release_configs_map
 
   project    = google_dataform_repository.repo.project
   region     = google_dataform_repository.repo.region
   repository = google_dataform_repository.repo.name
 
-  name          = var.repository_release_configs[count.index].name
-  git_commitish = var.repository_release_configs[count.index].git_commitish
-  cron_schedule = var.repository_release_configs[count.index].cron_schedule
-  time_zone     = var.repository_release_configs[count.index].time_zone
+  name          = each.key
+  git_commitish = each.value.git_commitish
 
   code_compilation_config {
-    default_database = try(
-      lookup(
-        var.repository_release_configs[count.index].code_compilation_config,
-        "default_database",
-        var.repository_release_configs[count.index].code_compilation_config.default_database
-      ),
-      null #"map_does_not_exist"
-    )
-
-    default_schema = try(
-      lookup(
-        var.repository_release_configs[count.index].code_compilation_config,
-        "default_schema",
-        var.repository_release_configs[count.index].code_compilation_config.default_schema
-      ),
-      null #"map_does_not_exist"
-    )
-
-    database_suffix = try(
-      lookup(
-        var.repository_release_configs[count.index].code_compilation_config,
-        "database_suffix",
-        var.repository_release_configs[count.index].code_compilation_config.default_schema
-      ),
-      null #"map_does_not_exist"
-    )
-
-    schema_suffix = try(
-      lookup(
-        var.repository_release_configs[count.index].code_compilation_config,
-        "schema_suffix",
-        var.repository_release_configs[count.index].code_compilation_config.default_schema
-      ),
-      null #"map_does_not_exist"
-    )
-
-    table_prefix = try(
-      lookup(
-        var.repository_release_configs[count.index].code_compilation_config,
-        "table_prefix",
-        var.repository_release_configs[count.index].code_compilation_config.default_schema
-      ),
-      null #"map_does_not_exist"
-    )
-
-    vars = try(
-      lookup(
-        var.repository_release_configs[count.index].code_compilation_config,
-        "vars",
-        var.repository_release_configs[count.index].code_compilation_config.vars
-      ),
-      null #"map_does_not_exist"
-    )
+    default_database = try(each.value.code_compilation_config.default_database, null)
+    default_schema   = try(each.value.code_compilation_config.default_schema, null)
+    database_suffix  = try(each.value.code_compilation_config.database_suffix, null)
+    schema_suffix    = try(each.value.code_compilation_config.schema_suffix, null)
+    table_prefix     = try(each.value.code_compilation_config.table_prefix, null)
+    vars             = try(each.value.code_compilation_config.vars, null)
   }
-  depends_on = [ google_secret_manager_secret.dataform_git_repo_secret ]
+
+  depends_on = [google_secret_manager_secret.dataform_git_repo_secret]
+}
+
+resource "google_dataform_repository_workflow_config" "workflows" {
+  provider = google-beta
+  for_each = { for k, v in local.release_configs_map : k => v if v.cron_schedule != null }
+
+  project    = google_dataform_repository.repo.project
+  region     = google_dataform_repository.repo.region
+  repository = google_dataform_repository.repo.name
+
+  name = "${each.key}-workflow"
+  release_config = google_dataform_repository_release_config.releases[each.key].id
+
+  cron_schedule = each.value.cron_schedule
+  time_zone     = each.value.time_zone
+
+  invocation_config {
+    included_tags                            = ["high-frequency"]
+    transitive_dependencies_included         = false
+    transitive_dependents_included           = false
+    fully_refresh_incremental_tables_enabled = false
+  }
 }
 
 resource "google_secret_manager_secret" "dataform_git_repo_secret" {

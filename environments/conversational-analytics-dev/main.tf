@@ -259,8 +259,8 @@ module "dataform" {
     {
       name          = "dev"
       git_commitish = var.dataform_git_commit
-      cron_schedule = null
-      time_zone     = null
+      cron_schedule = "*/3 * * * *"
+      time_zone     = "UTC"
       code_compilation_config = {
         default_database = var.project_id
         vars = {
