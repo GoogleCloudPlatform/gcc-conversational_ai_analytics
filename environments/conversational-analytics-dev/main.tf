@@ -258,7 +258,7 @@ module "dataform" {
   repository_release_configs = [
     {
       name          = "dev"
-      git_commitish = var.dataform_git_repo_default_branch
+      git_commitish = var.dataform_git_commit
       cron_schedule = null
       time_zone     = null
       code_compilation_config = {

@@ -46,6 +46,11 @@ variable "dataform_repository_name" {
   type        = string
 }
 
+variable "dataform_git_commit" {
+  description = "Git repo commit for Dataform code"
+  type        = string
+}
+
 variable "dataform_git_repo_url" {
   description = "Git repo url for Dataform code"
   type        = string

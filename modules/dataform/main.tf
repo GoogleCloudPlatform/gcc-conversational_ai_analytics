@@ -14,6 +14,7 @@ locals {
     for f in local.schema_files :
     replace(f, ".json", "") => jsondecode(file("${path.module}/schemas/${f}"))
   }
+  release_configs_map = { for config in var.repository_release_configs : config.name => config }
 }
 
 resource "google_dataform_repository" "repo" {
@@ -137,4 +138,17 @@ module "bigquery-dataset" {
       require_partition_filter = try(config.require_partition_filter,null) 
     }
   }
+}
+
+resource "null_resource" "trigger_dataform_compilation" {
+  for_each = local.release_configs_map
+  triggers = {
+    config_hash = md5(jsonencode(each.value))
+    repo_name   = google_dataform_repository.repo.name
+  }
+  provisioner "local-exec" {
+    command     = "/bin/bash ./trigger_compilation.sh ${each.key} ${var.project_id} ${var.region} ${each.value.git_commitish} ${google_dataform_repository.repo.name}"
+    working_dir = path.module
+  }
+  depends_on = [google_dataform_repository_release_config.releases]
 }
