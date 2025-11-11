@@ -15,41 +15,41 @@ view: dfcx_session_metadata {
 
   dimension: agent_id {
     type: string
+    description: "The user-provided identifier for the agent"
     sql: ${TABLE}.agent_id ;;
   }
 
   dimension: agent_name {
     type: string
+    description: "The human readable name of the agent"
     sql: ${TABLE}.agent_name ;;
   }
 
-  dimension: channel {
-    type: string
-    sql: ${TABLE}.channel ;;
-  }
+
 
   dimension: final_action {
     type: string
+    description: "The final action of the session"
     sql: ${TABLE}.final_action ;;
   }
 
   dimension: final_action_ended {
     type: yesno
+    description: "Whether the final action ended"
     sql: ${TABLE}.final_action_ended ;;
   }
 
-  dimension: final_action_primary_flow {
-    type: string
-    sql: ${TABLE}.final_action_primary_flow ;;
-  }
+
 
   dimension: final_action_started {
     type: yesno
+    description: "Whether the final action started"
     sql: ${TABLE}.final_action_started ;;
   }
 
   dimension: final_interaction_head_intent {
     type: string
+    description: "The head intent of the final interaction"
     sql: ${TABLE}.final_interaction_head_intent ;;
   }
 
@@ -60,127 +60,17 @@ view: dfcx_session_metadata {
 
   dimension: final_language_code {
     type: string
+    description: "The language code of the final interaction"
     sql: ${TABLE}.final_language_code ;;
   }
 
-  dimension: final_message__authentication_method {
+  dimension: final_session_parameters {
     type: string
-    sql: ${TABLE}.final_message.authentication_method ;;
-    group_label: "Final Message"
-    group_item_label: "Authentication Method"
+    description: "The session parameters of the final interaction"
+    sql: ${TABLE}.final_session_parameters ;;
   }
 
-  dimension: final_message__event {
-    type: string
-    sql: ${TABLE}.final_message.event ;;
-    group_label: "Final Message"
-    group_item_label: "Event"
-  }
 
-  dimension: final_message__event_flow {
-    type: string
-    sql: ${TABLE}.final_message.event_flow ;;
-    group_label: "Final Message"
-    group_item_label: "Event Flow"
-  }
-
-  dimension: final_message__event_page {
-    type: string
-    sql: ${TABLE}.final_message.event_page ;;
-    group_label: "Final Message"
-    group_item_label: "Event Page"
-  }
-
-  dimension: final_message__flow_display_name {
-    type: string
-    sql: ${TABLE}.final_message.flow_display_name ;;
-    group_label: "Final Message"
-    group_item_label: "Flow Display Name"
-  }
-
-  dimension: final_message__how_delivered {
-    type: string
-    sql: ${TABLE}.final_message.how_delivered ;;
-    group_label: "Final Message"
-    group_item_label: "How Delivered"
-  }
-
-  dimension: final_message__intent_display_name {
-    type: string
-    sql: ${TABLE}.final_message.intent_display_name ;;
-    group_label: "Final Message"
-    group_item_label: "Intent Display Name"
-  }
-
-  dimension: final_message__is_authenticated {
-    type: string
-    sql: ${TABLE}.final_message.isAuthenticated ;;
-    group_label: "Final Message"
-    group_item_label: "Is Authenticated"
-  }
-
-  dimension: final_message__match_type {
-    type: string
-    sql: ${TABLE}.final_message.match_type ;;
-    group_label: "Final Message"
-    group_item_label: "Match Type"
-  }
-
-  dimension: final_message__page_display_name {
-    type: string
-    sql: ${TABLE}.final_message.page_display_name ;;
-    group_label: "Final Message"
-    group_item_label: "Page Display Name"
-  }
-
-  dimension: final_message__prev_intent {
-    type: string
-    sql: ${TABLE}.final_message.prev_intent ;;
-    group_label: "Final Message"
-    group_item_label: "Prev Intent"
-  }
-
-  dimension: final_message__producttype {
-    type: string
-    sql: ${TABLE}.final_message.producttype ;;
-    group_label: "Final Message"
-    group_item_label: "Producttype"
-  }
-
-  dimension: final_message__sms_needs_response {
-    type: string
-    sql: ${TABLE}.final_message.sms_needs_response ;;
-    group_label: "Final Message"
-    group_item_label: "Sms Needs Response"
-  }
-
-  dimension: final_message__sms_type {
-    type: string
-    sql: ${TABLE}.final_message.sms_type ;;
-    group_label: "Final Message"
-    group_item_label: "Sms Type"
-  }
-
-  dimension: final_message__source_flow_display_name {
-    type: string
-    sql: ${TABLE}.final_message.source_flow_display_name ;;
-    group_label: "Final Message"
-    group_item_label: "Source Flow Display Name"
-  }
-
-  dimension: final_message__source_page_display_name {
-    type: string
-    sql: ${TABLE}.final_message.source_page_display_name ;;
-    group_label: "Final Message"
-    group_item_label: "Source Page Display Name"
-  }
-
-  dimension: final_message__voice_faq_id {
-    type: string
-    sql: ${TABLE}.final_message.voice_faq_id ;;
-    group_label: "Final Message"
-    group_item_label: "Voice Faq ID"
-  }
 
   dimension: flag_failed_webhook {
     type: yesno
@@ -189,26 +79,46 @@ view: dfcx_session_metadata {
 
   dimension: is_escalated {
     type: yesno
+    description: "Whether the session was escalated"
     sql: ${TABLE}.is_escalated ;;
+  }
+
+  dimension_group: latest_insert {
+    type: time
+    description: "The timestamp at which the record was last inserted"
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}.latest_insert_time ;;
   }
 
   dimension: location {
     type: string
+    description: "The GCP location of the agent"
     sql: ${TABLE}.location ;;
   }
 
   dimension: number_of_turns {
     type: number
+    description: "The number of turns in the session"
     sql: ${TABLE}.number_of_turns ;;
   }
 
   dimension: project_id {
     type: string
+    description: "The GCP project ID"
     sql: ${TABLE}.project_id ;;
   }
 
   dimension_group: session_end {
     type: time
+    description: "The timestamp at which the session ended"
     timeframes: [
       raw,
       time,
@@ -223,6 +133,7 @@ view: dfcx_session_metadata {
 
   dimension: session_id {
     type: string
+    description: "The fully qualified unique ID for the session"
     sql: ${TABLE}.session_id ;;
     link: {
       label: "Cloud Logging"
@@ -256,6 +167,7 @@ view: dfcx_session_metadata {
 
   dimension_group: session_start {
     type: time
+    description: "The timestamp at which the session started"
     timeframes: [
       raw,
       time,

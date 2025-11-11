@@ -8,143 +8,13 @@ view: dfcx_interaction {
     sql: CONCAT(${session_id}, ${interaction_position}) ;;
   }
 
-  dimension: actions {
-    hidden: yes
-    sql: ${TABLE}.actions ;;
-  }
 
-  dimension: end_interaction_position {
-    type: number
-    sql: ${TABLE}.end_interaction_position ;;
-  }
 
-  dimension: execution_steps {
-    hidden: yes
-    sql: ${TABLE}.execution_steps ;;
-  }
 
-  dimension: final_message__authentication_method {
-    type: string
-    sql: ${TABLE}.final_message.authentication_method ;;
-    group_label: "Final Message"
-    group_item_label: "Authentication Method"
-  }
 
-  dimension: final_message__event {
-    type: string
-    sql: ${TABLE}.final_message.event ;;
-    group_label: "Final Message"
-    group_item_label: "Event"
-  }
-
-  dimension: final_message__event_flow {
-    type: string
-    sql: ${TABLE}.final_message.event_flow ;;
-    group_label: "Final Message"
-    group_item_label: "Event Flow"
-  }
-
-  dimension: final_message__event_page {
-    type: string
-    sql: ${TABLE}.final_message.event_page ;;
-    group_label: "Final Message"
-    group_item_label: "Event Page"
-  }
-
-  dimension: final_message__flow_display_name {
-    type: string
-    sql: ${TABLE}.final_message.flow_display_name ;;
-    group_label: "Final Message"
-    group_item_label: "Flow Display Name"
-  }
-
-  dimension: final_message__how_delivered {
-    type: string
-    sql: ${TABLE}.final_message.how_delivered ;;
-    group_label: "Final Message"
-    group_item_label: "How Delivered"
-  }
-
-  dimension: final_message__intent_display_name {
-    type: string
-    sql: ${TABLE}.final_message.intent_display_name ;;
-    group_label: "Final Message"
-    group_item_label: "Intent Display Name"
-  }
-
-  dimension: final_message__is_authenticated {
-    type: string
-    sql: ${TABLE}.final_message.isAuthenticated ;;
-    group_label: "Final Message"
-    group_item_label: "Is Authenticated"
-  }
-
-  dimension: final_message__match_type {
-    type: string
-    sql: ${TABLE}.final_message.match_type ;;
-    group_label: "Final Message"
-    group_item_label: "Match Type"
-  }
-
-  dimension: final_message__page_display_name {
-    type: string
-    sql: ${TABLE}.final_message.page_display_name ;;
-    group_label: "Final Message"
-    group_item_label: "Page Display Name"
-  }
-
-  dimension: final_message__prev_intent {
-    type: string
-    sql: ${TABLE}.final_message.prev_intent ;;
-    group_label: "Final Message"
-    group_item_label: "Prev Intent"
-  }
-
-  dimension: final_message__producttype {
-    type: string
-    sql: ${TABLE}.final_message.producttype ;;
-    group_label: "Final Message"
-    group_item_label: "Producttype"
-  }
-
-  dimension: final_message__sms_needs_response {
-    type: string
-    sql: ${TABLE}.final_message.sms_needs_response ;;
-    group_label: "Final Message"
-    group_item_label: "Sms Needs Response"
-  }
-
-  dimension: final_message__sms_type {
-    type: string
-    sql: ${TABLE}.final_message.sms_type ;;
-    group_label: "Final Message"
-    group_item_label: "Sms Type"
-  }
-
-  dimension: final_message__source_flow_display_name {
-    type: string
-    sql: ${TABLE}.final_message.source_flow_display_name ;;
-    group_label: "Final Message"
-    group_item_label: "Source Flow Display Name"
-  }
-
-  dimension: final_message__source_page_display_name {
-    type: string
-    sql: ${TABLE}.final_message.source_page_display_name ;;
-    group_label: "Final Message"
-    group_item_label: "Source Page Display Name"
-  }
-
-  dimension: final_message__voice_faq_id {
-    type: string
-    sql: ${TABLE}.final_message.voice_faq_id ;;
-    group_label: "Final Message"
-    group_item_label: "Voice Faq ID"
-  }
-
-  dimension_group: insert_timestamp {
-    hidden: yes
+  dimension_group: latest_insert {
     type: time
+    description: "The timestamp at which the record was last inserted"
     timeframes: [
       raw,
       time,
@@ -154,38 +24,93 @@ view: dfcx_interaction {
       quarter,
       year
     ]
-    sql: ${TABLE}.insert_timestamp ;;
+    sql: ${TABLE}.latest_insert_time ;;
+  }
+
+  dimension: flows {
+    hidden: yes
+    sql: ${TABLE}.flows ;;
   }
 
   dimension: interaction_head_intent {
     type: string
+    description: "The head intent of the interaction"
     sql: ${TABLE}.interaction_head_intent ;;
+  }
+
+  dimension_group: start_interaction {
+    type: time
+    description: "The timestamp at which the interaction started"
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}.start_interaction_time ;;
+  }
+
+  dimension_group: end_interaction {
+    type: time
+    description: "The timestamp at which the interaction ended"
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}.end_interaction_time ;;
   }
 
   dimension: interaction_position {
     type: number
+    description: "The position of the interaction within the session"
     sql: ${TABLE}.interaction_position ;;
   }
 
   dimension: interaction_position_reverse {
     hidden: yes
     type: number
+    description: "The reverse position of the interaction within the session"
     sql: ${TABLE}.interaction_position_reverse ;;
   }
 
   dimension: project_id {
     hidden: yes
     type: string
+    description: "The GCP project ID"
     sql: ${TABLE}.project_id ;;
+  }
+
+  dimension: location {
+    hidden: yes
+    type: string
+    description: "The GCP location of the agent"
+    sql: ${TABLE}.location ;;
+  }
+
+  dimension: agent_id {
+    hidden: yes
+    type: string
+    description: "The user-provided identifier for the agent"
+    sql: ${TABLE}.agent_id ;;
   }
 
   dimension: session_id {
     type: string
+    description: "The fully qualified unique ID for the session"
     sql: ${TABLE}.session_id ;;
   }
 
   dimension_group: session_start {
     type: time
+    description: "The timestamp at which the session started"
     timeframes: [
       raw,
       time,
@@ -198,10 +123,7 @@ view: dfcx_interaction {
     sql: ${TABLE}.session_start_time ;;
   }
 
-  dimension: start_interaction_position {
-    type: number
-    sql: ${TABLE}.start_interaction_position ;;
-  }
+
 
   measure: total_interactions {
     type: count
@@ -211,7 +133,7 @@ view: dfcx_interaction {
   measure: total_interactions_started {
     type: count
     filters: [
-      dfcx_interaction__actions.action_started: "yes"
+      dfcx_interaction__flows.action_started: "yes"
     ]
     value_format_name: decimal_0
     drill_fields: [standard_interaction_drill*,total_interactions_started]
@@ -220,8 +142,8 @@ view: dfcx_interaction {
   measure: total_interactions_ended {
     type: count
     filters: [
-      dfcx_interaction__actions.action_started: "yes",
-      dfcx_interaction__actions.action_ended: "yes"
+      dfcx_interaction__flows.action_started: "yes",
+      dfcx_interaction__flows.action_ended: "yes"
     ]
     value_format_name: decimal_0
     drill_fields: [standard_interaction_drill*,total_interactions_ended]
@@ -247,71 +169,68 @@ view: dfcx_interaction {
     fields: [
       dfcx_session_metadata.session_id,
       interaction_position,
-      dfcx_interaction__actions.action,
-      dfcx_interaction__actions.action_started,
-      dfcx_interaction__actions.action_ended,
-      final_message__source_flow_display_name,
-      final_message__source_page_display_name,
-      final_message__flow_display_name,
-      final_message__page_display_name,
-      final_message__intent_display_name
+      dfcx_interaction__flows.flow_display_name,
+      dfcx_interaction__flows.action_started,
+      dfcx_interaction__flows.action_ended
       ]
   }
 
 }
 
-view: dfcx_interaction__actions {
-  dimension: action {
+view: dfcx_interaction__flows {
+  dimension: flow_id {
     type: string
-    sql: action ;;
+    description: "The unique ID of the flow"
+    sql: flow_id ;;
   }
 
-  dimension: action_ended {
-    type: yesno
-    sql: action_ended ;;
-  }
-
-  dimension: action_ended_position {
-    type: number
-    sql: action_ended_position ;;
+  dimension: flow_display_name {
+    type: string
+    description: "The human readable name of the flow"
+    sql: flow_display_name ;;
   }
 
   dimension: action_started {
     type: yesno
+    description: "Whether the action started in the flow"
     sql: action_started ;;
   }
 
-  dimension: action_started_position {
-    type: number
-    sql: action_started_position ;;
+  dimension_group: action_started {
+    type: time
+    description: "The timestamp at which the action started"
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: action_started_time ;;
   }
 
-  dimension: action_type {
-    type: string
-    sql: action_type ;;
-  }
-
-  dimension: dfcx_interaction__actions {
-    type: string
-    hidden: yes
-    sql: dfcx_interaction__actions ;;
-  }
-
-  dimension: primary_action {
+  dimension: action_ended {
     type: yesno
-    sql: primary_action ;;
+    description: "Whether the action ended in the flow"
+    sql: action_ended ;;
   }
 
-  dimension: primary_flow {
-    type: string
-    sql: primary_flow ;;
+  dimension_group: action_ended {
+    type: time
+    description: "The timestamp at which the action ended"
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: action_ended_time ;;
   }
-
 }
 
-view: dfcx_interaction__execution_steps {
-  dimension: dfcx_interaction__execution_steps {
-    type: string
-    sql: dfcx_interaction__execution_steps ;;
-  }
-}
+

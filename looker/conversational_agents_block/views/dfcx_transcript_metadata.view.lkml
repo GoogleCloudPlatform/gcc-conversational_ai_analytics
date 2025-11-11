@@ -8,88 +8,36 @@ view: dfcx_transcript_metadata {
     sql: CONCAT(${session_id}, ${position}) ;;
   }
 
-  dimension: alternative_matched_intents {
-    hidden: yes
-    sql: ${TABLE}.alternative_matched_intents ;;
-  }
-
-  dimension: consecutive_no_match {
-    type: yesno
-    sql: ${TABLE}.consecutive_no_match ;;
-  }
-
   dimension: response_id {
     type: string
+    description: "The unique ID associated with the response from the agent"
     sql: ${TABLE}.response_id ;;
-  }
-
-  dimension: consolidated_agent_response {
-    type: string
-    sql: ${TABLE}.consolidated_agent_response ;;
-  }
-
-  dimension: consolidated_user_utterance {
-    type: string
-    sql: ${TABLE}.consolidated_user_utterance ;;
   }
 
   dimension: contain_ai_generated_content {
     type: yesno
+    description: "Whether the turn contains AI generated content"
     sql: ${TABLE}.contain_ai_generated_content ;;
-  }
-
-  dimension: contain_generative_fallback {
-    type: yesno
-    sql: ${TABLE}.contain_generative_fallback ;;
   }
 
   dimension: contain_generators_content {
     type: yesno
+    description: "Whether the turn contains generators content"
     sql: ${TABLE}.contain_generators_content ;;
   }
 
-  dimension: event {
-    type: string
-    sql: ${TABLE}.event ;;
+  dimension: contain_generative_fallback {
+    type: yesno
+    description: "Whether the turn contains generative fallback"
+    sql: ${TABLE}.contain_generative_fallback ;;
   }
 
-  dimension: event_flow {
-    type: string
-    sql: ${TABLE}.event_flow ;;
-  }
 
-  dimension: event_page {
-    type: string
-    sql: ${TABLE}.event_page ;;
-  }
-
-  dimension: infobot_confidence {
-    type: string
-    sql: ${TABLE}.infobot_confidence ;;
-  }
-
-  dimension: infobot_match {
-    type: string
-    sql: ${TABLE}.infobot_match ;;
-  }
-
-  dimension: infobot_was_link_provided {
-    type: string
-    sql: ${TABLE}.infobot_was_link_provided ;;
-  }
-
-  dimension: match_type {
-    type: string
-    sql: ${TABLE}.match_type ;;
-  }
-
-  dimension: position {
-    type: number
-    sql: ${TABLE}.position ;;
-  }
+  
 
   dimension_group: request {
     type: time
+    description: "The time of the conversational turn"
     timeframes: [
       raw,
       time,
@@ -102,13 +50,30 @@ view: dfcx_transcript_metadata {
     sql: ${TABLE}.request_time ;;
   }
 
+  dimension_group: insert {
+    type: time
+    description: "The timestamp when the record was inserted"
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}.insert_time ;;
+  }
+
   dimension: session_id {
     type: string
+    description: "The fully qualified unique ID for the session"
     sql: ${TABLE}.session_id ;;
   }
 
   dimension_group: session_start {
     type: time
+    description: "The timestamp at which the session started"
     timeframes: [
       raw,
       time,
@@ -121,30 +86,36 @@ view: dfcx_transcript_metadata {
     sql: ${TABLE}.session_start_time ;;
   }
 
-  dimension: contain_attempted_datastore_interactions {
-    group_label: "AI Indicators"
-    type: yesno
-    sql: ${TABLE}.contain_attempted_datastore_interactions ;;
+  dimension: source_agent_response {
+    type: string
+    description: "The source agent response"
+    sql: ${TABLE}.source_agent_response ;;
   }
 
-  dimension: contain_datastore_content {
+  dimension: contain_attempted_data_store_interactions {
     group_label: "AI Indicators"
     type: yesno
-    sql: ${TABLE}.contain_datastore_content ;;
+    sql: ${TABLE}.contain_attempted_data_store_interactions ;;
   }
 
-  dimension: contain_datastore_faq_content {
+  dimension: contain_data_store_content {
+    group_label: "AI Indicators"
+    type: yesno
+    sql: ${TABLE}.contain_data_store_content ;;
+  }
+
+  dimension: contain_data_store_faq_content {
     group_label: "AI Indicators"
     label: "Contain Datastore FAQ Content"
     type: yesno
-    sql: ${TABLE}.contain_datastore_faq_content ;;
+    sql: ${TABLE}.contain_data_store_faq_content ;;
   }
 
-  dimension: contain_playbook_content {
+  dimension: contain_playbook {
     group_label: "AI Indicators"
-    label: "Contain Playbook Content"
+    label: "Contain Playbook"
     type: yesno
-    sql: ${TABLE}.contain_playbook_content ;;
+    sql: ${TABLE}.contain_playbook ;;
   }
 
   dimension: contain_any_ai_generated_content {

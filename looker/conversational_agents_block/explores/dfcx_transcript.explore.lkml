@@ -29,4 +29,27 @@ explore: dfcx_transcript {
     relationship: one_to_many
   }
 
+  join: dfcx_transcript__playbooks {
+    view_label: "DFCX Transcript: Playbooks"
+    sql: LEFT JOIN UNNEST(${dfcx_transcript.playbooks}) as dfcx_transcript__playbooks ;;
+    relationship: one_to_many
+  }
+
+  join: dfcx_transcript__blocks {
+    view_label: "DFCX Transcript: Blocks"
+    sql: LEFT JOIN UNNEST(${dfcx_transcript.blocks}) as dfcx_transcript__blocks ;;
+    relationship: one_to_many
+  }
+
+  join: dfcx_transcript__tools {
+    view_label: "DFCX Transcript: Tools"
+    sql: LEFT JOIN UNNEST(${dfcx_transcript.tools}) as dfcx_transcript__tools ;;
+    relationship: one_to_many
+  }
+
+  join: dfcx_transcript__response_messages {
+    view_label: "DFCX Transcript: Response Messages"
+    sql: LEFT JOIN UNNEST(${dfcx_transcript.response_messages}) as dfcx_transcript__response_messages ;;
+    relationship: one_to_many
+  }
 }
