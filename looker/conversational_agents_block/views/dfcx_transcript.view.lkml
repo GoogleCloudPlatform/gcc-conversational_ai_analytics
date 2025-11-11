@@ -20,11 +20,13 @@ view: dfcx_transcript {
 
   dimension: agent_id {
     type: string
+    description: "The user-provided identifier for the agent who handled the conversation"
     sql: ${TABLE}.agent_id ;;
   }
 
   dimension: agent_response {
     type: string
+    description: "The agent's response to user utterance at turn level for a particular conversation"
     sql: ${TABLE}.agent_response ;;
   }
 
@@ -35,6 +37,7 @@ view: dfcx_transcript {
 
   dimension: event {
     type: string
+    description: "The trigger based on a specific action or flow in the agent based on something that happened, rather than direct user input"
     sql: ${TABLE}.event ;;
   }
 
@@ -45,93 +48,98 @@ view: dfcx_transcript {
 
   dimension: execution_sequence_count {
     type: number
+    description: "The number of steps in the execution sequence"
     sql: ${TABLE}.execution_sequence_count ;;
   }
 
   dimension: flow_display_name {
     type: string
+    description: "The human readable name of the flow"
     sql: ${TABLE}.flow_display_name ;;
   }
 
   dimension: flow_id {
     hidden: yes
     type: string
+    description: "The unique ID of the matched flow"
     sql: ${TABLE}.flow_id ;;
   }
 
   dimension: intent_confidence_score {
     type: number
+    description: "The magnitude of the matched intent score in the scale of 0-1"
     sql: ${TABLE}.intent_confidence_score ;;
   }
 
   dimension: intent_display_id {
     hidden: yes
     type: string
+    description: "The unique ID of the matched intent"
     sql: ${TABLE}.intent_display_id ;;
   }
 
   dimension: intent_display_name {
     type: string
+    description: "The human readable name of the matched intent"
     sql: ${TABLE}.intent_display_name ;;
   }
 
   dimension: language_code {
     type: string
+    description: "The language tag"
     sql: ${TABLE}.language_code ;;
   }
 
-  dimension: live_agent_escalation {
-    hidden: yes
-    type: yesno
-    sql: ${TABLE}.live_agent_escalation ;;
-  }
 
-  dimension: live_agent_handoff {
-    hidden: yes
-    type: yesno
-    sql: ${TABLE}.live_agent_handoff ;;
-  }
 
   dimension: location {
     hidden: yes
     type: string
+    description: "The GCP project location"
     sql: ${TABLE}.location ;;
   }
 
   dimension: match_type {
     type: string
+    description: "The intent or playbook match associated with user utterance"
     sql: ${TABLE}.match_type ;;
   }
 
   dimension: optional_dtmf_digits {
     type: string
+    description: "The turn level user's input on phone key pad"
     sql: ${TABLE}.optional_dtmf_digits ;;
   }
 
   dimension: page_display_name {
     type: string
+    description: "The human readable name of the page"
     sql: ${TABLE}.page_display_name ;;
   }
 
   dimension: page_id {
     hidden: yes
     type: string
+    description: "The unique ID of the matched page"
     sql: ${TABLE}.page_id ;;
   }
 
   dimension: position {
     type: number
+    description: "The conversational turn number"
     sql: ${TABLE}.position ;;
   }
 
   dimension: project_id {
     hidden: yes
     type: string
+    description: "The GCP project ID"
     sql: ${TABLE}.project_id ;;
   }
 
   dimension_group: request {
     type: time
+    description: "The time of the conversational turn"
     timeframes: [
       raw,
       time,
@@ -146,6 +154,7 @@ view: dfcx_transcript {
 
   dimension: response_id {
     type: string
+    description: "The unique ID associated with the response from the agent"
     sql: ${TABLE}.response_id ;;
   }
 
@@ -167,6 +176,7 @@ view: dfcx_transcript {
   dimension: session_id {
     hidden: yes
     type: string
+    description: "The fully qualified unique ID for the session"
     sql: ${TABLE}.session_id ;;
   }
 
@@ -174,6 +184,7 @@ view: dfcx_transcript {
     #Underlying data type is JSON
     hidden: yes
     type: string
+    description: "The various session parameters as represented at the end of a turn"
     sql: ${TABLE}.session_parameters ;;
   }
 
@@ -203,6 +214,7 @@ view: dfcx_transcript {
   dimension_group: session_start {
     hidden: yes
     type: time
+    description: "The time at which a session starts"
     timeframes: [
       raw,
       time,
@@ -217,29 +229,49 @@ view: dfcx_transcript {
 
   dimension: source_flow_display_name {
     type: string
+    description: "The human readable name of the source flow at every turn in the conversation"
     sql: ${TABLE}.source_flow_display_name ;;
   }
 
   dimension: source_flow_id {
     hidden: yes
     type: string
+    description: "The unique ID of the matched source flow at every turn in the conversation"
     sql: ${TABLE}.source_flow_id ;;
   }
 
   dimension: source_page_display_name {
     type: string
+    description: "The human readable name of the source page at every turn in the conversation"
     sql: ${TABLE}.source_page_display_name ;;
   }
 
   dimension: source_page_id {
     hidden: yes
     type: string
+    description: "The unique ID of the matched source page at every turn in the conversation"
     sql: ${TABLE}.source_page_id ;;
   }
 
   dimension: user_utterance {
     type: string
+    description: "The turn level user's utterance with the agent"
     sql: ${TABLE}.user_utterance ;;
+  }
+
+  dimension_group: insert {
+    type: time
+    description: "The timestamp when the record was inserted into the raw conversation logs table."
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}.insert_time ;;
   }
 
   dimension: webhooks {
@@ -247,7 +279,27 @@ view: dfcx_transcript {
     sql: ${TABLE}.webhooks ;;
   }
 
-  measure: total_turns {
+  dimension: playbooks {
+    hidden: yes
+    sql: ${TABLE}.playbooks ;;
+  }
+
+  dimension: response_messages {
+    hidden: yes
+    sql: ${TABLE}.response_messages ;;
+  }
+
+  dimension: blocks {
+    hidden: yes
+    sql: ${TABLE}.blocks ;;
+  }
+
+  dimension: tools {
+    hidden: yes
+    sql: ${TABLE}.tools ;;
+  }
+
+    measure: total_turns {
     type: count
     drill_fields: [standard_transcript_drill*]
   }
@@ -1081,7 +1133,198 @@ view: dfcx_transcript {
   set: standard_transcript_drill {
     fields: [session_id,position,user_utterance,agent_response,source_flow_display_name,source_page_display_name,flow_display_name,page_display_name]
   }
+}
 
+view: dfcx_transcript__tools {
+  dimension: block_step {
+    type: number
+    description: "The sequential order of the parent block for this tool usage."
+    sql: block_step ;;
+  }
+
+  dimension: action_step {
+    type: number
+    description: "The sequential order of the action within its parent block."
+    sql: action_step ;;
+  }
+
+  dimension: action_flow_id {
+    type: string
+    description: "The unique ID of the flow context for this action."
+    sql: action_flow_id ;;
+  }
+
+  dimension: action_flow_display_name {
+    type: string
+    description: "The human readable name of the flow context for this action."
+    sql: action_flow_display_name ;;
+  }
+
+  dimension: action_page_id {
+    type: string
+    description: "The unique ID of the page context for this action."
+    sql: action_page_id ;;
+  }
+
+  dimension: action_page_display_name {
+    type: string
+    description: "The human readable name of the page context for this action."
+    sql: action_page_display_name ;;
+  }
+
+  dimension: playbook_id {
+    type: string
+    description: "The fully qualified unique ID for the playbook associated with this action's block."
+    sql: playbook_id ;;
+  }
+
+  dimension: playbook_name {
+    type: string
+    description: "The human readable name associated with the playbook for this action's block."
+    sql: playbook_name ;;
+  }
+
+  dimension: tool_id {
+    type: string
+    description: "The fully qualified unique ID for the tool being used."
+    sql: tool_id ;;
+  }
+
+  dimension: tool_name {
+    type: string
+    description: "The human readable name of the tool being used."
+    sql: tool_name ;;
+  }
+
+  dimension: tool_type {
+    type: string
+    description: "The type of tool used, e.g., 'Webhook', 'Data Store'."
+    sql: tool_type ;;
+  }
+
+  dimension: tool_latency_ms {
+    type: number
+    description: "The latency in milliseconds for this tool action."
+    sql: tool_latency_ms ;;
+  }
+
+  dimension: webhook_url {
+    type: string
+    description: "The entire URL associated with the webhook function call."
+    sql: webhook_url ;;
+  }
+
+  dimension: webhook_tag {
+    type: string
+    description: "The tag associated with the webhook in the Dialogflow CX console."
+    sql: webhook_tag ;;
+  }
+
+  dimension: error_message {
+    type: string
+    description: "The error message generated by the tool, if any."
+    sql: error_message ;;
+  }
+
+  dimension: webhook_state {
+    type: string
+    description: "The PASS or FAILURE state associated with the function call."
+    sql: webhook_state ;;
+  }
+
+  dimension: webhook_reason {
+    type: string
+    description: "The error reason associated with the function call."
+    sql: webhook_reason ;;
+  }
+}
+
+view: dfcx_transcript__response_messages {
+  dimension: text {
+    type: string
+    sql: JSON_EXTRACT_SCALAR(response_messages, '$.text.text') ;;
+  }
+}
+
+view: dfcx_transcript__blocks {
+  dimension: block_step {
+    type: number
+    description: "The sequential order of this processing block within the conversational turn."
+    sql: block_step ;;
+  }
+
+  dimension: block_type {
+    type: string
+    description: "The type of processing block, e.g., 'Flow Trace', 'Playbook Trace', 'Speech Processing'."
+    sql: block_type ;;
+  }
+
+  dimension_group: block_start {
+    type: time
+    description: "The timestamp when this processing block began execution."
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}.block_start_time ;;
+  }
+
+  dimension_group: block_complete {
+    type: time
+    description: "The timestamp when this processing block finished execution."
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}.block_complete_time ;;
+  }
+
+  dimension: block_flow_id {
+    type: string
+    description: "The unique ID of the flow associated with this block, if applicable."
+    sql: block_flow_id ;;
+  }
+
+  dimension: block_flow_display_name {
+    type: string
+    description: "The human readable name of the flow associated with this block, if applicable."
+    sql: block_flow_display_name ;;
+  }
+
+  dimension: actions {
+    hidden: yes
+    sql: ${TABLE}.actions ;;
+  }
+}
+
+view: dfcx_transcript__playbooks {
+  dimension: playbook_step {
+    type: number
+    description: "The order of the playbooks entered"
+    sql: playbook_step ;;
+  }
+
+  dimension: playbook_id {
+    type: string
+    description: "The fully qualified unique ID for the triggered playbook"
+    sql: playbook_id ;;
+  }
+
+  dimension: playbook_name {
+    type: string
+    description: "The human readable name associated with the triggered playbook"
+    sql: playbook_name ;;
+  }
 }
 
 view: dfcx_transcript__webhooks {
