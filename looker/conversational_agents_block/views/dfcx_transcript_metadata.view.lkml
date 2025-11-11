@@ -5,10 +5,11 @@ view: dfcx_transcript_metadata {
     hidden: yes
     primary_key: yes
     type: string
-    sql: CONCAT(${session_id}, ${position}) ;;
+    sql: CONCAT(${session_id}, ${response_id}) ;;
   }
 
   dimension: response_id {
+    hidden: yes
     type: string
     description: "The unique ID associated with the response from the agent"
     sql: ${TABLE}.response_id ;;
@@ -32,10 +33,8 @@ view: dfcx_transcript_metadata {
     sql: ${TABLE}.contain_generative_fallback ;;
   }
 
-
-  
-
   dimension_group: request {
+    hidden: yes
     type: time
     description: "The time of the conversational turn"
     timeframes: [
@@ -51,6 +50,7 @@ view: dfcx_transcript_metadata {
   }
 
   dimension_group: insert {
+    hidden: yes
     type: time
     description: "The timestamp when the record was inserted"
     timeframes: [
@@ -66,12 +66,14 @@ view: dfcx_transcript_metadata {
   }
 
   dimension: session_id {
+    hidden: yes
     type: string
     description: "The fully qualified unique ID for the session"
     sql: ${TABLE}.session_id ;;
   }
 
   dimension_group: session_start {
+    hidden: yes
     type: time
     description: "The timestamp at which the session started"
     timeframes: [
@@ -106,12 +108,12 @@ view: dfcx_transcript_metadata {
 
   dimension: contain_data_store_faq_content {
     group_label: "AI Indicators"
-    label: "Contain Datastore FAQ Content"
+    label: "Contain Data Store FAQ Content"
     type: yesno
     sql: ${TABLE}.contain_data_store_faq_content ;;
   }
 
-  dimension: contain_playbook {
+  dimension: contain_playbook_content {
     group_label: "AI Indicators"
     label: "Contain Playbook"
     type: yesno
@@ -122,7 +124,7 @@ view: dfcx_transcript_metadata {
     group_label: "AI Indicators"
     label: "Contain Any AI Generated Content"
     type: yesno
-    sql: ${contain_ai_generated_content} OR ${contain_datastore_content} OR ${contain_datastore_faq_content} OR ${contain_generative_fallback} OR ${contain_generators_content} OR ${contain_playbook_content} ;;
+    sql: ${contain_ai_generated_content} OR ${contain_data_store_content} OR ${contain_data_store_faq_content} OR ${contain_generative_fallback} OR ${contain_generators_content} OR ${contain_playbook_content} ;;
   }
 
   measure: total_turns_contain_ai_generated_content {
@@ -133,20 +135,20 @@ view: dfcx_transcript_metadata {
     drill_fields: [dfcx_transcript.standard_transcript_drill*,total_turns_contain_ai_generated_content]
   }
 
-  measure: total_turns_contain_datastore_content {
+  measure: total_turns_contain_data_store_content {
     type: count
-    filters: [contain_datastore_content: "Yes"]
+    filters: [contain_data_store_content: "Yes"]
     group_label: "AI Indicators"
-    label: "Total Turns Contain Datastore Content"
-    drill_fields: [dfcx_transcript.standard_transcript_drill*,total_turns_contain_datastore_content]
+    label: "Total Turns Contain Data Store Content"
+    drill_fields: [dfcx_transcript.standard_transcript_drill*,total_turns_contain_data_store_content]
   }
 
-  measure: total_turns_contain_datastore_faq_content {
+  measure: total_turns_contain_data_store_faq_content {
     type: count
-    filters: [contain_datastore_faq_content: "Yes"]
+    filters: [contain_data_store_faq_content: "Yes"]
     group_label: "AI Indicators"
-    label: "Total Turns Contain Datastore FAQ Content"
-    drill_fields: [dfcx_transcript.standard_transcript_drill*,total_turns_contain_datastore_faq_content]
+    label: "Total Turns Contain Data Store FAQ Content"
+    drill_fields: [dfcx_transcript.standard_transcript_drill*,total_turns_contain_data_store_faq_content]
   }
 
   measure: total_turns_contain_generative_fallback {
@@ -196,10 +198,6 @@ view: dfcx_transcript_metadata {
     drill_fields: [dfcx_transcript.standard_transcript_drill*,ai_generated_content_percentage]
   }
 
-  measure: count {
-    type: count
-    drill_fields: []
-  }
 }
 
 view: dfcx_transcript_metadata__alternative_matched_intents {

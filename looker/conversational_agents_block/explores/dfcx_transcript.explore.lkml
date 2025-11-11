@@ -41,6 +41,12 @@ explore: dfcx_transcript {
     relationship: one_to_many
   }
 
+  join: dfcx_transcript__blocks__actions {
+    view_label: "Dfcx Transcript: Blocks Actions"
+    sql: LEFT JOIN UNNEST(${dfcx_transcript__blocks.actions}) as dfcx_transcript__blocks__actions ;;
+    relationship: one_to_many
+  }
+
   join: dfcx_transcript__tools {
     view_label: "DFCX Transcript: Tools"
     sql: LEFT JOIN UNNEST(${dfcx_transcript.tools}) as dfcx_transcript__tools ;;

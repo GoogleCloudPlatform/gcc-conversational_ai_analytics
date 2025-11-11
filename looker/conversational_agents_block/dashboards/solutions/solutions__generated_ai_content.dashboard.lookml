@@ -12,12 +12,12 @@
     explore: dfcx_session_metadata
     type: looker_column
     fields: [dfcx_transcript_metadata.total_turns_contain_ai_generated_content,
-      dfcx_transcript_metadata.total_turns_contain_datastore_content, dfcx_transcript_metadata.total_turns_contain_datastore_faq_content,
+      dfcx_transcript_metadata.total_turns_contain_data_store_content, dfcx_transcript_metadata.total_turns_contain_data_store_faq_content,
       dfcx_transcript_metadata.total_turns_contain_generative_fallback, dfcx_transcript_metadata.total_turns_contain_generators_content,
       dfcx_transcript_metadata.total_turns_contain_playbook_content, dfcx_session_metadata.session_start_date]
     fill_fields: [dfcx_session_metadata.session_start_date]
     filters:
-      
+
       dfcx_transcript_metadata.contain_any_ai_generated_content: 'Yes'
     sorts: [dfcx_session_metadata.session_start_date desc]
     limit: 500
@@ -72,7 +72,7 @@
       dfcx_transcript_metadata.total_turns_curated_responses, dfcx_transcript_metadata.ai_generated_content_percentage]
     fill_fields: [dfcx_session_metadata.session_start_date]
     filters:
-      
+
     sorts: [dfcx_session_metadata.session_start_date desc]
     limit: 500
     column_limit: 50

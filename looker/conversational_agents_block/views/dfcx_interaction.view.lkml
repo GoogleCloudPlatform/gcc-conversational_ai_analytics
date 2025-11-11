@@ -8,10 +8,6 @@ view: dfcx_interaction {
     sql: CONCAT(${session_id}, ${interaction_position}) ;;
   }
 
-
-
-
-
   dimension_group: latest_insert {
     type: time
     description: "The timestamp at which the record was last inserted"
@@ -181,19 +177,19 @@ view: dfcx_interaction__flows {
   dimension: flow_id {
     type: string
     description: "The unique ID of the flow"
-    sql: flow_id ;;
+    sql: ${TABLE}.flow_id ;;
   }
 
   dimension: flow_display_name {
     type: string
     description: "The human readable name of the flow"
-    sql: flow_display_name ;;
+    sql: ${TABLE}.flow_display_name ;;
   }
 
   dimension: action_started {
     type: yesno
     description: "Whether the action started in the flow"
-    sql: action_started ;;
+    sql: ${TABLE}.action_started ;;
   }
 
   dimension_group: action_started {
@@ -208,13 +204,13 @@ view: dfcx_interaction__flows {
       quarter,
       year
     ]
-    sql: action_started_time ;;
+    sql: ${TABLE}.action_started_time ;;
   }
 
   dimension: action_ended {
     type: yesno
     description: "Whether the action ended in the flow"
-    sql: action_ended ;;
+    sql: ${TABLE}.action_ended ;;
   }
 
   dimension_group: action_ended {
@@ -229,8 +225,6 @@ view: dfcx_interaction__flows {
       quarter,
       year
     ]
-    sql: action_ended_time ;;
+    sql: ${TABLE}.action_ended_time ;;
   }
 }
-
-
