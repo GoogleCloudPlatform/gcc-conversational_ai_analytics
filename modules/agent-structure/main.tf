@@ -31,7 +31,7 @@ module "cf_agent_structure" {
     path    = "${path.module}/cf-source-code"
     folder_options = {
       archive_path = "${path.module}/cf-source-code/bundle.zip"
-      excludes     = ["__pycache__", "env", ".venv", ".pytest_cache","test_main.py"]
+      excludes     = ["__pycache__", "env", ".venv", ".pytest_cache", "test_main.py"]
     }
   }
   service_account = var.service_account_email
@@ -47,8 +47,8 @@ module "cf_agent_structure" {
   }
 
   trigger_config = {
-    event_type   = "google.cloud.pubsub.topic.v1.messagePublished"
-    pubsub_topic = google_pubsub_topic.trigger_agent_structure.id
+    event_type            = "google.cloud.pubsub.topic.v1.messagePublished"
+    pubsub_topic          = google_pubsub_topic.trigger_agent_structure.id
     service_account_email = var.service_account_email
   }
 

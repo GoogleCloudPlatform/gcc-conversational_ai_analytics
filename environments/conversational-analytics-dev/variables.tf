@@ -13,17 +13,17 @@
 # limitations under the License.
 
 variable "project_id" {
-  type = string
+  type        = string
   description = "Project ID in which resources will be deployed"
 }
 
 variable "region" {
-  type = string
+  type        = string
   description = "Region in which GCP resources will be deployed"
 }
 
 variable "bq_dataset_region" {
-  type = string
+  type        = string
   description = "BigQuery dataset region"
 }
 
@@ -68,20 +68,20 @@ variable "dfcx_export_table" {
 
 variable "nlu_testing_execution_instances" {
   type = list(object({
-    schedule_name = string
-    agent_id = string
+    schedule_name       = string
+    agent_id            = string
     test_config_gcs_uri = string
-    cron_schedule = string
-    timezone = string
+    cron_schedule       = string
+    timezone            = string
   }))
 }
 
 variable "cx_test_cases_execution_instances" {
   type = list(object({
     schedule_name = string
-    agent_id = string
+    agent_id      = string
     cron_schedule = string
-    timezone = string
+    timezone      = string
   }))
 }
 

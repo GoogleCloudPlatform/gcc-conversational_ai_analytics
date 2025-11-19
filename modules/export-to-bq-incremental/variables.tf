@@ -13,66 +13,66 @@
 #    limitations under the License.
 
 variable "project_id" {
-  type = string
+  type        = string
   description = "Project ID in which the resources will be provisioned"
 }
 
 variable "region" {
-  type = string
+  type        = string
   description = "Region in which the resources will be provisioned"
 }
 
 variable "ccai_insights_project_id" {
-  type = string
+  type        = string
   description = "Project ID of CCAI Insights"
 }
 
 variable "ccai_insights_location_id" {
-  type = string
+  type        = string
   description = "Location ID of CCAI Insights"
 }
 
 variable "bigquery_project_id" {
-  type = string
+  type        = string
   description = "Project ID to which we will be sending the CCAI Insights data to BigQuery"
 }
 
 variable "bigquery_staging_dataset" {
-  type = string
+  type        = string
   description = "BigQuery dataset in which we will be writing the Staging data"
 }
 
 variable "bigquery_final_dataset" {
-  type = string
+  type        = string
   description = "BigQuery dataset in which we will be writing the data"
 }
 
 variable "bigquery_staging_table" {
-  type = string
+  type        = string
   description = "BigQuery table in which we will be writing the Staging data"
 }
 
 variable "bigquery_final_table" {
-  type = string
+  type        = string
   description = "BigQuery table in which we will be writing the data"
 }
 
 variable "export_to_bq_cron" {
-  type = string
+  type        = string
   description = "CRON expression that defines how often the CCAI Insights data will be exported"
 }
 
 variable "service_account_email" {
-  type = string
+  type        = string
   description = "Service Account used as identity by the Cloud Function"
 }
 
 variable "cf_bucket_name" {
-  type = string
+  type        = string
   description = "Bucket name to use for storing the Cloud Function bundle"
 }
 
 variable "function_name" {
-  type = string
+  type        = string
   description = "Cloud Function name"
 }

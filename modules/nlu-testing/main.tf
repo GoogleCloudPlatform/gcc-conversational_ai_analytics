@@ -19,22 +19,22 @@ module "cf_nlu_testing" {
   name        = "nlu-testing"
   bucket_name = var.cf_bucket_name
   bundle_config = {
-    path  = "${path.module}/cf-source-code"
+    path = "${path.module}/cf-source-code"
     folder_options = {
       archive_path = "${path.module}/cf-source-code/bundle.zip"
-      excludes     = ["__pycache__","env"]
+      excludes     = ["__pycache__", "env"]
     }
   }
   service_account = var.service_account_email
 
   function_config = {
-    memory_mb = 512
+    memory_mb       = 512
     timeout_seconds = local.timeout_seconds
   }
 
   environment_variables = {
     BQ_PROJECT_ID = var.bq_project_id
-    BQ_TABLE_ID = var.bq_table_id
+    BQ_TABLE_ID   = var.bq_table_id
   }
 }
 
@@ -57,15 +57,15 @@ resource "google_cloud_scheduler_job" "test_instances" {
   http_target {
     http_method = "POST"
     uri         = module.cf_nlu_testing.uri
-    body        = base64encode(
+    body = base64encode(
       jsonencode({
-        agent_id=var.scheduled_test_instances[count.index].agent_id
-        test_config_gcs_uri=var.scheduled_test_instances[count.index].test_config_gcs_uri
+        agent_id            = var.scheduled_test_instances[count.index].agent_id
+        test_config_gcs_uri = var.scheduled_test_instances[count.index].test_config_gcs_uri
       })
     )
     oidc_token {
-        audience              = "${module.cf_nlu_testing.uri}/"
-        service_account_email = var.service_account_email
+      audience              = "${module.cf_nlu_testing.uri}/"
+      service_account_email = var.service_account_email
     }
     headers = {
       "Content-Type" = "application/json"

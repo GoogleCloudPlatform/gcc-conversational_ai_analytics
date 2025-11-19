@@ -3,6 +3,5 @@ google-cloud-dialogflow-cx
 google-cloud-logging
 Flask
 vertexai
-pytest
 functions-framework
-IPython
+

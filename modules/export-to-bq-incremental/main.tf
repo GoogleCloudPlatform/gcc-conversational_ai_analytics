@@ -30,25 +30,25 @@ module "cf_export_to_bq" {
 
   function_config = {
     max_instance_count = 1 #Only one export at the time should be running
-    timeout_seconds = local.timeout_seconds
+    timeout_seconds    = local.timeout_seconds
   }
 
   environment_variables = {
-    CCAI_INSIGHTS_PROJECT_ID = var.ccai_insights_project_id
+    CCAI_INSIGHTS_PROJECT_ID  = var.ccai_insights_project_id
     CCAI_INSIGHTS_LOCATION_ID = var.ccai_insights_location_id
-    BIGQUERY_PROJECT_ID = var.bigquery_project_id
-    BIGQUERY_STAGING_DATASET = var.bigquery_staging_dataset
-    BIGQUERY_STAGING_TABLE = var.bigquery_staging_table
-    BIGQUERY_FINAL_DATASET = var.bigquery_final_dataset
-    BIGQUERY_FINAL_TABLE = var.bigquery_final_table
+    BIGQUERY_PROJECT_ID       = var.bigquery_project_id
+    BIGQUERY_STAGING_DATASET  = var.bigquery_staging_dataset
+    BIGQUERY_STAGING_TABLE    = var.bigquery_staging_table
+    BIGQUERY_FINAL_DATASET    = var.bigquery_final_dataset
+    BIGQUERY_FINAL_TABLE      = var.bigquery_final_table
   }
 }
 
 resource "google_cloud_scheduler_job" "ccai_to_bq_scheduler" {
-  name     = "${var.function_name}-scheduler"
-  region = var.region
-  schedule = var.export_to_bq_cron
-  description = "Schedule to export CCAI Insights conversations to BigQuery"
+  name             = "${var.function_name}-scheduler"
+  region           = var.region
+  schedule         = var.export_to_bq_cron
+  description      = "Schedule to export CCAI Insights conversations to BigQuery"
   attempt_deadline = "${local.timeout_seconds}s" #30 minutes
   retry_config {
     retry_count = 3
@@ -57,8 +57,8 @@ resource "google_cloud_scheduler_job" "ccai_to_bq_scheduler" {
     uri         = module.cf_export_to_bq.uri
     http_method = "POST"
     oidc_token {
-        audience              = "${module.cf_export_to_bq.uri}/"
-        service_account_email = var.service_account_email
+      audience              = "${module.cf_export_to_bq.uri}/"
+      service_account_email = var.service_account_email
     }
   }
 }

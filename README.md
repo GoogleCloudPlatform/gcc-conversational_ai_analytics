@@ -30,3 +30,5 @@ The modules in this repository can be combined to create a powerful and flexible
 To get started with this repository, you'll need to have Terraform installed and configured to work with your Google Cloud project. You can then browse the modules in the `/modules` directory and choose the ones you want to use.
 
 Each module has its own `README.md` file with detailed instructions on how to use it. You can also find example configurations in the `/environments` directory.
+
+For detailed operational procedures and development workflows, please refer to the [Operating Manual](GEMINI.md).

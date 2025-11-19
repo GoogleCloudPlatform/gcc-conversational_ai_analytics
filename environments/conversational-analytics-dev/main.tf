@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 provider "google" {
-  project = "${var.project_id}"
+  project = var.project_id
 }
 
 data "google_project" "project" {
@@ -20,68 +20,68 @@ data "google_project" "project" {
 }
 
 resource "google_project_service" "secret_manager_api" {
-  project = var.project_id
-  service = "secretmanager.googleapis.com"
+  project            = var.project_id
+  service            = "secretmanager.googleapis.com"
   disable_on_destroy = false
 }
 
 resource "google_project_service" "cloud_functions_api" {
-  project = var.project_id
-  service = "cloudfunctions.googleapis.com"
+  project            = var.project_id
+  service            = "cloudfunctions.googleapis.com"
   disable_on_destroy = false
 }
 
 resource "google_project_service" "cloud_scheduler_api" {
-  project = var.project_id
-  service = "cloudscheduler.googleapis.com"
+  project            = var.project_id
+  service            = "cloudscheduler.googleapis.com"
   disable_on_destroy = false
 }
 
 resource "google_project_service" "run_api" {
-  project = var.project_id
-  service = "run.googleapis.com"
+  project            = var.project_id
+  service            = "run.googleapis.com"
   disable_on_destroy = false
 }
 
 resource "google_project_service" "dataform_api" {
-  project = var.project_id
-  service = "dataform.googleapis.com"
+  project            = var.project_id
+  service            = "dataform.googleapis.com"
   disable_on_destroy = false
 }
 
 resource "google_project_service" "storage_api" {
-  project = var.project_id
-  service = "storage.googleapis.com"
+  project            = var.project_id
+  service            = "storage.googleapis.com"
   disable_on_destroy = false
 }
 
 resource "google_project_service" "dialogflow_api" {
-  project = var.project_id
-  service = "dialogflow.googleapis.com"
+  project            = var.project_id
+  service            = "dialogflow.googleapis.com"
   disable_on_destroy = false
 }
 
 resource "google_project_service" "bigquery_api" {
-  project = var.project_id
-  service = "bigquery.googleapis.com"
+  project            = var.project_id
+  service            = "bigquery.googleapis.com"
   disable_on_destroy = false
 }
 
 resource "google_project_service" "cloud_build_api" {
-  project = var.project_id
-  service = "cloudbuild.googleapis.com"
+  project            = var.project_id
+  service            = "cloudbuild.googleapis.com"
   disable_on_destroy = false
 }
 
 resource "google_project_service" "artifact_registry_api" {
-  project = var.project_id
-  service = "artifactregistry.googleapis.com"
+  project            = var.project_id
+  service            = "artifactregistry.googleapis.com"
   disable_on_destroy = false
 }
 
 resource "google_project_service" "eventarc_api" {
-  project = var.project_id
-  service = "eventarc.googleapis.com"
+  project            = var.project_id
+  service            = "eventarc.googleapis.com"
   disable_on_destroy = false
 }
 
@@ -128,14 +128,6 @@ resource "google_project_iam_member" "compute_sa_permissions" {
   member = "serviceAccount:${data.google_project.project.number}-compute@developer.gserviceaccount.com"
 }
 
-resource "google_project_iam_member" "build_sa_permissions" {
-  project = var.project_id
-  for_each = toset([
-    "roles/logging.logWriter"
-  ])
-  role   = each.key
-  member  = "serviceAccount:${data.google_project.project.number}-compute@developer.gserviceaccount.com"
-}
 
 resource "google_project_iam_member" "dataform_sa_permissions" {
   project = var.project_id
@@ -145,7 +137,7 @@ resource "google_project_iam_member" "dataform_sa_permissions" {
     "roles/iam.serviceAccountUser"
   ])
   role   = each.key
-  member  = "serviceAccount:service-${data.google_project.project.number}@gcp-sa-dataform.iam.gserviceaccount.com"
+  member = "serviceAccount:service-${data.google_project.project.number}@gcp-sa-dataform.iam.gserviceaccount.com"
 }
 
 resource "random_string" "random" {
@@ -165,14 +157,14 @@ module "cf_bundle_bucket" {
 
 module "nlu_testing" {
   source = "../../modules/nlu-testing"
-  
+
   project_id = var.project_id
-  region = var.region
+  region     = var.region
 
   cf_bucket_name = module.cf_bundle_bucket.name
-  
+
   bq_project_id = var.project_id
-  bq_table_id = "${var.bq_testing_dataset_name}.nlu_testing"
+  bq_table_id   = "${var.bq_testing_dataset_name}.nlu_testing"
 
   service_account_email = google_service_account.conversational_analytics_sa.email
 
@@ -189,15 +181,15 @@ module "nlu_testing" {
 
 module "cx_test_cases" {
   source = "../../modules/cx-test-cases"
-  
+
   project_id = var.project_id
-  region = var.region
+  region     = var.region
 
   cf_bucket_name = module.cf_bundle_bucket.name
-  
+
   bq_project_id = var.project_id
-  bq_table_id = "${var.bq_testing_dataset_name}.cx_test_cases" 
-  
+  bq_table_id   = "${var.bq_testing_dataset_name}.cx_test_cases"
+
   service_account_email = google_service_account.conversational_analytics_sa.email
 
   scheduled_test_instances = var.cx_test_cases_execution_instances
@@ -213,14 +205,14 @@ module "cx_test_cases" {
 
 module "agent_structure" {
   source = "../../modules/agent-structure"
-  
+
   project_id = var.project_id
-  region = var.region
+  region     = var.region
 
   cf_bucket_name = module.cf_bundle_bucket.name
-  
-  bq_project_id = var.project_id
-  bq_dataset_region = var.bq_dataset_region
+
+  bq_project_id         = var.project_id
+  bq_dataset_region     = var.bq_dataset_region
   bq_agent_dataset_name = var.bq_agent_dataset_name
   service_account_email = google_service_account.conversational_analytics_sa.email
 
@@ -236,19 +228,19 @@ module "agent_structure" {
 }
 
 module "dataform" {
-  source  = "../../modules/dataform"
+  source = "../../modules/dataform"
 
-  repository_name = var.dataform_repository_name
-  project_id      = var.project_id
-  region          = var.region
-  service_account = google_service_account.conversational_analytics_sa.email
-  bq_project_id = var.project_id
-  bq_dataset_region = var.bq_dataset_region
+  repository_name          = var.dataform_repository_name
+  project_id               = var.project_id
+  region                   = var.region
+  service_account          = google_service_account.conversational_analytics_sa.email
+  bq_project_id            = var.project_id
+  bq_dataset_region        = var.bq_dataset_region
   bq_dataform_dataset_name = var.bq_dataform_dataset_name
 
   remote_repository_settings = {
-    url            = var.dataform_git_repo_url
-    branch         = var.dataform_git_repo_default_branch
+    url    = var.dataform_git_repo_url
+    branch = var.dataform_git_repo_default_branch
   }
 
   workspace_compilation_overrides = {
@@ -270,31 +262,31 @@ module "dataform" {
       }
     }
   ]
-    depends_on = [
-      google_project_service.dataform_api,
-      google_project_service.secret_manager_api
-    ]
-  }
-  
-  module "conversation_generator" {
-    source = "../../modules/conversation-generator"
-  
-    project_id        = var.project_id
-    region            = var.region
-    dfcx_location     = var.region
-    dfcx_agent_id     = var.conversation_generator_dfcx_agent_id
-    gemini_model_name = var.conversation_generator_gemini_model_name
-    max_turns         = var.conversation_generator_max_turns
-    num_conversations = var.conversation_generator_num_conversations
-    pubsub_topic_name = var.conversation_generator_pubsub_topic_name
-    cf_bucket_name    = module.cf_bundle_bucket.name
-  
-    depends_on = [
-      google_project_service.run_api,
-      google_project_service.cloud_build_api,
-      google_project_service.dialogflow_api,
-      google_project_service.artifact_registry_api,
-      google_project_service.eventarc_api
-    ]
-  }
+  depends_on = [
+    google_project_service.dataform_api,
+    google_project_service.secret_manager_api
+  ]
+}
+
+module "conversation_generator" {
+  source = "../../modules/conversation-generator"
+
+  project_id        = var.project_id
+  region            = var.region
+  dfcx_location     = var.region
+  dfcx_agent_id     = var.conversation_generator_dfcx_agent_id
+  gemini_model_name = var.conversation_generator_gemini_model_name
+  max_turns         = var.conversation_generator_max_turns
+  num_conversations = var.conversation_generator_num_conversations
+  pubsub_topic_name = var.conversation_generator_pubsub_topic_name
+  cf_bucket_name    = module.cf_bundle_bucket.name
+
+  depends_on = [
+    google_project_service.run_api,
+    google_project_service.cloud_build_api,
+    google_project_service.dialogflow_api,
+    google_project_service.artifact_registry_api,
+    google_project_service.eventarc_api
+  ]
+}
   

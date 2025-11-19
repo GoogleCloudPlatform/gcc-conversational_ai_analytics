@@ -76,7 +76,7 @@ resource "google_dataform_repository_workflow_config" "workflows" {
   region     = google_dataform_repository.repo.region
   repository = google_dataform_repository.repo.name
 
-  name = "${each.key}-workflow"
+  name           = "${each.key}-workflow"
   release_config = google_dataform_repository_release_config.releases[each.key].id
 
   cron_schedule = each.value.cron_schedule
@@ -108,8 +108,8 @@ module "bigquery-dataset" {
     name => {
       schema                   = jsonencode(config.schema)
       description              = config.description
-      partitioning             = try(config.partitioning,null)
-      require_partition_filter = try(config.require_partition_filter,null) 
+      partitioning             = try(config.partitioning, null)
+      require_partition_filter = try(config.require_partition_filter, null)
     }
   }
 }

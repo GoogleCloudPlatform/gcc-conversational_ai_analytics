@@ -33,7 +33,7 @@ module "cf_dfcx_simulator" {
     runtime = "python313"
     path    = "${path.module}/cf-source-code"
     folder_options = {
-      excludes     = ["__pycache__", "env", ".venv", ".pytest_cache","test_main.py"]
+      excludes = ["__pycache__", "env", ".venv", ".pytest_cache", "test_main.py"]
     }
   }
   service_account = google_service_account.dfcx_simulator_sa.email
@@ -53,8 +53,8 @@ module "cf_dfcx_simulator" {
   }
 
   trigger_config = {
-    event_type   = "google.cloud.pubsub.topic.v1.messagePublished"
-    pubsub_topic = google_pubsub_topic.dfcx_simulation_trigger.id
+    event_type            = "google.cloud.pubsub.topic.v1.messagePublished"
+    pubsub_topic          = google_pubsub_topic.dfcx_simulation_trigger.id
     service_account_email = google_service_account.dfcx_simulator_sa.email
   }
 
@@ -71,10 +71,10 @@ resource "google_pubsub_topic_iam_member" "scheduler_pubsub_publisher" {
 }
 
 resource "google_cloud_scheduler_job" "conversation_generator_scheduler" {
-  project  = var.project_id
-  region   = var.region
-  name     = "conversation-generator-scheduler"
-  schedule = "*/4 * * * *"
+  project   = var.project_id
+  region    = var.region
+  name      = "conversation-generator-scheduler"
+  schedule  = "*/4 * * * *"
   time_zone = "Etc/UTC"
 
   pubsub_target {

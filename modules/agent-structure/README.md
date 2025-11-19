@@ -26,4 +26,19 @@ This module provisions a Cloud Function that is triggered by a Cloud Logging sin
 
 ## Outputs
 
-This module does not have any outputs.
+| Name | Description |
+|------|-------------|
+| `function_name` | The name of the provisioned Cloud Function. |
+| `function_uri` | The URI of the provisioned Cloud Function. |
+
+## Local Development
+
+To run tests locally, you need to install the test dependencies. It is recommended to use a virtual environment:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r cf-source-code/requirements.txt
+pip install -r cf-source-code/requirements-test.txt
+pytest cf-source-code/
+```

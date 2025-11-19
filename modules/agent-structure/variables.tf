@@ -19,7 +19,7 @@ variable "bq_dataset_region" {
 }
 
 variable "bq_agent_dataset_name" {
-  type = string
+  type        = string
   description = "BigQuery dataset region"
 }
 

@@ -24,7 +24,7 @@ variable "bq_dataset_region" {
 }
 
 variable "bq_dataform_dataset_name" {
-  type = string
+  type        = string
   description = "BigQuery dataset region"
 }
 

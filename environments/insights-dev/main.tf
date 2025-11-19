@@ -13,7 +13,7 @@
 # limitations under the License.
 
 provider "google" {
-  project = "${var.project_id}"
+  project = var.project_id
 }
 
 data "google_project" "project" {
@@ -21,32 +21,32 @@ data "google_project" "project" {
 }
 
 resource "google_project_service" "contact_center_insights_api" {
-  project = var.project_id
-  service = "contactcenterinsights.googleapis.com"
+  project            = var.project_id
+  service            = "contactcenterinsights.googleapis.com"
   disable_on_destroy = false
 }
 
 resource "google_project_service" "bigquery_api" {
-  project = var.project_id
-  service = "bigquery.googleapis.com"
+  project            = var.project_id
+  service            = "bigquery.googleapis.com"
   disable_on_destroy = false
 }
 
 resource "google_project_service" "run_api" {
-  project = var.project_id
-  service = "run.googleapis.com"
+  project            = var.project_id
+  service            = "run.googleapis.com"
   disable_on_destroy = false
 }
 
 resource "google_project_service" "cloud_build_api" {
-  project = var.project_id
-  service = "cloudbuild.googleapis.com"
+  project            = var.project_id
+  service            = "cloudbuild.googleapis.com"
   disable_on_destroy = false
 }
 
 resource "google_project_service" "artifact_registry_api" {
-  project = var.project_id
-  service = "artifactregistry.googleapis.com"
+  project            = var.project_id
+  service            = "artifactregistry.googleapis.com"
   disable_on_destroy = false
 }
 
@@ -73,7 +73,7 @@ module "ccai_insights_sa" {
       "roles/logging.logWriter",
       "roles/workflows.invoker",
 
-       # only required if GCS/PubSub trigger will be used by Cloud Function v2
+      # only required if GCS/PubSub trigger will be used by Cloud Function v2
       "roles/pubsub.publisher",
       "roles/run.invoker",
       "roles/eventarc.eventReceiver",
@@ -84,7 +84,7 @@ module "ccai_insights_sa" {
 }
 
 # the GCS default Service Account needs to have permissions to publish Eventarc events
-resource "google_project_iam_member" "gcs_pubsub_publisher" { 
+resource "google_project_iam_member" "gcs_pubsub_publisher" {
   project = var.project_id
   role    = "roles/pubsub.publisher"
   member  = "serviceAccount:service-${data.google_project.project.number}@gs-project-accounts.iam.gserviceaccount.com"
@@ -106,22 +106,22 @@ module "cf_bundle_bucket" {
 
 # Implement the Terraform module that schedules the BQ export using incremental loads
 module "ccai_insights_to_bq_incremental" {
-  source  = "../../modules/export-to-bq-incremental"
+  source     = "../../modules/export-to-bq-incremental"
   project_id = var.project_id
-  region = var.region
+  region     = var.region
 
-  function_name = "export-to-bq-incremental"
+  function_name  = "export-to-bq-incremental"
   cf_bucket_name = module.cf_bundle_bucket.name
-  
-  ccai_insights_location_id = var.region
-  ccai_insights_project_id = var.project_id
-  bigquery_project_id = var.project_id
-  bigquery_staging_dataset = "ccai_insights_export"
-  bigquery_staging_table = "export_staging"
-  bigquery_final_dataset = "ccai_insights_export"
-  bigquery_final_table = "export"
-  export_to_bq_cron   = "0 * * * *"
-  service_account_email = module.ccai_insights_sa.email
 
-  depends_on = [ module.ccai_insights_sa ]
+  ccai_insights_location_id = var.region
+  ccai_insights_project_id  = var.project_id
+  bigquery_project_id       = var.project_id
+  bigquery_staging_dataset  = "ccai_insights_export"
+  bigquery_staging_table    = "export_staging"
+  bigquery_final_dataset    = "ccai_insights_export"
+  bigquery_final_table      = "export"
+  export_to_bq_cron         = "0 * * * *"
+  service_account_email     = module.ccai_insights_sa.email
+
+  depends_on = [module.ccai_insights_sa]
 }
