@@ -64,7 +64,7 @@ resource "google_project_iam_binding" "project" {
 module "ccai_insights_sa" {
   source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/iam-service-account?ref=v31.1.0&depth=1"
   project_id = var.project_id
-  name       = "ccai-insights-demo1"
+  name       = "ccai-insights-sa"
 
   # non-authoritative roles granted *to* the service accounts on other resources
   iam_project_roles = {
@@ -117,9 +117,9 @@ module "ccai_insights_to_bq_incremental" {
   ccai_insights_project_id  = var.project_id
   bigquery_project_id       = var.project_id
   bigquery_staging_dataset  = "ccai_insights_export"
-  bigquery_staging_table    = "export_staging"
+  bigquery_staging_table    = "insights_conversations_staging"
   bigquery_final_dataset    = "ccai_insights_export"
-  bigquery_final_table      = "export"
+  bigquery_final_table      = "insights_conversations"
   export_to_bq_cron         = "0 * * * *"
   service_account_email     = module.ccai_insights_sa.email
 

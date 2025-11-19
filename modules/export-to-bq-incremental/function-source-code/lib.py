@@ -44,7 +44,8 @@ class InsightsHelper:
         bigquery_staging_dataset,
         bigquery_staging_table,
         bigquery_final_dataset,
-        bigquery_final_table
+        bigquery_final_table,
+        export_schema_version=None
         ):
 
         self.ccai_insights_project_id = ccai_insights_project_id
@@ -54,6 +55,7 @@ class InsightsHelper:
         self.bigquery_staging_table = bigquery_staging_table
         self.bigquery_final_dataset = bigquery_final_dataset
         self.bigquery_final_table = bigquery_final_table
+        self.export_schema_version = export_schema_version
 
         self.bq_client = bigquery.Client()
 
@@ -105,6 +107,9 @@ class InsightsHelper:
             },
             'filter':filter
         }
+
+        if self.export_schema_version:
+            request_data['exportSchemaVersion'] = self.export_schema_version
         print('BQ Export Request Data:')
         print(request_data)
 
@@ -126,6 +131,7 @@ class InsightsHelper:
                     audioFileUri, 
                     dialogflowConversationProfileId, 
                     startTimestampUtc, 
+                    startTimestamp,
                     loadTimestampUtc, 
                     analysisTimestampUtc, 
                     conversationUpdateTimestampUtc, 
@@ -141,6 +147,7 @@ class InsightsHelper:
                     agentSentimentMagnitude, 
                     clientSentimentScore, 
                     clientSentimentMagnitude, 
+                    clientSentimentRationale,
                     transcript, 
                     turnCount, 
                     languageCode, 
@@ -152,7 +159,9 @@ class InsightsHelper:
                     sentences,
                     latestSummary,
                     qaScorecardResults,
-                    agents
+                    agents,
+                    feedbackLabels,
+                    CURRENT_TIMESTAMP() as update_timestamp
                     FROM `{self.staging_table_id}`) S 
                     ON T.conversationName = S.conversationName 
                 WHEN MATCHED AND T.conversationUpdateTimestampUtc != S.conversationUpdateTimestampUtc THEN 
@@ -160,6 +169,7 @@ class InsightsHelper:
                         audioFileUri = S.audioFileUri, 
                         dialogflowConversationProfileId = S.dialogflowConversationProfileId, 
                         startTimestampUtc = S.startTimestampUtc, 
+                        startTimestamp = S.startTimestamp,
                         loadTimestampUtc = S.loadTimestampUtc, 
                         analysisTimestampUtc = S.analysisTimestampUtc, 
                         conversationUpdateTimestampUtc = S.conversationUpdateTimestampUtc, 
@@ -174,7 +184,8 @@ class InsightsHelper:
                         agentSentimentScore = S.agentSentimentScore, 
                         agentSentimentMagnitude = S.agentSentimentMagnitude, 
                         clientSentimentScore = S.clientSentimentScore, 
-                        clientSentimentMagnitude = S.clientSentimentMagnitude, 
+                        clientSentimentMagnitude = S.clientSentimentMagnitude,
+                        clientSentimentRationale = S.clientSentimentRationale,
                         transcript = S.transcript, 
                         turnCount = S.turnCount, 
                         languageCode = S.languageCode, 
@@ -186,7 +197,9 @@ class InsightsHelper:
                         sentences = S.sentences,
                         latestSummary = S.latestSummary,
                         qaScorecardResults = S.qaScorecardResults,
-                        agents = S.agents
+                        agents = S.agents,
+                        feedbackLabels = S.feedbackLabels,
+                        update_timestamp = S.update_timestamp
                 WHEN NOT MATCHED THEN
                     INSERT ROW
         '''

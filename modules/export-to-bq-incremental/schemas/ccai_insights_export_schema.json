@@ -1,0 +1,1018 @@
+[
+  {
+    "description": "Name of the conversation resource.",
+    "mode": "NULLABLE",
+    "name": "conversationName",
+    "type": "STRING"
+  },
+  {
+    "description": "Location of the audio file on Google Cloud Storage.",
+    "mode": "NULLABLE",
+    "name": "audioFileUri",
+    "type": "STRING"
+  },
+  {
+    "description": "The Dialogflow conversation profile ID of this conversation.",
+    "mode": "NULLABLE",
+    "name": "dialogflowConversationProfileId",
+    "type": "STRING"
+  },
+  {
+    "description": "The time in seconds at which the conversation started.",
+    "mode": "NULLABLE",
+    "name": "startTimestampUtc",
+    "type": "INTEGER"
+  },
+  {
+    "description": "The time at which the conversation started.",
+    "mode": "NULLABLE",
+    "name": "startTimestamp",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "The time in seconds at which the conversation was loaded into Insights.",
+    "mode": "NULLABLE",
+    "name": "loadTimestampUtc",
+    "type": "INTEGER"
+  },
+  {
+    "description": "The time in seconds at which the most recent analysis was performed.",
+    "mode": "NULLABLE",
+    "name": "analysisTimestampUtc",
+    "type": "INTEGER"
+  },
+  {
+    "description": "The time in seconds at which the conversation was last updated.",
+    "mode": "NULLABLE",
+    "name": "conversationUpdateTimestampUtc",
+    "type": "INTEGER"
+  },
+  {
+    "description": "Year date part of `loadTimestampUtc`.",
+    "mode": "NULLABLE",
+    "name": "year",
+    "type": "INTEGER"
+  },
+  {
+    "description": "Month date part of `loadTimestampUtc`.",
+    "mode": "NULLABLE",
+    "name": "month",
+    "type": "INTEGER"
+  },
+  {
+    "description": "Day date part of `loadTimestampUtc`.",
+    "mode": "NULLABLE",
+    "name": "day",
+    "type": "INTEGER"
+  },
+  {
+    "description": "Conversation duration in nanoseconds.",
+    "mode": "NULLABLE",
+    "name": "durationNanos",
+    "type": "INTEGER"
+  },
+  {
+    "description": "Number of nanoseconds calculated to be in silence.",
+    "mode": "NULLABLE",
+    "name": "silenceNanos",
+    "type": "INTEGER"
+  },
+  {
+    "description": "Percentage of the total conversation spent in silence.",
+    "mode": "NULLABLE",
+    "name": "silencePercentage",
+    "type": "FLOAT"
+  },
+  {
+    "description": "Percentage of the conversation with the agent speaking.",
+    "mode": "NULLABLE",
+    "name": "agentSpeakingPercentage",
+    "type": "FLOAT"
+  },
+  {
+    "description": "Percentage of the conversation with the client speaking.",
+    "mode": "NULLABLE",
+    "name": "clientSpeakingPercentage",
+    "type": "FLOAT"
+  },
+  {
+    "description": "Agent sentiment score between -1.0 (negative) and 1.0 (positive).",
+    "mode": "NULLABLE",
+    "name": "agentSentimentScore",
+    "type": "FLOAT"
+  },
+  {
+    "description": "A non-negative number from zero to infinity that represents the absolute magnitude of the agent sentiment regardless of score.",
+    "mode": "NULLABLE",
+    "name": "agentSentimentMagnitude",
+    "type": "FLOAT"
+  },
+  {
+    "description": "Client sentiment score between -1.0 (negative) and 1.0 (positive).",
+    "mode": "NULLABLE",
+    "name": "clientSentimentScore",
+    "type": "FLOAT"
+  },
+  {
+    "description": "A non-negative number from zero to infinity that represents the absolute magnitude of client sentiment regardless of score.",
+    "mode": "NULLABLE",
+    "name": "clientSentimentMagnitude",
+    "type": "FLOAT"
+  },
+  {
+    "description": "The rationale for the client sentiment score.",
+    "mode": "NULLABLE",
+    "name": "clientSentimentRationale",
+    "type": "STRING"
+  },
+  {
+    "description": "The complete text transcript of the conversation.",
+    "mode": "NULLABLE",
+    "name": "transcript",
+    "type": "STRING"
+  },
+  {
+    "description": "The number of turns taken in the conversation.",
+    "mode": "NULLABLE",
+    "name": "turnCount",
+    "type": "INTEGER"
+  },
+  {
+    "description": "Language code of the conversation.",
+    "mode": "NULLABLE",
+    "name": "languageCode",
+    "type": "STRING"
+  },
+  {
+    "description": "Medium of the conversation.",
+    "mode": "NULLABLE",
+    "name": "medium",
+    "type": "STRING"
+  },
+  {
+    "description": "The list of all issues of the conversation.",
+    "fields": [
+      {
+        "description": "The name of the issue.",
+        "mode": "NULLABLE",
+        "name": "name",
+        "type": "STRING"
+      },
+      {
+        "description": "Score indicating the likelihood of the issue assignment, between 0 and 1.0.",
+        "mode": "NULLABLE",
+        "name": "score",
+        "type": "FLOAT"
+      },
+      {
+        "description": "ID of the issue model that generated the issue assignment.",
+        "mode": "NULLABLE",
+        "name": "issueModelId",
+        "type": "STRING"
+      },
+      {
+        "description": "ID of the assigned issue.",
+        "mode": "NULLABLE",
+        "name": "issueId",
+        "type": "STRING"
+      }
+    ],
+    "mode": "REPEATED",
+    "name": "issues",
+    "type": "RECORD"
+  },
+  {
+    "description": "The list of all spoken entities.",
+    "fields": [
+      {
+        "description": "Name of the entity.",
+        "mode": "NULLABLE",
+        "name": "name",
+        "type": "STRING"
+      },
+      {
+        "description": "Type of the entity.",
+        "mode": "NULLABLE",
+        "name": "type",
+        "type": "STRING"
+      },
+      {
+        "description": "The entity sentiment score between -1.0 (negative) and 1.0 (positive).",
+        "mode": "NULLABLE",
+        "name": "sentimentScore",
+        "type": "FLOAT"
+      },
+      {
+        "description": "A non-negative number from zero to infinity that represents the absolute magnitude of the entity sentiment regardless of score.",
+        "mode": "NULLABLE",
+        "name": "sentimentMagnitude",
+        "type": "FLOAT"
+      },
+      {
+        "description": "Salience score of the entity.",
+        "mode": "NULLABLE",
+        "name": "salience",
+        "type": "FLOAT"
+      },
+      {
+        "description": "The speaker that the entity mention originated from.",
+        "mode": "NULLABLE",
+        "name": "speakerTag",
+        "type": "INTEGER"
+      }
+    ],
+    "mode": "REPEATED",
+    "name": "entities",
+    "type": "RECORD"
+  },
+  {
+    "description": "The list of all user-provided labels.",
+    "fields": [
+      {
+        "description": "User-provided label key.",
+        "mode": "NULLABLE",
+        "name": "key",
+        "type": "STRING"
+      },
+      {
+        "description": "User-provided label value.",
+        "mode": "NULLABLE",
+        "name": "value",
+        "type": "STRING"
+      }
+    ],
+    "mode": "REPEATED",
+    "name": "labels",
+    "type": "RECORD"
+  },
+  {
+    "description": "The list of all spoken words.",
+    "fields": [
+      {
+        "description": "The transcribed word.",
+        "mode": "NULLABLE",
+        "name": "word",
+        "type": "STRING"
+      },
+      {
+        "description": "Time offset in nanoseconds of the start of this word relative to the beginning of the conversation.",
+        "mode": "NULLABLE",
+        "name": "startOffsetNanos",
+        "type": "INTEGER"
+      },
+      {
+        "description": "Time offset in nanoseconds of the end of this word relative to the beginning of the conversation.",
+        "mode": "NULLABLE",
+        "name": "endOffsetNanos",
+        "type": "INTEGER"
+      },
+      {
+        "description": "The speaker that the word originated from.",
+        "mode": "NULLABLE",
+        "name": "speakerTag",
+        "type": "INTEGER"
+      },
+      {
+        "description": "Language code.",
+        "mode": "NULLABLE",
+        "name": "languageCode",
+        "type": "STRING"
+      }
+    ],
+    "mode": "REPEATED",
+    "name": "words",
+    "type": "RECORD"
+  },
+  {
+    "description": "The list of conversation sentences.",
+    "fields": [
+      {
+        "description": "The transcribed sentence.",
+        "mode": "NULLABLE",
+        "name": "sentence",
+        "type": "STRING"
+      },
+      {
+        "description": "The sentence sentiment score between -1.0 (negative) and 1.0 (positive).",
+        "mode": "NULLABLE",
+        "name": "sentimentScore",
+        "type": "FLOAT"
+      },
+      {
+        "description": "A non-negative number from zero to infinity that represents the absolute magnitude of the sentence sentiment regardless of score.",
+        "mode": "NULLABLE",
+        "name": "sentimentMagnitude",
+        "type": "FLOAT"
+      },
+      {
+        "description": "The speaker that the sentence originated from.",
+        "mode": "NULLABLE",
+        "name": "speakerTag",
+        "type": "INTEGER"
+      },
+      {
+        "description": "Language code.",
+        "mode": "NULLABLE",
+        "name": "languageCode",
+        "type": "STRING"
+      },
+      {
+        "description": "Time offset in nanoseconds of the start of this sentence relative to the beginning of the conversation.",
+        "mode": "NULLABLE",
+        "name": "startOffsetNanos",
+        "type": "INTEGER"
+      },
+      {
+        "description": "Time offset in nanoseconds of the end of this sentence relative to the beginning of the conversation.",
+        "mode": "NULLABLE",
+        "name": "endOffsetNanos",
+        "type": "INTEGER"
+      },
+      {
+        "description": "Time in nanoseconds that the conversation message took place, if provided.",
+        "mode": "NULLABLE",
+        "name": "createTimeNanos",
+        "type": "INTEGER"
+      },
+      {
+        "description": "Participant ID, if provided.",
+        "mode": "NULLABLE",
+        "name": "participantId",
+        "type": "STRING"
+      },
+      {
+        "description": "Participant role, if provided.",
+        "mode": "NULLABLE",
+        "name": "participantRole",
+        "type": "STRING"
+      },
+      {
+        "description": "Obfuscated external user ID, if provided.",
+        "mode": "NULLABLE",
+        "name": "obfuscatedExternalUserId",
+        "type": "STRING"
+      },
+      {
+        "description": "Whether the sentence is covered by [a configured smart reply allowlist](/agent-assist/docs/model-training#model_allowlist_management) in Agent Assist.",
+        "mode": "NULLABLE",
+        "name": "isCoveredBySmartReplyAllowlist",
+        "type": "BOOLEAN"
+      },
+      {
+        "description": "The list of annotations from [Dialogflow Runtime Integration](/contact-center/insights/docs/enable-dialogflow-runtime-integration). See [full list](/contact-center/insights/docs/reference/rest/v1/projects.locations.conversations#runtimeannotation).",
+        "fields": [
+          {
+            "description": "The annotation record returned from Dialogflow.",
+            "mode": "NULLABLE",
+            "name": "annotationRecord",
+            "type": "JSON"
+          },
+          {
+            "description": "The timestamp when the suggestion was generated.",
+            "mode": "NULLABLE",
+            "name": "createTimeNanos",
+            "type": "INTEGER"
+          },
+          {
+            "description": "The type of suggestion.",
+            "mode": "NULLABLE",
+            "name": "type",
+            "type": "STRING"
+          },
+          {
+            "description": "Customer feedback on whether the suggestion was clicked.",
+            "mode": "NULLABLE",
+            "name": "clicked",
+            "type": "BOOLEAN"
+          },
+          {
+            "description": "Customer feedback on the correctness level of the suggestion.",
+            "mode": "NULLABLE",
+            "name": "correctnessLevel",
+            "type": "STRING"
+          },
+          {
+            "description": "Customer feedback on whether the suggestion was displayed.",
+            "mode": "NULLABLE",
+            "name": "displayed",
+            "type": "BOOLEAN"
+          },
+          {
+            "description": "The detailed feedback content returned from Dialogflow.",
+            "mode": "NULLABLE",
+            "name": "detailedFeedback",
+            "type": "JSON"
+          },
+          {
+            "description": "The explicit user input used to generate this annotation.",
+            "mode": "NULLABLE",
+            "name": "userInput",
+            "type": "JSON"
+          }
+        ],
+        "mode": "REPEATED",
+        "name": "annotations",
+        "type": "RECORD"
+      },
+      {
+        "description": "The list of matched intents for the sentence.",
+        "fields": [
+          {
+            "description": "The unique ID of the matched intent.",
+            "mode": "NULLABLE",
+            "name": "intentId",
+            "type": "STRING"
+          },
+          {
+            "description": "The human readable name of the matched intent.",
+            "mode": "NULLABLE",
+            "name": "displayName",
+            "type": "STRING"
+          }
+        ],
+        "mode": "REPEATED",
+        "name": "intentMatchData",
+        "type": "RECORD"
+      },
+      {
+        "description": "The list of phrase match data for the sentence.",
+        "fields": [
+          {
+            "description": "The unique ID of the phrase matcher.",
+            "mode": "NULLABLE",
+            "name": "phraseMatcherId",
+            "type": "STRING"
+          },
+          {
+            "description": "Indicating the revision of the phrase matcher.",
+            "mode": "NULLABLE",
+            "name": "revisionId",
+            "type": "STRING"
+          },
+          {
+            "description": "The human readable name of the phrase matcher.",
+            "mode": "NULLABLE",
+            "name": "displayName",
+            "type": "STRING"
+          }
+        ],
+        "mode": "REPEATED",
+        "name": "phraseMatchData",
+        "type": "RECORD"
+      },
+      {
+        "description": "The list of highlighter data for the sentence.",
+        "fields": [
+          {
+            "description": "The unique id of the highlighter.",
+            "mode": "NULLABLE",
+            "name": "highlighterName",
+            "type": "STRING"
+          },
+          {
+            "description": "The human readable name of the highlighter.",
+            "mode": "NULLABLE",
+            "name": "displayName",
+            "type": "STRING"
+          },
+          {
+            "description": "The type of the highlighter.",
+            "mode": "NULLABLE",
+            "name": "type",
+            "type": "STRING"
+          }
+        ],
+        "mode": "REPEATED",
+        "name": "highlightData",
+        "type": "RECORD"
+      },
+      {
+        "description": "The list of Dialogflow intent match data for the sentence.",
+        "fields": [
+          {
+            "description": "The resource name of the matched intent.",
+            "mode": "NULLABLE",
+            "name": "intentName",
+            "type": "STRING"
+          },
+          {
+            "description": "The human readable name of the matched intent.",
+            "mode": "NULLABLE",
+            "name": "displayName",
+            "type": "STRING"
+          },
+          {
+            "description": "The confidence score for the intent match, between 0 and 1.0.",
+            "mode": "NULLABLE",
+            "name": "maxConfidence",
+            "type": "FLOAT"
+          }
+        ],
+        "mode": "REPEATED",
+        "name": "dialogflowIntentMatchData",
+        "type": "RECORD"
+      }
+    ],
+    "mode": "REPEATED",
+    "name": "sentences",
+    "type": "RECORD"
+  },
+  {
+    "description": "The latest conversation summary.",
+    "fields": [
+      {
+        "description": "The summarization content that is concatenated into one string.",
+        "mode": "NULLABLE",
+        "name": "text",
+        "type": "STRING"
+      },
+      {
+        "description": "The summarization content that is divided into sections. The key is the section's name and the value is the section's content. There is no specific format for the key or value.",
+        "fields": [
+          {
+            "description": "The name of the section.",
+            "mode": "NULLABLE",
+            "name": "key",
+            "type": "STRING"
+          },
+          {
+            "description": "The content of the section.",
+            "mode": "NULLABLE",
+            "name": "value",
+            "type": "STRING"
+          }
+        ],
+        "mode": "REPEATED",
+        "name": "textSections",
+        "type": "RECORD"
+      },
+      {
+        "description": "The confidence score of the summarization.",
+        "mode": "NULLABLE",
+        "name": "confidence",
+        "type": "FLOAT"
+      },
+      {
+        "description": "A map that contains metadata about the summarization and the document from which it originates.",
+        "fields": [
+          {
+            "description": "The key of the metadata.",
+            "mode": "NULLABLE",
+            "name": "key",
+            "type": "STRING"
+          },
+          {
+            "description": "The value of the metadata.",
+            "mode": "NULLABLE",
+            "name": "value",
+            "type": "STRING"
+          }
+        ],
+        "mode": "REPEATED",
+        "name": "metadata",
+        "type": "RECORD"
+      },
+      {
+        "description": "The name of the answer record. Format: projects/{project}/locations/{location}/answerRecords/{answer_record}",
+        "mode": "NULLABLE",
+        "name": "answerRecord",
+        "type": "STRING"
+      },
+      {
+        "description": "The name of the model that generates this summary. Format: projects/{project}/locations/{location}/conversationModels/{conversation_model}",
+        "mode": "NULLABLE",
+        "name": "conversationModel",
+        "type": "STRING"
+      }
+    ],
+    "mode": "NULLABLE",
+    "name": "latestSummary",
+    "type": "RECORD"
+  },
+  {
+    "description": "All QaScorecardResult(s) available for the conversation.",
+    "fields": [
+      {
+        "description": "Fully qualified resource name of the scorecard. Format: projects/{project}/locations/{location}/qaScorecards/{qa_scorecard_id}",
+        "mode": "NULLABLE",
+        "name": "qaScorecard",
+        "type": "STRING"
+      },
+      {
+        "description": "Fully qualified resource name of the scorecard revision. Format: projects/{project}/locations/{location}/qaScorecards/{qa_scorecard_id}/revisions/{revision_id}",
+        "mode": "NULLABLE",
+        "name": "qaScorecardRevision",
+        "type": "STRING"
+      },
+      {
+        "description": "Fully qualified resource name of the scorecard result. Format: projects/{project}/locations/{location}/qaScorecards/{qa_scorecard_id}/revisions/{revision_id}/results/{result_id}",
+        "mode": "NULLABLE",
+        "name": "qaScorecardResult",
+        "type": "STRING"
+      },
+      {
+        "description": "The score assigned to the conversation.",
+        "mode": "NULLABLE",
+        "name": "score",
+        "type": "FLOAT"
+      },
+      {
+        "description": "The potential score assigned to the conversation.",
+        "mode": "NULLABLE",
+        "name": "potentialScore",
+        "type": "FLOAT"
+      },
+      {
+        "description": "Normalized score assigned for the conversation.",
+        "mode": "NULLABLE",
+        "name": "normalizedScore",
+        "type": "FLOAT"
+      },
+      {
+        "fields": [
+          {
+            "description": "The tag assigned to question(s) in the scorecard.",
+            "mode": "NULLABLE",
+            "name": "tag",
+            "type": "STRING"
+          },
+          {
+            "description": "The score assigned to the tag for this conversation.",
+            "mode": "NULLABLE",
+            "name": "score",
+            "type": "FLOAT"
+          },
+          {
+            "description": "The potential score assigned to the tag for this conversation.",
+            "mode": "NULLABLE",
+            "name": "potentialScore",
+            "type": "FLOAT"
+          },
+          {
+            "description": "Normalized score for the given tag for this conversation.",
+            "mode": "NULLABLE",
+            "name": "normalizedScore",
+            "type": "FLOAT"
+          }
+        ],
+        "mode": "REPEATED",
+        "name": "qaTagResults",
+        "type": "RECORD"
+      },
+      {
+        "description": "The answers to the questions in the scorecard.",
+        "fields": [
+          {
+            "description": "A QaQuestion corresponding to the given QaAnswer.",
+            "fields": [
+              {
+                "description": "Resource name of the question. Format: projects/{project}/locations/{location}/qaScorecards/{qa_scorecard_id}/revisions/{revision_id}/qaQuestions/{qa_question_id}",
+                "mode": "NULLABLE",
+                "name": "qaQuestion",
+                "type": "STRING"
+              },
+              {
+                "description": "Question text. For examlpe, \"Did the agent greet the customer?\"",
+                "mode": "NULLABLE",
+                "name": "questionBody",
+                "type": "STRING"
+              }
+            ],
+            "mode": "NULLABLE",
+            "name": "qaQuestion",
+            "type": "RECORD"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "qaAnswerStringValue",
+            "type": "STRING"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "qaAnswerNumericValue",
+            "type": "FLOAT"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "qaAnswerBoolValue",
+            "type": "BOOLEAN"
+          },
+          {
+            "mode": "NULLABLE",
+            "name": "qaAnswerNaValue",
+            "type": "BOOLEAN"
+          },
+          {
+            "description": "The score assigned to the answer.",
+            "mode": "NULLABLE",
+            "name": "score",
+            "type": "FLOAT"
+          },
+          {
+            "description": "The potential score assigned to the answer.",
+            "mode": "NULLABLE",
+            "name": "potentialScore",
+            "type": "FLOAT"
+          },
+          {
+            "description": "The normalized score assigned to the answer.",
+            "mode": "NULLABLE",
+            "name": "normalizedScore",
+            "type": "FLOAT"
+          },
+          {
+            "description": "User defined list of arbitrary tags.",
+            "mode": "REPEATED",
+            "name": "tags",
+            "type": "STRING"
+          },
+          {
+            "description": "List of all individual score sets. Each score set contains a score, potential score, normalized score, and a list of tag scores. This contains score per question.",
+            "fields": [
+              {
+                "description": "The source of the score. Possible values are SOURCE_TYPE_UNSPECIFIED, SYSTEM_GENERATED_ONLY or INCLUDES_MANUAL_EDITS.",
+                "mode": "NULLABLE",
+                "name": "sourceType",
+                "type": "STRING"
+              },
+              {
+                "description": "The overall numerical score of the result.",
+                "mode": "NULLABLE",
+                "name": "score",
+                "type": "FLOAT"
+              },
+              {
+                "description": "The maximum potential overall score of the scorecard. Any questions answered using `na_value` are excluded from this calculation.",
+                "mode": "NULLABLE",
+                "name": "potentialScore",
+                "type": "FLOAT"
+              },
+              {
+                "description": "The normalized score, which is the score divided by the potential score.",
+                "mode": "NULLABLE",
+                "name": "normalizedScore",
+                "type": "FLOAT"
+              },
+              {
+                "description": "Collection of tags and their scores.",
+                "fields": [
+                  {
+                    "description": "The tag the score applies to.",
+                    "mode": "NULLABLE",
+                    "name": "tag",
+                    "type": "STRING"
+                  },
+                  {
+                    "description": "The score the tag applies to.",
+                    "mode": "NULLABLE",
+                    "name": "score",
+                    "type": "FLOAT"
+                  },
+                  {
+                    "description": "The potential score the tag applies to.",
+                    "mode": "NULLABLE",
+                    "name": "potentialScore",
+                    "type": "FLOAT"
+                  },
+                  {
+                    "description": "The normalized score the tag applies to.",
+                    "mode": "NULLABLE",
+                    "name": "normalizedScore",
+                    "type": "FLOAT"
+                  }
+                ],
+                "mode": "REPEATED",
+                "name": "qaTagResults",
+                "type": "RECORD"
+              }
+            ],
+            "mode": "REPEATED",
+            "name": "scoreSources",
+            "type": "RECORD"
+          },
+          {
+            "description": "List of all individual answer sources. Each answer source contains a source type and the answer for the question provided by the LLM if the source is SYSTEM_GENERATED. If the source is MANUAL_EDIT, this field will contain the answer provided by the user using manual edit.",
+            "fields": [
+              {
+                "description": "The source of the answer. Possible values are SOURCE_TYPE_UNSPECIFIED, SYSTEM_GENERATED or MANUAL_EDIT.",
+                "mode": "NULLABLE",
+                "name": "sourceType",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "qaAnswerStringValue",
+                "type": "STRING"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "qaAnswerNumericValue",
+                "type": "FLOAT"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "qaAnswerBoolValue",
+                "type": "BOOLEAN"
+              },
+              {
+                "mode": "NULLABLE",
+                "name": "qaAnswerNaValue",
+                "type": "BOOLEAN"
+              },
+              {
+                "description": "The score assigned to the answer.",
+                "mode": "NULLABLE",
+                "name": "score",
+                "type": "FLOAT"
+              },
+              {
+                "description": "The potential score assigned to the answer.",
+                "mode": "NULLABLE",
+                "name": "potentialScore",
+                "type": "FLOAT"
+              },
+              {
+                "description": "The normalized score assigned to the answer.",
+                "mode": "NULLABLE",
+                "name": "normalizedScore",
+                "type": "FLOAT"
+              }
+            ],
+            "mode": "REPEATED",
+            "name": "answerSources",
+            "type": "RECORD"
+          }
+        ],
+        "mode": "REPEATED",
+        "name": "qaAnswers",
+        "type": "RECORD"
+      },
+      {
+        "description": "List of all individual score sets.",
+        "fields": [
+          {
+            "description": "The source of the score. Possible values are SOURCE_TYPE_UNSPECIFIED, SYSTEM_GENERATED_ONLY or INCLUDES_MANUAL_EDITS.",
+            "mode": "NULLABLE",
+            "name": "sourceType",
+            "type": "STRING"
+          },
+          {
+            "description": "The overall numerical score of the result.",
+            "mode": "NULLABLE",
+            "name": "score",
+            "type": "FLOAT"
+          },
+          {
+            "description": "The maximum potential overall score of the scorecard. Any questions answered using `na_value` are excluded from this calculation.",
+            "mode": "NULLABLE",
+            "name": "potentialScore",
+            "type": "FLOAT"
+          },
+          {
+            "description": "The normalized score, which is the score divided by the potential score.",
+            "mode": "NULLABLE",
+            "name": "normalizedScore",
+            "type": "FLOAT"
+          },
+          {
+            "description": "Collection of tags and their scores.",
+            "fields": [
+              {
+                "description": "The tag the score applies to.",
+                "mode": "NULLABLE",
+                "name": "tag",
+                "type": "STRING"
+              },
+              {
+                "description": "The score the tag applies to.",
+                "mode": "NULLABLE",
+                "name": "score",
+                "type": "FLOAT"
+              },
+              {
+                "description": "The potential score the tag applies to.",
+                "mode": "NULLABLE",
+                "name": "potentialScore",
+                "type": "FLOAT"
+              },
+              {
+                "description": "The normalized score the tag applies to.",
+                "mode": "NULLABLE",
+                "name": "normalizedScore",
+                "type": "FLOAT"
+              }
+            ],
+            "mode": "REPEATED",
+            "name": "qaTagResults",
+            "type": "RECORD"
+          }
+        ],
+        "mode": "REPEATED",
+        "name": "scoreSources",
+        "type": "RECORD"
+      }
+    ],
+    "mode": "REPEATED",
+    "name": "qaScorecardResults",
+    "type": "RECORD"
+  },
+  {
+    "description": "Metadata about the agent dimension.",
+    "fields": [
+      {
+        "description": "A user-specified string representing the agent. This field replaces the `agent_id` field in the older export versions.",
+        "mode": "NULLABLE",
+        "name": "agentId",
+        "type": "STRING"
+      },
+      {
+        "description": "The agent's name",
+        "mode": "NULLABLE",
+        "name": "agentDisplayName",
+        "type": "STRING"
+      },
+      {
+        "description": "A user-specified string representing the agent's team.",
+        "mode": "NULLABLE",
+        "name": "agentTeam",
+        "type": "STRING"
+      },
+      {
+        "description": "The agent's type. Possible values are ROLE_UNSPECIFIED, HUMAN_AGENT, AUTOMATED_AGENT, END_USER, or ANY_AGENT.",
+        "mode": "NULLABLE",
+        "name": "agentType",
+        "type": "STRING"
+      }
+    ],
+    "mode": "REPEATED",
+    "name": "agents",
+    "type": "RECORD"
+  },
+  {
+    "fields": [
+      {
+        "description": "The resource name of the feedback label. Format: projects/{project}/locations/{location}/conversations/{conversation}/feedbackLabels/{feedback_label}",
+        "mode": "NULLABLE",
+        "name": "name",
+        "type": "STRING"
+      },
+      {
+        "description": "Resource name of the resource to be labeled.",
+        "mode": "NULLABLE",
+        "name": "labeledResource",
+        "type": "STRING"
+      },
+      {
+        "description": "String label.",
+        "mode": "NULLABLE",
+        "name": "label",
+        "type": "STRING"
+      },
+      {
+        "description": "Quality AI: feedback label of string type.",
+        "mode": "NULLABLE",
+        "name": "qaAnswerStringValue",
+        "type": "STRING"
+      },
+      {
+        "description": "Quality AI: feedback label of numeric type.",
+        "mode": "NULLABLE",
+        "name": "qaAnswerNumericValue",
+        "type": "FLOAT"
+      },
+      {
+        "description": "Quality AI: feedback label of boolean type.",
+        "mode": "NULLABLE",
+        "name": "qaAnswerBoolValue",
+        "type": "BOOLEAN"
+      },
+      {
+        "description": "Quality AI: feedback label of not applicable (N/A) type.",
+        "mode": "NULLABLE",
+        "name": "qaAnswerNaValue",
+        "type": "BOOLEAN"
+      },
+      {
+        "description": "The timestamp when the feedback label was created.",
+        "mode": "NULLABLE",
+        "name": "createTimestampUtc",
+        "type": "INTEGER"
+      },
+      {
+        "description": "The timestamp when the feedback label was last updated.",
+        "mode": "NULLABLE",
+        "name": "updateTimestampUtc",
+        "type": "INTEGER"
+      }
+    ],
+    "mode": "REPEATED",
+    "name": "feedbackLabels",
+    "type": "RECORD"
+  },
+  {
+    "description": "The timestamp when the row was last updated by the export process.",
+    "mode": "NULLABLE",
+    "name": "update_timestamp",
+    "type": "TIMESTAMP"
+  }
+]

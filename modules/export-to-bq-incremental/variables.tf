@@ -76,3 +76,9 @@ variable "function_name" {
   type        = string
   description = "Cloud Function name"
 }
+
+variable "bq_export_schema_version" {
+  description = "The version of the BigQuery export schema. If not specified, it defaults to V3."
+  type        = string
+  default     = "EXPORT_V10"
+}

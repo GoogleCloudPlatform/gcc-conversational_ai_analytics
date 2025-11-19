@@ -20,8 +20,8 @@ import requests
 
 from lib import InsightsHelper
 
-@functions_framework.http
-def main(request):
+@functions_framework.cloud_event
+def main(cloud_event):
     CCAI_INSIGHTS_PROJECT_ID=os.environ['CCAI_INSIGHTS_PROJECT_ID']
     CCAI_INSIGHTS_LOCATION_ID=os.environ['CCAI_INSIGHTS_LOCATION_ID']
     BIGQUERY_PROJECT_ID=os.environ['BIGQUERY_PROJECT_ID']
@@ -29,6 +29,7 @@ def main(request):
     BIGQUERY_STAGING_TABLE=os.environ['BIGQUERY_STAGING_TABLE']
     BIGQUERY_FINAL_DATASET=os.environ['BIGQUERY_FINAL_DATASET']
     BIGQUERY_FINAL_TABLE=os.environ['BIGQUERY_FINAL_TABLE']
+    BQ_EXPORT_SCHEMA_VERSION=os.environ.get('BQ_EXPORT_SCHEMA_VERSION')
 
     insights_helper = InsightsHelper(
         ccai_insights_project_id=CCAI_INSIGHTS_PROJECT_ID,
@@ -37,12 +38,13 @@ def main(request):
         bigquery_staging_dataset=BIGQUERY_STAGING_DATASET,
         bigquery_staging_table=BIGQUERY_STAGING_TABLE,
         bigquery_final_dataset=BIGQUERY_FINAL_DATASET,
-        bigquery_final_table=BIGQUERY_FINAL_TABLE
+        bigquery_final_table=BIGQUERY_FINAL_TABLE,
+        export_schema_version=BQ_EXPORT_SCHEMA_VERSION
     )
 
     # Filter based on conversation start time and only Analyzed conversations
     
-    filter_expression=f'latest_analysis:"*"'
+    filter_expression=f'' # sample latest_analysis:"*"
     latest_update_time = insights_helper.get_latest_update_time()
 
     # if a latest_update_time was found, include it in the filter
@@ -83,5 +85,3 @@ def main(request):
 
     convo_count_diff = (1 - (convo_count_bq/convo_count_insights)) * 100
     print(f'Conversation count difference between BQ and Insights: {round(convo_count_diff, 2)}%')
-
-    return 'ok'
