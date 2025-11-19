@@ -82,3 +82,9 @@ variable "bq_export_schema_version" {
   type        = string
   default     = "EXPORT_V10"
 }
+
+variable "bq_dataset_region" {
+  type        = string
+  description = "Region in which the BigQuery datasets will be provisioned"
+  default     = "US"
+}

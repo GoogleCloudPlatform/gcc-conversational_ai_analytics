@@ -93,6 +93,7 @@ module "unified_dataset" {
   source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/bigquery-dataset?ref=v34.1.0&depth=1"
   project_id = var.bigquery_project_id
   id         = var.bigquery_staging_dataset
+  location   = var.bq_dataset_region
   tables = {
     (var.bigquery_staging_table) = {
       schema              = file("${path.module}/schemas/ccai_insights_export_schema.json")
@@ -114,6 +115,7 @@ module "staging_dataset" {
   source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/bigquery-dataset?ref=v34.1.0&depth=1"
   project_id = var.bigquery_project_id
   id         = var.bigquery_staging_dataset
+  location   = var.bq_dataset_region
   tables = {
     (var.bigquery_staging_table) = {
       schema              = file("${path.module}/schemas/ccai_insights_export_schema.json")
@@ -127,6 +129,7 @@ module "final_dataset" {
   source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/bigquery-dataset?ref=v34.1.0&depth=1"
   project_id = var.bigquery_project_id
   id         = var.bigquery_final_dataset
+  location   = var.bq_dataset_region
   tables = {
     (var.bigquery_final_table) = {
       schema              = file("${path.module}/schemas/ccai_insights_export_schema.json")
