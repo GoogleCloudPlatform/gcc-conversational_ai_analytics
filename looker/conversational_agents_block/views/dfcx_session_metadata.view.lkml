@@ -234,4 +234,10 @@ view: dfcx_session_metadata {
     value_format_name: percent_2
   }
 
+  drill_fields: [standard_session_drill*]
+
+  set: standard_session_drill {
+    fields: [session_id, project_id, agent_name, is_escalated, session_handle_time]
+  }
+
 }

@@ -7,7 +7,7 @@
   elements:
   - title: Total Sessions
     name: Total Sessions
-    #model: billTest
+
     explore: dfcx_session_metadata
     type: single_value
     fields: [dfcx_session_metadata.total_sessions]
@@ -89,7 +89,7 @@
     height: 2
   - title: Final Action
     name: Final Action
-    #model: billTest
+
     explore: dfcx_session_metadata
     type: looker_grid
     fields: [dfcx_session_metadata.final_action, dfcx_session_metadata.total_ss_attempt_sessions,
@@ -178,7 +178,7 @@
     height: 6
   - title: SS Success %
     name: SS Success %
-    #model: billTest
+
     explore: dfcx_session_metadata
     type: single_value
     fields: [dfcx_session_metadata.ss_success_percentage]
@@ -260,7 +260,7 @@
     height: 2
   - title: ''
     name: ''
-    #model: billTest
+
     explore: dfcx_session_metadata
     type: looker_grid
     fields: [dfcx_session_metadata.final_interaction_head_intent, dfcx_session_metadata.total_sessions,
@@ -374,7 +374,7 @@
     height: 6
   - title: SS Attempt %
     name: SS Attempt %
-    #model: billTest
+
     explore: dfcx_session_metadata
     type: single_value
     fields: [dfcx_session_metadata.ss_attempt_percentage]
@@ -456,7 +456,7 @@
     height: 2
   - title: Escalated %
     name: Escalated %
-    #model: billTest
+
     explore: dfcx_session_metadata
     type: single_value
     fields: [dfcx_session_metadata.escalated_percentage]
@@ -538,7 +538,7 @@
     height: 2
   - title: Intent Specific Trends
     name: Intent Specific Trends
-    #model: billTest
+
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_session_metadata.session_start_date, dfcx_session_metadata.total_ss_attempt_sessions,
@@ -608,7 +608,7 @@
     height: 6
   - title: Avg Session Handle Time
     name: Avg Session Handle Time
-    #model: billTest
+
     explore: dfcx_session_metadata
     type: single_value
     fields: [dfcx_session_metadata.avg_session_handle_time]
@@ -692,7 +692,7 @@
     height: 2
   - title: Conversation Sample
     name: Conversation Sample
-    #model: billTest
+
     explore: dfcx_session_metadata
     type: looker_grid
     fields: [dfcx_session_metadata.session_id, dfcx_session_metadata.session_start_date,
@@ -749,7 +749,7 @@
       type: relative_timeframes
       display: inline
       options: []
-    #model: billTest
+
     explore: dfcx_session_metadata
     listens_to_filters: []
     field: dfcx_session_metadata.session_start_date
@@ -762,7 +762,7 @@
     ui_config:
       type: tag_list
       display: popover
-    #model: billTest
+
     explore: dfcx_session_metadata
     listens_to_filters: []
     field: dfcx_session_metadata.project_id
@@ -775,7 +775,7 @@
     ui_config:
       type: tag_list
       display: popover
-    #model: billTest
+
     explore: dfcx_session_metadata
     listens_to_filters: []
     field: dfcx_session_metadata.final_interaction_head_intent

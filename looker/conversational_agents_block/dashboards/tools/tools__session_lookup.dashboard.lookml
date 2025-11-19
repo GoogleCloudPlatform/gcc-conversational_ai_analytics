@@ -7,7 +7,6 @@
   elements:
   - title: Session Lookup
     name: Session Lookup
-    #model:: billTest
     explore: dfcx_session_metadata
     type: looker_grid
     fields: [dfcx_session_metadata.session_id,dfcx_session_metadata.session_start_date]
@@ -56,7 +55,6 @@
       type: relative_timeframes
       display: inline
       options: []
-    #model:: billTest
     explore: dfcx_session_metadata
     listens_to_filters: []
     field: dfcx_session_metadata.session_start_date
@@ -69,7 +67,6 @@
     ui_config:
       type: tag_list
       display: popover
-    #model:: billTest
     explore: dfcx_session_metadata
     listens_to_filters: [Session Start Date, Agent Name]
     field: dfcx_session_metadata.session_id
@@ -84,7 +81,6 @@
       display: overflow
       options:
       - '1'
-    #model:: billTest
     explore: dfcx_session_metadata
     listens_to_filters: []
     field: dfcx_session_metadata.auth_user
@@ -97,7 +93,7 @@
     ui_config:
       type: tag_list
       display: popover
-    #model: DCA_PRD_1
+
     explore: dfcx_session_metadata
     listens_to_filters: [Session Start Date]
     field: dfcx_session_metadata.agent_name

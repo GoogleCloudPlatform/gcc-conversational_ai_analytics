@@ -90,8 +90,6 @@ view: dfcx_transcript {
     sql: ${TABLE}.language_code ;;
   }
 
-
-
   dimension: location {
     hidden: yes
     type: string
@@ -192,7 +190,8 @@ view: dfcx_transcript {
     group_label: "Session Parameters"
     label: "Session Parameters (string)"
     type: string
-    sql: TO_JSON_STRING(${session_parameters}) ;;
+    sql: TO_JSON_STRING(${session_parameters},true) ;;
+    html: @{html_json_rendering} ;;
   }
 
   dimension: session_parameter_value {
@@ -208,7 +207,8 @@ view: dfcx_transcript {
     label: "Session Parameter (Query)"
     type: string
     description: "Use with Session Parameter Path parameter to extract a specific string value"
-    sql: TO_JSON_STRING(JSON_QUERY(${session_parameters},{{session_parameter_path._parameter_value}})) ;;
+    sql: TO_JSON_STRING(JSON_QUERY(${session_parameters},{{session_parameter_path._parameter_value}}),true) ;;
+    html: @{html_json_rendering} ;;
   }
 
   dimension_group: session_start {
@@ -299,15 +299,87 @@ view: dfcx_transcript {
     sql: ${TABLE}.tools ;;
   }
 
-    measure: total_turns {
-    type: count
-    drill_fields: [standard_transcript_drill*]
-  }
-
   dimension: did_agent_respond {
     label: "Did agent respond?"
     type: yesno
     sql: ${agent_response} is not null ;;
+  }
+
+  dimension: matched_intent {
+    type: string
+    sql: CASE WHEN ${match_type} = 'INTENT' THEN ${intent_display_name} ELSE ${match_type} END ;;
+  }
+
+  dimension: conversation_thread_html {
+    type: number
+    label: "Conversation Thread (Visual)"
+    description: "Displays the User and Agent turn as a chat bubble thread with GenAI and DTMF indicators."
+    sql: ${position} ;;
+    required_fields: [user_utterance, agent_response, event, match_type, optional_dtmf_digits, dfcx_transcript_metadata.contain_any_ai_generated_content]
+    html:
+    <div style="width: 100%; display: flex; flex-direction: column; gap: 12px; font-family: 'Roboto', sans-serif; font-size: 13px; min-width: 300px;">
+    {% assign user_text = user_utterance._value %}
+    {% assign dtmf_digits = optional_dtmf_digits._value %}
+    {% assign agent_text = agent_response._value %}
+    {% assign gen_ai = dfcx_transcript_metadata.contain_any_ai_generated_content._value %}
+    {% assign match_type = match_type._value %}
+    {% assign event = event._value %}
+
+    {% assign is_gen_ai = false %}
+    {% if gen_ai == 'Yes' %}
+      {% assign is_gen_ai = true %}
+    {% endif %}
+    <!-- USER BUBBLE -->
+    <div style="align-self: flex-end; margin-left: auto; background-color: #e3f2fd; color: #1565c0; padding: 10px 14px; border-radius: 18px 18px 4px 18px; max-width: 85%; box-shadow: 0 1px 2px rgba(0,0,0,0.1); text-align: right;">
+        <div style="font-size: 10px; font-weight: 700; margin-bottom: 2px; color: #5e92f3; text-transform: uppercase;">User</div>
+        {% if user_text != '' %}
+            {{ user_text }}
+        {% endif %}
+        {% if dtmf_digits != nil %}
+            {% if user_text != '' %}<div style="height: 4px;"></div>{% endif %}
+            <div style="font-family: monospace; background-color: rgba(255,255,255,0.6); display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 11px;">
+                DTMF: {{ dtmf_digits }}
+            </div>
+        {% endif %}
+        {% if match_type == 'NO_INPUT' %}
+            <div style="margin-top: 8px; background-color: #f8f9fa; color: #757575; padding: 8px 12px; border-radius: 18px 18px 4px 18px; border: 1px dashed #bdbdbd; font-style: italic; font-size: 12px; text-align: right;">
+                <div style="font-size: 10px; font-weight: 700; margin-bottom: 2px; color: #9e9e9e; text-transform: uppercase;">User</div>
+                ⏱️ No Input
+            </div>
+        {% endif %}
+        {% if match_type == 'EVENT' %}
+            <div style="margin-top: 8px; background-color: #fff3e0; color: #e65100; padding: 8px 12px; border-radius: 18px 18px 4px 18px; border: 1px solid #ffcc80; font-size: 12px; text-align: right;">
+                <div style="font-size: 10px; font-weight: 700; margin-bottom: 2px; color: #ef6c00; text-transform: uppercase;">Event</div>
+                ⚡ {{ event }}
+            </div>
+        {% endif %}
+    </div>
+    <!-- AGENT BUBBLE -->
+    {% if agent_text != nil %}
+        <div style="align-self: flex-start; margin-right: auto; background-color: #f5f5f5; color: #424242; padding: 10px 14px; border-radius: 18px 18px 18px 4px; max-width: 85%; box-shadow: 0 1px 2px rgba(0,0,0,0.1); text-align: left; border: {% if is_gen_ai %}1px solid #c81ee6{% else %}1px solid transparent{% endif %};">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <div style="font-size: 10px; font-weight: 700; color: #9e9e9e; text-transform: uppercase;">Agent</div>
+                {% if is_gen_ai %}
+                    <div style="font-size: 9px; font-weight: 700; color: #c81ee6; background-color: #fce4ec; padding: 2px 6px; border-radius: 10px; display: flex; align-items: center;">
+                        AI Generated
+                    </div>
+                {% endif %}
+            </div>
+            {{ agent_text }}
+        </div>
+    {% endif %}
+</div> ;;
+  }
+
+  measure: total_turns {
+    type: count
+    drill_fields: [standard_transcript_drill*]
+  }
+
+  measure: percent_total {
+    type: percent_of_total
+    sql: ${total_turns} ;;
+    value_format_name: percent_0
   }
 
   measure: total_no_agent_response_turns {
@@ -1130,8 +1202,10 @@ view: dfcx_transcript {
     value_format_name: decimal_0
   }
 
+  drill_fields: [standard_transcript_drill*]
+
   set: standard_transcript_drill {
-    fields: [session_id,position,user_utterance,agent_response,source_flow_display_name,source_page_display_name,flow_display_name,page_display_name]
+    fields: [dfcx_session_metadata.session_id,position,user_utterance,agent_response,source_flow_display_name,source_page_display_name,flow_display_name,page_display_name]
   }
 }
 
@@ -1245,6 +1319,88 @@ view: dfcx_transcript__tools {
     description: "The error reason associated with the function call."
     sql: ${TABLE}.webhook_reason ;;
   }
+
+  dimension: operational_webhook_failure {
+    type: yesno
+    sql: ${webhook_state} != 'OK' ;;
+    description: "Indicates if the webhook state is not 'OK'"
+  }
+
+  measure: total_operational_webhook_failures {
+    type: count_distinct
+    sql: CASE WHEN ${operational_webhook_failure} THEN ${primary_key} ELSE NULL END ;;
+    label: "Total Operational Webhook Failures"
+  }
+
+  measure: operational_webhook_failure_rate {
+    type: number
+    sql: ${total_operational_webhook_failures}/ NULLIF(${total_webhooks},0)  ;;
+    value_format_name: percent_2
+  }
+
+  measure: total_tools {
+    type: count
+  }
+
+  measure: total_webhooks {
+    type: count
+    filters: [tool_type: "Webhook"]
+  }
+
+  measure: average_tool_latency_ms {
+    label: "Average Tool Latency MS"
+    type: average
+    sql: ${tool_latency_ms} ;;
+    value_format_name: decimal_2
+  }
+
+  measure: 5th_percentile_webhook_latency_ms {
+    group_label: "Tool Latency MS Percentiles"
+    label: "Tool Latency MS - 05%"
+    type: percentile
+    sql: ${tool_latency_ms} ;;
+    percentile: 5
+  }
+  measure: 25th_percentile_webhook_latency_ms {
+    group_label: "Tool Latency MS Percentiles"
+    label: "Tool Latency MS - 25%"
+    type: percentile
+    sql: ${tool_latency_ms} ;;
+    percentile: 25
+  }
+  measure: 50th_percentile_webhook_latency_ms {
+    group_label: "Tool Latency MS Percentiles"
+    label: "Tool Latency MS - 50%"
+    type: percentile
+    sql: ${tool_latency_ms} ;;
+    percentile: 50
+  }
+  measure: 75th_percentile_webhook_latency_ms {
+    group_label: "Tool Latency MS Percentiles"
+    label: "Tool Latency MS - 75%"
+    type: percentile
+    sql: ${tool_latency_ms} ;;
+    percentile: 75
+  }
+
+  measure: 95th_percentile_webhook_latency_ms {
+    group_label: "Tool Latency MS Percentiles"
+    label: "Tool Latency MS - 95%"
+    type: percentile
+    sql: ${tool_latency_ms} ;;
+    percentile: 95
+  }
+
+  measure: 99th_percentile_webhook_latency_ms {
+    group_label: "Tool Latency MS Percentiles"
+    label: "Tool Latency MS - 99%"
+    type: percentile
+    sql: ${tool_latency_ms} ;;
+    percentile: 99
+  }
+
+  drill_fields: [dfcx_transcript.standard_transcript_drill*]
+
 }
 
 view: dfcx_transcript__response_messages {
@@ -1255,6 +1411,8 @@ view: dfcx_transcript__response_messages {
     description: "Represents a response message that can be returned by a conversational agent"
     sql: dfcx_transcript__response_messages ;;
   }
+
+  drill_fields: [dfcx_transcript.standard_transcript_drill*]
 }
 
 view: dfcx_transcript__blocks {
@@ -1324,6 +1482,9 @@ view: dfcx_transcript__blocks {
     hidden: yes
     sql: ${TABLE}.actions ;;
   }
+
+  drill_fields: [dfcx_transcript.standard_transcript_drill*]
+
 }
 
 view: dfcx_transcript__blocks__actions {
@@ -1472,6 +1633,9 @@ view: dfcx_transcript__blocks__actions {
     description: "The entire URL associated with a webhook function call."
     sql: ${TABLE}.webhook_url ;;
   }
+
+  drill_fields: [dfcx_transcript.standard_transcript_drill*]
+
 }
 
 view: dfcx_transcript__playbooks {
@@ -1500,6 +1664,9 @@ view: dfcx_transcript__playbooks {
     description: "The human readable name associated with the triggered playbook"
     sql: ${TABLE}.playbook_name ;;
   }
+
+  drill_fields: [dfcx_transcript.standard_transcript_drill*]
+
 }
 
 view: dfcx_transcript__webhooks {
@@ -1651,6 +1818,8 @@ view: dfcx_transcript__webhooks {
     percentile: 99
   }
 
+  drill_fields: [dfcx_transcript.standard_transcript_drill*]
+
 }
 
 view: dfcx_transcript__execution_sequence {
@@ -1789,6 +1958,9 @@ view: dfcx_transcript__execution_sequence {
     sql: ${webhook_latency_ms} ;;
     value_format_name: decimal_0
   }
+
+  drill_fields: [dfcx_transcript.standard_transcript_drill*]
+
 }
 
 view: dfcx_transcript__actions {
@@ -1814,7 +1986,8 @@ view: dfcx_transcript__actions {
   dimension: action_input_string {
     label: "Action Input (string)"
     type: string
-    sql: TO_JSON_STRING(${action_input}) ;;
+    sql: TO_JSON_STRING(${action_input},true) ;;
+    html: @{html_json_rendering} ;;
     full_suggestions: yes
   }
 
@@ -1848,6 +2021,7 @@ view: dfcx_transcript__actions {
     label: "Action Output (string)"
     type: string
     sql: TO_JSON_STRING(${action_output}) ;;
+    html: @{html_json_rendering} ;;
     full_suggestions: yes
   }
 
@@ -1901,6 +2075,8 @@ view: dfcx_transcript__actions {
     drill_fields: [standard_action_drill*,total_sql_queries,successful_query_percentage]
   }
 
+  drill_fields: [dfcx_transcript.standard_transcript_drill*]
+
   set: standard_action_drill {
     fields: [dfcx_session_metadata.session_id,dfcx_transcript.position,action_step,action_name,action_input_string,action_output_string]
   }
@@ -1918,4 +2094,6 @@ view: dfcx_transcript__alternative_matched_intents {
     type: number
     sql: ${TABLE}.score ;;
   }
+
+  drill_fields: [dfcx_transcript.standard_transcript_drill*]
 }

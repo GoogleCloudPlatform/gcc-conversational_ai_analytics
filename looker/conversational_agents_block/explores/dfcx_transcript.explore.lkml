@@ -3,6 +3,8 @@ include: "/views/dfcx_transcript.view.lkml"
 explore: dfcx_transcript {
   hidden: yes
 
+  fields: [ALL_FIELDS*, -dfcx_transcript.conversation_thread_html]
+
   persist_with: hourly
 
   join: dfcx_transcript__webhooks {

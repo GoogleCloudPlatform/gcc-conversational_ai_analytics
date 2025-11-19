@@ -161,6 +161,8 @@ view: dfcx_interaction {
     drill_fields: [standard_interaction_drill*,total_interactions_ended,total_interactions_started,self_service_success_rate]
   }
 
+  drill_fields: [standard_interaction_drill*]
+
   set: standard_interaction_drill {
     fields: [
       dfcx_session_metadata.session_id,

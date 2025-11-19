@@ -17,7 +17,7 @@
   - name: ''
     type: text
     title_text: ''
-    body_text: '[{"type":"h1","children":[{"text":"Webhook Overview"}],"align":"center"}]'
+    body_text: '[{"type":"h1","children":[{"text":"Webhooks Overview"}],"align":"center"}]'
     rich_content_json: '{"format":"slate"}'
     row: 0
     col: 0
@@ -25,15 +25,15 @@
     height: 2
   - title: Webhook Latency MS Percentiles (p50, p75, p95, p99)
     name: Webhook Latency MS Percentiles (p50, p75, p95, p99)
-    #model: VVA_DEV_1
     explore: dfcx_session_metadata
     type: looker_line
-    fields: [dfcx_transcript__webhooks.50th_percentile_webhook_latency_ms, dfcx_transcript__webhooks.75th_percentile_webhook_latency_ms,
-      dfcx_transcript__webhooks.95th_percentile_webhook_latency_ms, dfcx_transcript__webhooks.99th_percentile_webhook_latency_ms,
-      dfcx_session_metadata.session_start_date]
+    fields: [dfcx_session_metadata.session_start_date, dfcx_transcript__tools.50th_percentile_webhook_latency_ms,
+      dfcx_transcript__tools.75th_percentile_webhook_latency_ms, dfcx_transcript__tools.95th_percentile_webhook_latency_ms,
+      dfcx_transcript__tools.99th_percentile_webhook_latency_ms]
     fill_fields: [dfcx_session_metadata.session_start_date]
     filters:
-      dfcx_transcript__webhooks.webhook_url: "-NULL"
+      dfcx_session_metadata.session_start_date: 30 days
+      dfcx_transcript__tools.tool_type: Webhook
     sorts: [dfcx_session_metadata.session_start_date desc]
     limit: 500
     column_limit: 50
@@ -61,14 +61,14 @@
     y_axis_combined: true
     show_null_points: true
     interpolation: monotone
-    y_axes: [{label: !!null '', orientation: left, series: [{axisId: dfcx_transcript__webhooks.50th_percentile_webhook_latency_ms,
-            id: dfcx_transcript__webhooks.50th_percentile_webhook_latency_ms, name: 50th
-              Percentile Webhook Latency Ms}, {axisId: dfcx_transcript__webhooks.75th_percentile_webhook_latency_ms,
-            id: dfcx_transcript__webhooks.75th_percentile_webhook_latency_ms, name: 75th
-              Percentile Webhook Latency Ms}, {axisId: dfcx_transcript__webhooks.95th_percentile_webhook_latency_ms,
-            id: dfcx_transcript__webhooks.95th_percentile_webhook_latency_ms, name: 95th
-              Percentile Webhook Latency Ms}, {axisId: dfcx_transcript__webhooks.99th_percentile_webhook_latency_ms,
-            id: dfcx_transcript__webhooks.99th_percentile_webhook_latency_ms, name: 99th
+    y_axes: [{label: !!null '', orientation: left, series: [{axisId: dfcx_transcript__tools.50th_percentile_webhook_latency_ms,
+            id: dfcx_transcript__tools.50th_percentile_webhook_latency_ms, name: 50th
+              Percentile Webhook Latency Ms}, {axisId: dfcx_transcript__tools.75th_percentile_webhook_latency_ms,
+            id: dfcx_transcript__tools.75th_percentile_webhook_latency_ms, name: 75th
+              Percentile Webhook Latency Ms}, {axisId: dfcx_transcript__tools.95th_percentile_webhook_latency_ms,
+            id: dfcx_transcript__tools.95th_percentile_webhook_latency_ms, name: 95th
+              Percentile Webhook Latency Ms}, {axisId: dfcx_transcript__tools.99th_percentile_webhook_latency_ms,
+            id: dfcx_transcript__tools.99th_percentile_webhook_latency_ms, name: 99th
               Percentile Webhook Latency Ms}], showLabels: true, showValues: true,
         unpinAxis: false, tickDensity: custom, tickDensityCustom: 38, type: linear}]
     x_axis_zoom: true
@@ -79,26 +79,30 @@
     swap_axes: false
     defaults_version: 1
     hidden_fields: []
+    hidden_pivots: {}
     listen:
       Project ID: dfcx_session_metadata.project_id
       Session Start Date: dfcx_session_metadata.session_start_date
-      Webhook Flow Name: dfcx_transcript__webhooks.flow_display_name
-      Webhook Page Name: dfcx_transcript__webhooks.page_display_name
       Agent Name: dfcx_session_metadata.agent_name
+      Playbook Name: dfcx_transcript__tools.playbook_name
+      Action Flow Display Name: dfcx_transcript__tools.action_flow_display_name
+      Action Page Display Name: dfcx_transcript__tools.action_page_display_name
+      Tool Type: dfcx_transcript__tools.tool_type
+      Tool Name: dfcx_transcript__tools.tool_name
     row: 2
     col: 0
     width: 24
     height: 6
   - title: Webhook Overall Performance
     name: Webhook Overall Performance
-    #model: VVA_DEV_1
     explore: dfcx_session_metadata
     type: looker_line
-    fields: [dfcx_session_metadata.session_start_date, dfcx_transcript__webhooks.total_webhooks,
-      dfcx_transcript__webhooks.total_operational_webhook_failures, dfcx_transcript__webhooks.operational_webhook_failure_rate]
+    fields: [dfcx_session_metadata.session_start_date, dfcx_transcript__tools.total_webhooks,
+      dfcx_transcript__tools.total_operational_webhook_failures, dfcx_transcript__tools.operational_webhook_failure_rate]
     fill_fields: [dfcx_session_metadata.session_start_date]
     filters:
-      dfcx_transcript__webhooks.webhook_url: "-NULL"
+      dfcx_session_metadata.session_start_date: 30 days
+      dfcx_transcript__tools.tool_type: Webhook
     sorts: [dfcx_session_metadata.session_start_date desc]
     limit: 500
     column_limit: 50
@@ -126,17 +130,15 @@
     y_axis_combined: true
     show_null_points: true
     interpolation: monotone
-    y_axes: [{label: '', orientation: left, series: [{axisId: dfcx_transcript__webhooks.total_webhooks,
-            id: dfcx_transcript__webhooks.total_webhooks, name: Total Webhooks}, {
-            axisId: dfcx_transcript__webhooks.total_operational_webhook_failures,
-            id: dfcx_transcript__webhooks.total_operational_webhook_failures, name: Total
+    y_axes: [{label: '', orientation: left, series: [{axisId: dfcx_transcript__tools.total_webhooks,
+            id: dfcx_transcript__tools.total_webhooks, name: Total Webhooks}, {axisId: dfcx_transcript__tools.total_operational_webhook_failures,
+            id: dfcx_transcript__tools.total_operational_webhook_failures, name: Total
               Operational Webhook Failures}], showLabels: true, showValues: true,
-        unpinAxis: false, tickDensity: default, tickDensityCustom: 37, type: linear},
-      {label: !!null '', orientation: right, series: [{axisId: dfcx_transcript__webhooks.operational_webhook_failure_rate,
-            id: dfcx_transcript__webhooks.operational_webhook_failure_rate, name: Operational
-              Webhook Failure Rate}], showLabels: true, showValues: true, maxValue: 1,
-        minValue: 0, unpinAxis: false, tickDensity: default, tickDensityCustom: 49,
-        type: linear}]
+        unpinAxis: false, tickDensity: default, type: linear}, {label: '', orientation: right,
+        series: [{axisId: dfcx_transcript__tools.operational_webhook_failure_rate,
+            id: dfcx_transcript__tools.operational_webhook_failure_rate, name: Operational
+              Webhook Failure Rate}], showLabels: true, showValues: true, unpinAxis: false,
+        tickDensity: default, type: linear}]
     x_axis_zoom: true
     y_axis_zoom: true
     custom_color_enabled: true
@@ -155,29 +157,33 @@
     ordering: none
     show_null_labels: false
     hidden_fields: []
+    hidden_pivots: {}
     listen:
       Project ID: dfcx_session_metadata.project_id
       Session Start Date: dfcx_session_metadata.session_start_date
-      Webhook Flow Name: dfcx_transcript__webhooks.flow_display_name
-      Webhook Page Name: dfcx_transcript__webhooks.page_display_name
       Agent Name: dfcx_session_metadata.agent_name
+      Playbook Name: dfcx_transcript__tools.playbook_name
+      Action Flow Display Name: dfcx_transcript__tools.action_flow_display_name
+      Action Page Display Name: dfcx_transcript__tools.action_page_display_name
+      Tool Type: dfcx_transcript__tools.tool_type
+      Tool Name: dfcx_transcript__tools.tool_name
     row: 8
     col: 0
     width: 24
     height: 6
   - title: Webhook Overall Performance
     name: Webhook Overall Performance (2)
-    #model: VVA_DEV_1
     explore: dfcx_session_metadata
     type: looker_grid
-    fields: [dfcx_transcript__webhooks.webhook_display_name, dfcx_transcript__webhooks.total_webhooks,
-      dfcx_transcript__webhooks.total_operational_webhook_failures, dfcx_transcript__webhooks.operational_webhook_failure_rate,
-      dfcx_transcript__webhooks.5th_percentile_webhook_latency_ms, dfcx_transcript__webhooks.25th_percentile_webhook_latency_ms,
-      dfcx_transcript__webhooks.50th_percentile_webhook_latency_ms, dfcx_transcript__webhooks.75th_percentile_webhook_latency_ms,
-      dfcx_transcript__webhooks.95th_percentile_webhook_latency_ms, dfcx_transcript__webhooks.99th_percentile_webhook_latency_ms]
+    fields: [dfcx_transcript__tools.tool_name, dfcx_transcript__tools.total_webhooks,
+      dfcx_transcript__tools.total_operational_webhook_failures, dfcx_transcript__tools.operational_webhook_failure_rate,
+      dfcx_transcript__tools.5th_percentile_webhook_latency_ms, dfcx_transcript__tools.25th_percentile_webhook_latency_ms,
+      dfcx_transcript__tools.50th_percentile_webhook_latency_ms, dfcx_transcript__tools.75th_percentile_webhook_latency_ms,
+      dfcx_transcript__tools.95th_percentile_webhook_latency_ms, dfcx_transcript__tools.99th_percentile_webhook_latency_ms]
     filters:
-      dfcx_transcript__webhooks.webhook_url: "-NULL"
-    sorts: [dfcx_transcript__webhooks.webhook_display_name]
+      dfcx_session_metadata.session_start_date: 30 days
+      dfcx_transcript__tools.tool_type: Webhook
+    sorts: [dfcx_transcript__tools.total_webhooks desc 0]
     limit: 500
     column_limit: 50
     show_view_names: false
@@ -200,18 +206,18 @@
     show_row_totals: true
     truncate_header: false
     series_labels:
-      dfcx_transcript__webhooks.webhook_display_name: Webhook Name
-      dfcx_transcript__webhooks.5th_percentile_webhook_latency_ms: Webhook Latency
+      dfcx_transcript__tools.webhook_display_name: Webhook Name
+      dfcx_transcript__tools.5th_percentile_webhook_latency_ms: Webhook Latency
         MS - 05%
-      dfcx_transcript__webhooks.25th_percentile_webhook_latency_ms: Webhook Latency
+      dfcx_transcript__tools.25th_percentile_webhook_latency_ms: Webhook Latency
         MS - 25%
-      dfcx_transcript__webhooks.50th_percentile_webhook_latency_ms: Webhook Latency
+      dfcx_transcript__tools.50th_percentile_webhook_latency_ms: Webhook Latency
         MS - 50%
-      dfcx_transcript__webhooks.75th_percentile_webhook_latency_ms: Webhook Latency
+      dfcx_transcript__tools.75th_percentile_webhook_latency_ms: Webhook Latency
         MS - 75%
-      dfcx_transcript__webhooks.95th_percentile_webhook_latency_ms: Webhook Latency
+      dfcx_transcript__tools.95th_percentile_webhook_latency_ms: Webhook Latency
         MS - 95%
-      dfcx_transcript__webhooks.99th_percentile_webhook_latency_ms: Webhook Latency
+      dfcx_transcript__tools.99th_percentile_webhook_latency_ms: Webhook Latency
         MS - 99%
     series_cell_visualizations:
       dfcx_transcript.total_webhooks:
@@ -244,27 +250,31 @@
     defaults_version: 1
     hidden_fields: []
     y_axes: []
+    hidden_pivots: {}
     listen:
       Project ID: dfcx_session_metadata.project_id
       Session Start Date: dfcx_session_metadata.session_start_date
-      Webhook Flow Name: dfcx_transcript__webhooks.flow_display_name
-      Webhook Page Name: dfcx_transcript__webhooks.page_display_name
       Agent Name: dfcx_session_metadata.agent_name
+      Playbook Name: dfcx_transcript__tools.playbook_name
+      Action Flow Display Name: dfcx_transcript__tools.action_flow_display_name
+      Action Page Display Name: dfcx_transcript__tools.action_page_display_name
+      Tool Type: dfcx_transcript__tools.tool_type
+      Tool Name: dfcx_transcript__tools.tool_name
     row: 14
     col: 0
     width: 24
     height: 6
   - title: Webhook Latency MS Box Plot
     name: Webhook Latency MS Box Plot
-    #model: VVA_DEV_1
     explore: dfcx_session_metadata
     type: looker_boxplot
-    fields: [dfcx_transcript__webhooks.webhook_display_name, dfcx_transcript__webhooks.5th_percentile_webhook_latency_ms,
-      dfcx_transcript__webhooks.25th_percentile_webhook_latency_ms, dfcx_transcript__webhooks.average_webhook_latency_ms,
-      dfcx_transcript__webhooks.75th_percentile_webhook_latency_ms, dfcx_transcript__webhooks.95th_percentile_webhook_latency_ms]
+    fields: [dfcx_transcript__tools.tool_name, dfcx_transcript__tools.5th_percentile_webhook_latency_ms,
+      dfcx_transcript__tools.25th_percentile_webhook_latency_ms, dfcx_transcript__tools.average_tool_latency_ms,
+      dfcx_transcript__tools.75th_percentile_webhook_latency_ms, dfcx_transcript__tools.95th_percentile_webhook_latency_ms]
     filters:
-      dfcx_transcript__webhooks.webhook_url: "-NULL"
-    sorts: [dfcx_transcript__webhooks.webhook_display_name]
+      dfcx_session_metadata.session_start_date: 30 days
+      dfcx_transcript__tools.tool_type: Webhook
+    sorts: [dfcx_transcript__tools.5th_percentile_webhook_latency_ms desc 0]
     limit: 500
     column_limit: 50
     x_axis_gridlines: true
@@ -303,59 +313,29 @@
     show_null_points: true
     defaults_version: 1
     hidden_fields: []
+    hidden_pivots: {}
     listen:
       Project ID: dfcx_session_metadata.project_id
       Session Start Date: dfcx_session_metadata.session_start_date
-      Webhook Flow Name: dfcx_transcript__webhooks.flow_display_name
-      Webhook Page Name: dfcx_transcript__webhooks.page_display_name
       Agent Name: dfcx_session_metadata.agent_name
+      Playbook Name: dfcx_transcript__tools.playbook_name
+      Action Flow Display Name: dfcx_transcript__tools.action_flow_display_name
+      Action Page Display Name: dfcx_transcript__tools.action_page_display_name
+      Tool Type: dfcx_transcript__tools.tool_type
+      Tool Name: dfcx_transcript__tools.tool_name
     row: 20
     col: 0
     width: 24
     height: 7
-  - title: Heuristic Outcome Dist
-    name: Heuristic Outcome Dist
-    #model: VVA_DEV_1
-    explore: dfcx_session_metadata
-    type: looker_pie
-    fields: [dfcx_transcript__webhooks.total_webhooks, dfcx_session_metadata.is_escalated]
-    filters:
-      dfcx_transcript__webhooks.webhook_url: "-NULL"
-    sorts: [dfcx_transcript__webhooks.total_webhooks desc 0]
-    limit: 500
-    column_limit: 50
-    value_labels: legend
-    label_type: labPer
-    inner_radius: 60
-    color_application:
-      collection_id: da8306b5-3b46-48aa-9ead-a3b32292f35c
-      palette_id: 75905e81-dadc-472c-b9a2-a201f788d55d
-      options:
-        steps: 5
-        reverse: false
-    series_colors: {}
-    defaults_version: 1
-    hidden_fields: []
-    y_axes: []
-    listen:
-      Project ID: dfcx_session_metadata.project_id
-      Session Start Date: dfcx_session_metadata.session_start_date
-      Webhook Flow Name: dfcx_transcript__webhooks.flow_display_name
-      Webhook Page Name: dfcx_transcript__webhooks.page_display_name
-      Agent Name: dfcx_session_metadata.agent_name
-    row: 29
-    col: 14
-    width: 5
-    height: 5
   - title: Webhook Status
     name: Webhook Status
-    #model: VVA_DEV_1
     explore: dfcx_session_metadata
     type: looker_pie
-    fields: [dfcx_transcript__webhooks.total_webhooks, dfcx_transcript__webhooks.webhook_status]
+    fields: [dfcx_transcript__tools.total_webhooks, dfcx_transcript__tools.webhook_state]
     filters:
-      dfcx_transcript__webhooks.webhook_url: "-NULL"
-    sorts: [dfcx_transcript__webhooks.total_webhooks desc 0]
+      dfcx_session_metadata.session_start_date: 30 days
+      dfcx_transcript__tools.tool_type: Webhook
+    sorts: [dfcx_transcript__tools.total_webhooks desc 0]
     limit: 500
     column_limit: 50
     value_labels: legend
@@ -370,27 +350,31 @@
     defaults_version: 1
     hidden_fields: []
     y_axes: []
+    hidden_pivots: {}
     listen:
       Project ID: dfcx_session_metadata.project_id
       Session Start Date: dfcx_session_metadata.session_start_date
-      Webhook Flow Name: dfcx_transcript__webhooks.flow_display_name
-      Webhook Page Name: dfcx_transcript__webhooks.page_display_name
       Agent Name: dfcx_session_metadata.agent_name
+      Playbook Name: dfcx_transcript__tools.playbook_name
+      Action Flow Display Name: dfcx_transcript__tools.action_flow_display_name
+      Action Page Display Name: dfcx_transcript__tools.action_page_display_name
+      Tool Type: dfcx_transcript__tools.tool_type
+      Tool Name: dfcx_transcript__tools.tool_name
     row: 29
-    col: 19
-    width: 5
+    col: 18
+    width: 6
     height: 5
   - title: Webhook Failures
     name: Webhook Failures
-    #model: VVA_DEV_1
     explore: dfcx_session_metadata
     type: looker_grid
-    fields: [dfcx_session_metadata.session_id, dfcx_transcript.position, dfcx_transcript__webhooks.step,
-      dfcx_transcript__webhooks.webhook_display_name, dfcx_transcript__webhooks.webhook_status,
-      dfcx_transcript__webhooks.operational_webhook_failure]
+    fields: [dfcx_transcript__tools.tool_name, dfcx_transcript__tools.webhook_state,
+      dfcx_transcript__tools.webhook_reason, dfcx_transcript__tools.total_webhooks]
     filters:
-      dfcx_transcript__webhooks.webhook_display_name: "-NULL"
-    sorts: [dfcx_transcript.position desc]
+      dfcx_session_metadata.session_start_date: 30 days
+      dfcx_transcript__tools.tool_type: Webhook
+      dfcx_transcript__tools.operational_webhook_failure: 'Yes'
+    sorts: [dfcx_transcript__tools.total_webhooks desc]
     limit: 500
     column_limit: 50
     show_view_names: false
@@ -418,12 +402,15 @@
     listen:
       Project ID: dfcx_session_metadata.project_id
       Session Start Date: dfcx_session_metadata.session_start_date
-      Webhook Flow Name: dfcx_transcript__webhooks.flow_display_name
-      Webhook Page Name: dfcx_transcript__webhooks.page_display_name
       Agent Name: dfcx_session_metadata.agent_name
+      Playbook Name: dfcx_transcript__tools.playbook_name
+      Action Flow Display Name: dfcx_transcript__tools.action_flow_display_name
+      Action Page Display Name: dfcx_transcript__tools.action_page_display_name
+      Tool Type: dfcx_transcript__tools.tool_type
+      Tool Name: dfcx_transcript__tools.tool_name
     row: 29
     col: 0
-    width: 14
+    width: 18
     height: 5
   filters:
   - name: Session Start Date
@@ -436,7 +423,6 @@
       type: relative_timeframes
       display: inline
       options: []
-    #model: VVA_DEV_1
     explore: dfcx_session_metadata
     listens_to_filters: []
     field: dfcx_transcript.session_start_date
@@ -449,50 +435,10 @@
     ui_config:
       type: tag_list
       display: popover
-    #model: VVA_DEV_1
     explore: dfcx_session_metadata
-    listens_to_filters: [Session Start Date, Webhook Flow Name, Webhook Page Name, Webhook Display Name, Agent Name]
+    listens_to_filters: [Session Start Date, Agent Name, Playbook Name, Action Flow
+        Display Name, Action Page Display Name, Tool Type, Tool Name]
     field: dfcx_session_metadata.project_id
-  - name: Webhook Flow Name
-    title: Webhook Flow Name
-    type: field_filter
-    default_value: ''
-    allow_multiple_values: true
-    required: false
-    ui_config:
-      type: tag_list
-      display: popover
-    #model: VVA_DEV_1
-    explore: dfcx_session_metadata
-    listens_to_filters: [Session Start Date, Project ID, Webhook Page Name, Webhook Display Name, Agent Name]
-    field: dfcx_transcript.flow_display_name
-  - name: Webhook Page Name
-    title: Webhook Page Name
-    type: field_filter
-    default_value: ''
-    allow_multiple_values: true
-    required: false
-    ui_config:
-      type: tag_list
-      display: popover
-    #model: VVA_DEV_1
-    explore: dfcx_session_metadata
-    listens_to_filters: [Session Start Date, Project ID, Webhook Flow Name, Webhook Display Name, Agent Name]
-    field: dfcx_transcript.page_display_name
-  - name: Webhook Display Name
-    title: Webhook Display Name
-    type: field_filter
-    default_value: ''
-    allow_multiple_values: true
-    required: false
-    ui_config:
-      type: advanced
-      display: popover
-      options: []
-    #model: VVA_DEV_1
-    explore: dfcx_session_metadata
-    listens_to_filters: [Session Start Date, Project ID, Webhook Flow Name, Webhook Page Name, Agent Name]
-    field: dfcx_transcript__webhooks.webhook_display_name
   - name: Agent Name
     title: Agent Name
     type: field_filter
@@ -502,7 +448,77 @@
     ui_config:
       type: tag_list
       display: popover
-    #model: DCA_PRD_1
     explore: dfcx_session_metadata
-    listens_to_filters: [Session Start Date, Project ID, Webhook Flow Name, Webhook Page Name, Webhook Display Name]
+    listens_to_filters: [Session Start Date, Project ID, Playbook Name, Action Flow
+        Display Name, Action Page Display Name, Tool Type, Tool Name]
     field: dfcx_session_metadata.agent_name
+  - name: Playbook Name
+    title: Playbook Name
+    type: field_filter
+    default_value: ''
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: advanced
+      display: popover
+      options: []
+    explore: dfcx_session_metadata
+    listens_to_filters: [Session Start Date, Project ID, Agent Name, Action Flow Display
+        Name, Action Page Display Name, Tool Type, Tool Name]
+    field: dfcx_transcript__tools.playbook_name
+  - name: Action Flow Display Name
+    title: Action Flow Display Name
+    type: field_filter
+    default_value: ''
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: advanced
+      display: popover
+      options: []
+    explore: dfcx_session_metadata
+    listens_to_filters: [Session Start Date, Project ID, Agent Name, Playbook Name,
+      Action Page Display Name, Tool Type, Tool Name]
+    field: dfcx_transcript__tools.action_flow_display_name
+  - name: Action Page Display Name
+    title: Action Page Display Name
+    type: field_filter
+    default_value: ''
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: advanced
+      display: popover
+      options: []
+    explore: dfcx_session_metadata
+    listens_to_filters: [Session Start Date, Project ID, Agent Name, Playbook Name,
+      Action Flow Display Name, Tool Type, Tool Name]
+    field: dfcx_transcript__tools.action_page_display_name
+  - name: Tool Type
+    title: Tool Type
+    type: field_filter
+    default_value: ''
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: advanced
+      display: popover
+      options: []
+    explore: dfcx_session_metadata
+    listens_to_filters: [Session Start Date, Project ID, Agent Name, Playbook Name,
+      Action Flow Display Name, Action Page Display Name, Tool Name]
+    field: dfcx_transcript__tools.tool_type
+  - name: Tool Name
+    title: Tool Name
+    type: field_filter
+    default_value: ''
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: advanced
+      display: popover
+      options: []
+    explore: dfcx_session_metadata
+    listens_to_filters: [Session Start Date, Project ID, Agent Name, Playbook Name,
+      Action Flow Display Name, Action Page Display Name, Tool Type]
+    field: dfcx_transcript__tools.tool_name

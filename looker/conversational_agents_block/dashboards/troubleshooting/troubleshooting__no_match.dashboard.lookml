@@ -7,7 +7,7 @@
   elements:
   - title: No Match Page Details
     name: No Match Page Details
-    #model: billTest
+
     explore: dfcx_session_metadata
     type: looker_grid
     fields: [dfcx_transcript.source_flow_display_name, dfcx_transcript.source_page_display_name,
@@ -83,7 +83,7 @@
     height: 6
   - title: Daily No Match Rate
     name: Daily No Match Rate
-    #model: billTest
+
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_transcript.no_match_percentage, dfcx_session_metadata.session_start_date]
@@ -181,7 +181,7 @@
     height: 5
   - title: Common No Match User Utterances
     name: Common No Match User Utterances
-    #model: billTest
+
     explore: dfcx_session_metadata
     type: looker_grid
     fields: [dfcx_transcript.source_flow_display_name, dfcx_transcript.source_page_display_name,
@@ -266,7 +266,7 @@
       type: relative_timeframes
       display: inline
       options: []
-    #model: billTest
+
     explore: dfcx_session_metadata
     listens_to_filters: []
     field: dfcx_session_metadata.session_start_date
@@ -279,7 +279,7 @@
     ui_config:
       type: dropdown_menu
       display: inline
-    #model: billTest
+
     explore: dfcx_session_metadata
     listens_to_filters: [Session Start Date,  Source Page Display Name, Flow Display Name, Page Display Name, Agent Name]
     field: dfcx_transcript.source_flow_display_name
@@ -292,7 +292,7 @@
     ui_config:
       type: dropdown_menu
       display: inline
-    #model: billTest
+
     explore: dfcx_session_metadata
     listens_to_filters: [Session Start Date,  Source Flow Display Name, Flow Display Name, Page Display Name, Agent Name]
     field: dfcx_transcript.source_page_display_name
@@ -305,7 +305,7 @@
     ui_config:
       type: dropdown_menu
       display: inline
-    #model: billTest
+
     explore: dfcx_session_metadata
     listens_to_filters: [Session Start Date,  Source Flow Display Name, Source Page Display Name, Page Display Name, Agent Name]
     field: dfcx_transcript.flow_display_name
@@ -318,7 +318,7 @@
     ui_config:
       type: tag_list
       display: popover
-    #model: billTest
+
     explore: dfcx_session_metadata
     listens_to_filters: [Session Start Date,  Source Flow Display Name, Source Page Display Name, Flow Display Name, Agent Name]
     field: dfcx_transcript.page_display_name
@@ -333,7 +333,7 @@
       display: overflow
       options:
       - '1'
-    #model: billTest
+
     explore: dfcx_session_metadata
     listens_to_filters: []
     field: dfcx_session_metadata.auth_user
@@ -346,7 +346,7 @@
     ui_config:
       type: tag_list
       display: popover
-    #model: DCA_PRD_1
+
     explore: dfcx_session_metadata
     listens_to_filters: [Session Start Date,  Source Flow Display Name, Source Page Display Name, Flow Display Name, Page Display Name]
     field: dfcx_session_metadata.agent_name

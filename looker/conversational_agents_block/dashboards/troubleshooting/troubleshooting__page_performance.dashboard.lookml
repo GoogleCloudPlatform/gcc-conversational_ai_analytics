@@ -7,7 +7,7 @@
   elements:
   - title: Page Performance Overview
     name: Page Performance Overview
-    #model: billTest
+
     explore: dfcx_session_metadata
     type: looker_grid
     fields: [dfcx_transcript.source_flow_display_name, dfcx_transcript.source_page_display_name,
@@ -109,7 +109,7 @@
     height: 9
   - title: Page Performance by Date
     name: Page Performance by Date
-    #model: billTest
+
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_transcript.total_turns, dfcx_transcript.intent_percentage, dfcx_transcript.no_match_percentage,
@@ -229,7 +229,7 @@
       type: relative_timeframes
       display: inline
       options: []
-    #model: billTest
+
     explore: dfcx_session_metadata
     listens_to_filters: []
     field: dfcx_session_metadata.session_start_date
@@ -242,7 +242,7 @@
     ui_config:
       type: dropdown_menu
       display: inline
-    #model: billTest
+
     explore: dfcx_session_metadata
     listens_to_filters: [Session Start Date, Source Flow Display Name, Agent Name]
     field: dfcx_transcript.source_flow_display_name
@@ -255,7 +255,7 @@
     ui_config:
       type: dropdown_menu
       display: inline
-    #model: billTest
+
     explore: dfcx_session_metadata
     listens_to_filters: [Session Start Date, Source Flow Display Name, Agent Name]
     field: dfcx_transcript.source_page_display_name
@@ -270,7 +270,7 @@
       display: overflow
       options:
       - '1'
-    #model: billTest
+
     explore: dfcx_session_metadata
     listens_to_filters: []
     field: dfcx_session_metadata.auth_user
@@ -283,7 +283,7 @@
     ui_config:
       type: tag_list
       display: popover
-    #model: DCA_PRD_1
+
     explore: dfcx_session_metadata
     listens_to_filters: [Session Start Date, Source Flow Display Name, Source Page Display Name]
     field: dfcx_session_metadata.agent_name

@@ -7,7 +7,6 @@
   elements:
   - title: Confidence Score Percentiles
     name: Confidence Score Percentiles
-    #model: billTest
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_session_metadata.session_start_date, dfcx_transcript.confidence_score_percentile_05,
@@ -54,7 +53,7 @@
     height: 6
   - title: Confidence Score by Intent Box Plots
     name: Confidence Score by Intent Box Plots
-    #model: billTest
+
     explore: dfcx_session_metadata
     type: looker_boxplot
     fields: [dfcx_transcript.intent_display_name, dfcx_transcript.confidence_score_percentile_min,
@@ -98,7 +97,7 @@
     height: 9
   - title: User Inputs by Day
     name: User Inputs by Day
-    #model: billTest
+
     explore: dfcx_session_metadata
     type: looker_grid
     fields: [dfcx_transcript.user_utterance, dfcx_transcript.total_turns, dfcx_transcript.confidence_score_percentile_50]
@@ -146,7 +145,7 @@
     height: 6
   - title: No Match/ No Input per Day
     name: No Match/ No Input per Day
-    #model: billTest
+
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_transcript.no_match_percentage, dfcx_transcript.no_input_percentage,
@@ -207,7 +206,7 @@
     height: 6
   - title: Confidence Score Histogram
     name: Confidence Score Histogram
-    #model: billTest
+
     explore: dfcx_session_metadata
     type: looker_column
     fields: [dfcx_transcript.total_turns, intent_confidence_score_bins]
@@ -289,7 +288,7 @@
     height: 6
   - title: Alternative Intents Considered
     name: Alternative Intents Considered
-    #model: billTest
+
     explore: dfcx_session_metadata
     type: looker_grid
     fields: [dfcx_transcript.user_utterance, dfcx_transcript.intent_display_name,
@@ -351,7 +350,7 @@
       type: relative_timeframes
       display: inline
       options: []
-    #model: billTest
+
     explore: dfcx_session_metadata
     listens_to_filters: []
     field: dfcx_session_metadata.session_start_date
@@ -364,7 +363,7 @@
     ui_config:
       type: tag_list
       display: popover
-    #model: billTest
+
     explore: dfcx_session_metadata
     listens_to_filters: [Session Start Date, Source Page Display Name, Intent Display Name, Agent Name]
     field: dfcx_transcript.source_flow_display_name
@@ -377,7 +376,7 @@
     ui_config:
       type: tag_list
       display: popover
-    #model: billTest
+
     explore: dfcx_session_metadata
     listens_to_filters: [Session Start Date, Source Flow Display Name, Intent Display Name, Agent Name]
     field: dfcx_transcript.source_page_display_name
@@ -390,7 +389,7 @@
     ui_config:
       type: tag_list
       display: popover
-    #model: billTest
+
     explore: dfcx_session_metadata
     listens_to_filters: [Session Start Date, Source Flow Display Name, Source Page Display Name, Agent Name]
     field: dfcx_transcript.intent_display_name
@@ -403,7 +402,7 @@
     ui_config:
       type: tag_list
       display: popover
-    #model: DCA_PRD_1
+
     explore: dfcx_session_metadata
     listens_to_filters: [Session Start Date, Source Flow Display Name, Source Page Display Name, Intent Display Name]
     field: dfcx_session_metadata.agent_name

@@ -1,1 +1,1 @@
-label: "CCAI - @{environment_label}"
+label: "DFCX - @{environment_label}"

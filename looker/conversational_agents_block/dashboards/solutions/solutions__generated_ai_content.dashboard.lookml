@@ -1,4 +1,3 @@
----
 - dashboard: solutions__generated_ai_content
   title: Solutions - Generated AI Content
   layout: newspaper

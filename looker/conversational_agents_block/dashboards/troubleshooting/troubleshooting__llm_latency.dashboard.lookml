@@ -1,4 +1,3 @@
----
 - dashboard: troubleshooting__llm_latency
   title: Troubleshooting - LLM Latency
   layout: newspaper
@@ -8,12 +7,11 @@
   elements:
   - title: LLM Latency
     name: LLM Latency
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     type: single_value
     fields: [dfcx_transcript.total_turns]
     filters:
-      
+
       dfcx_transcript.contains_playbook_metrics: 'Yes'
     limit: 500
     column_limit: 50
@@ -39,12 +37,11 @@
     height: 3
   - title: Playbook Failures
     name: Playbook Failures
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     type: single_value
     fields: [dfcx_transcript.playbook_failure]
     filters:
-      
+
       dfcx_transcript.contains_playbook_metrics: 'Yes'
     limit: 500
     column_limit: 50
@@ -87,12 +84,11 @@
     height: 3
   - title: Playbook Success
     name: Playbook Success
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     type: single_value
     fields: [dfcx_transcript.playbook_success]
     filters:
-      
+
       dfcx_transcript.contains_playbook_metrics: 'Yes'
     limit: 500
     column_limit: 50
@@ -135,13 +131,12 @@
     height: 3
   - title: Max Total Latency Ms
     name: Max Total Latency Ms
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_transcript.max_total_latency_ms, dfcx_session_metadata.session_start_date]
     fill_fields: [dfcx_session_metadata.session_start_date]
     filters:
-      
+
       dfcx_transcript.contains_playbook_metrics: 'Yes'
     sorts: [dfcx_session_metadata.session_start_date desc]
     limit: 500
@@ -222,13 +217,12 @@
     height: 3
   - title: Avg Total Latency
     name: Avg Total Latency
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_transcript.average_total_latency_ms, dfcx_session_metadata.session_start_date]
     fill_fields: [dfcx_session_metadata.session_start_date]
     filters:
-      
+
       dfcx_transcript.contains_playbook_metrics: 'Yes'
     sorts: [dfcx_session_metadata.session_start_date desc]
     limit: 500
@@ -307,13 +301,12 @@
     height: 3
   - title: Min Total Latency
     name: Min Total Latency
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_transcript.min_total_latency_ms, dfcx_session_metadata.session_start_date]
     fill_fields: [dfcx_session_metadata.session_start_date]
     filters:
-      
+
       dfcx_transcript.contains_playbook_metrics: 'Yes'
     sorts: [dfcx_session_metadata.session_start_date desc]
     limit: 500
@@ -392,13 +385,12 @@
     height: 3
   - title: Total Latency
     name: Total Latency
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_transcript.total_latency_ms, dfcx_session_metadata.session_start_date]
     fill_fields: [dfcx_session_metadata.session_start_date]
     filters:
-      
+
       dfcx_transcript.contains_playbook_metrics: 'Yes'
     sorts: [dfcx_session_metadata.session_start_date desc]
     limit: 500
@@ -477,13 +469,12 @@
     height: 3
   - title: Avg LLM Latency
     name: Avg LLM Latency
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_transcript.average_llm_latency_ms, dfcx_session_metadata.session_start_date]
     fill_fields: [dfcx_session_metadata.session_start_date]
     filters:
-      
+
       dfcx_transcript.contains_playbook_metrics: 'Yes'
     sorts: [dfcx_session_metadata.session_start_date desc]
     limit: 500
@@ -562,13 +553,12 @@
     height: 3
   - title: Max LLM Latency
     name: Max LLM Latency
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_transcript.max_llm_latency_ms, dfcx_session_metadata.session_start_date]
     fill_fields: [dfcx_session_metadata.session_start_date]
     filters:
-      
+
       dfcx_transcript.contains_playbook_metrics: 'Yes'
     sorts: [dfcx_session_metadata.session_start_date desc]
     limit: 500
@@ -647,13 +637,12 @@
     height: 3
   - title: Min LLM Latency
     name: Min LLM Latency
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_transcript.min_llm_latency_ms, dfcx_session_metadata.session_start_date]
     fill_fields: [dfcx_session_metadata.session_start_date]
     filters:
-      
+
       dfcx_transcript.contains_playbook_metrics: 'Yes'
     sorts: [dfcx_session_metadata.session_start_date desc]
     limit: 500
@@ -732,13 +721,12 @@
     height: 3
   - title: Total LLM Latency
     name: Total LLM Latency
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_transcript.total_llm_latency_ms, dfcx_session_metadata.session_start_date]
     fill_fields: [dfcx_session_metadata.session_start_date]
     filters:
-      
+
       dfcx_transcript.contains_playbook_metrics: 'Yes'
     sorts: [dfcx_session_metadata.session_start_date desc]
     limit: 500
@@ -817,13 +805,12 @@
     height: 3
   - title: Total Out Token
     name: Total Out Token
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_session_metadata.session_start_date, dfcx_transcript.total_output_tokens]
     fill_fields: [dfcx_session_metadata.session_start_date]
     filters:
-      
+
       dfcx_transcript.contains_playbook_metrics: 'Yes'
     sorts: [dfcx_session_metadata.session_start_date desc]
     limit: 500
@@ -902,13 +889,12 @@
     height: 3
   - title: Total IN Tokens
     name: Total IN Tokens
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_session_metadata.session_start_date, dfcx_transcript.total_input_tokens]
     fill_fields: [dfcx_session_metadata.session_start_date]
     filters:
-      
+
       dfcx_transcript.contains_playbook_metrics: 'Yes'
     sorts: [dfcx_session_metadata.session_start_date desc]
     limit: 500
@@ -987,13 +973,12 @@
     height: 3
   - title: Max IN Tokens
     name: Max IN Tokens
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_session_metadata.session_start_date, dfcx_transcript.max_tokens_count]
     fill_fields: [dfcx_session_metadata.session_start_date]
     filters:
-      
+
       dfcx_transcript.contains_playbook_metrics: 'Yes'
     sorts: [dfcx_session_metadata.session_start_date desc]
     limit: 500
@@ -1057,13 +1042,12 @@
     height: 3
   - title: Max OUT Tokens
     name: Max OUT Tokens
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_session_metadata.session_start_date, dfcx_transcript.max_output_tokens]
     fill_fields: [dfcx_session_metadata.session_start_date]
     filters:
-      
+
       dfcx_transcript.contains_playbook_metrics: 'Yes'
     sorts: [dfcx_session_metadata.session_start_date desc]
     limit: 500
@@ -1127,13 +1111,12 @@
     height: 3
   - title: Avg IN Tokens
     name: Avg IN Tokens
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_session_metadata.session_start_date, dfcx_transcript.avg_input_tokens_count]
     fill_fields: [dfcx_session_metadata.session_start_date]
     filters:
-      
+
       dfcx_transcript.contains_playbook_metrics: 'Yes'
     sorts: [dfcx_session_metadata.session_start_date desc]
     limit: 500
@@ -1197,13 +1180,12 @@
     height: 3
   - title: Avg OUT Tokens
     name: Avg OUT Tokens
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_session_metadata.session_start_date, dfcx_transcript.avg_output_tokens]
     fill_fields: [dfcx_session_metadata.session_start_date]
     filters:
-      
+
       dfcx_transcript.contains_playbook_metrics: 'Yes'
     sorts: [dfcx_session_metadata.session_start_date desc]
     limit: 500
@@ -1267,13 +1249,12 @@
     height: 3
   - title: Min IN Tokens
     name: Min IN Tokens
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_session_metadata.session_start_date, dfcx_transcript.min_input_tokens]
     fill_fields: [dfcx_session_metadata.session_start_date]
     filters:
-      
+
       dfcx_transcript.contains_playbook_metrics: 'Yes'
     sorts: [dfcx_session_metadata.session_start_date desc]
     limit: 500
@@ -1337,13 +1318,12 @@
     height: 3
   - title: Min OUT Tokens
     name: Min OUT Tokens
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_session_metadata.session_start_date, dfcx_transcript.min_output_tokens]
     fill_fields: [dfcx_session_metadata.session_start_date]
     filters:
-      
+
       dfcx_transcript.contains_playbook_metrics: 'Yes'
     sorts: [dfcx_session_metadata.session_start_date desc]
     limit: 500
@@ -1407,13 +1387,12 @@
     height: 3
   - title: Total LLM Calls
     name: Total LLM Calls
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_transcript.total_llm_calls, dfcx_session_metadata.session_start_date]
     fill_fields: [dfcx_session_metadata.session_start_date]
     filters:
-      
+
       dfcx_transcript.contains_playbook_metrics: 'Yes'
     sorts: [dfcx_session_metadata.session_start_date desc]
     limit: 500
@@ -1486,13 +1465,12 @@
     height: 3
   - title: Max LLM Calls/Turn
     name: Max LLM Calls/Turn
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_transcript.max_llm_calls_per_turn, dfcx_session_metadata.session_start_date]
     fill_fields: [dfcx_session_metadata.session_start_date]
     filters:
-      
+
       dfcx_transcript.contains_playbook_metrics: 'Yes'
     sorts: [dfcx_session_metadata.session_start_date desc]
     limit: 500
@@ -1566,13 +1544,12 @@
     height: 3
   - title: Avg LLM Calls/Turn
     name: Avg LLM Calls/Turn
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_transcript.avg_llm_calls_per_turn, dfcx_session_metadata.session_start_date]
     fill_fields: [dfcx_session_metadata.session_start_date]
     filters:
-      
+
       dfcx_transcript.contains_playbook_metrics: 'Yes'
     sorts: [dfcx_session_metadata.session_start_date desc]
     limit: 500
@@ -1647,13 +1624,12 @@
     height: 3
   - title: Min LLM Calls/Turn
     name: Min LLM Calls/Turn
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_transcript.min_llm_calls_per_turn, dfcx_session_metadata.session_start_date]
     fill_fields: [dfcx_session_metadata.session_start_date]
     filters:
-      
+
       dfcx_transcript.contains_playbook_metrics: 'Yes'
     sorts: [dfcx_session_metadata.session_start_date desc]
     limit: 500
@@ -1728,13 +1704,12 @@
     height: 3
   - title: Total Tool Latency
     name: Total Tool Latency
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_transcript.total_tool_latency_ms, dfcx_session_metadata.session_start_date]
     fill_fields: [dfcx_session_metadata.session_start_date]
     filters:
-      
+
       dfcx_transcript.contains_playbook_metrics: 'Yes'
     sorts: [dfcx_session_metadata.session_start_date desc]
     limit: 500
@@ -1809,13 +1784,12 @@
     height: 3
   - title: Max Tool Latency
     name: Max Tool Latency
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_transcript.max_tool_latency_ms, dfcx_session_metadata.session_start_date]
     fill_fields: [dfcx_session_metadata.session_start_date]
     filters:
-      
+
       dfcx_transcript.contains_playbook_metrics: 'Yes'
     sorts: [dfcx_session_metadata.session_start_date desc]
     limit: 500
@@ -1890,13 +1864,12 @@
     height: 3
   - title: Avg Tool Latency
     name: Avg Tool Latency
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_transcript.avg_tool_latency_ms, dfcx_session_metadata.session_start_date]
     fill_fields: [dfcx_session_metadata.session_start_date]
     filters:
-      
+
       dfcx_transcript.contains_playbook_metrics: 'Yes'
     sorts: [dfcx_session_metadata.session_start_date desc]
     limit: 500
@@ -1971,13 +1944,12 @@
     height: 3
   - title: Min Tool Latency
     name: Min Tool Latency
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_transcript.min_tool_latency_ms, dfcx_session_metadata.session_start_date]
     fill_fields: [dfcx_session_metadata.session_start_date]
     filters:
-      
+
       dfcx_transcript.contains_playbook_metrics: 'Yes'
     limit: 500
     column_limit: 50
@@ -2051,12 +2023,11 @@
     height: 3
   - title: Total Sessions
     name: Total Sessions
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     type: single_value
     fields: [dfcx_session_metadata.total_sessions]
     filters:
-      
+
       dfcx_transcript.contains_playbook_metrics: 'Yes'
     limit: 500
     column_limit: 50
@@ -2105,7 +2076,6 @@
     ui_config:
       type: relative_timeframes
       display: inline
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     listens_to_filters: []
     field: dfcx_session_metadata.session_start_date
@@ -2118,7 +2088,6 @@
     ui_config:
       type: button_group
       display: inline
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     listens_to_filters: []
     field: dfcx_session_metadata.project_id
@@ -2131,7 +2100,6 @@
     ui_config:
       type: tag_list
       display: popover
-    #model: tmo-ccai-dev
     explore: dfcx_session_metadata
     listens_to_filters: []
     field: dfcx_session_metadata.agent_name

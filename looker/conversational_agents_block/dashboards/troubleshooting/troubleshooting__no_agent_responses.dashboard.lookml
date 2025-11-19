@@ -7,7 +7,7 @@
   elements:
   - title: No Agent Response Rate
     name: No Agent Response Rate
-    #model: billTest
+
     explore: dfcx_session_metadata
     type: looker_line
     fields: [dfcx_transcript.no_agent_response_rate, dfcx_transcript.total_no_agent_response_turns,
@@ -65,7 +65,7 @@
     height: 7
   - title: Pages with No Agent Response
     name: Pages with No Agent Response
-    #model: billTest
+
     explore: dfcx_session_metadata
     type: looker_grid
     fields: [dfcx_transcript.flow_display_name, dfcx_transcript.page_display_name,
@@ -141,7 +141,7 @@
       type: relative_timeframes
       display: inline
       options: []
-    #model: billTest
+
     explore: dfcx_session_metadata
     listens_to_filters: []
     field: dfcx_session_metadata.session_start_date
@@ -154,7 +154,7 @@
     ui_config:
       type: tag_list
       display: popover
-    #model: billTest
+
     explore: dfcx_session_metadata
     listens_to_filters: [Session Start Date,Page Display Name, Agent Name]
     field: dfcx_transcript.flow_display_name
@@ -167,7 +167,7 @@
     ui_config:
       type: tag_list
       display: popover
-    #model: billTest
+
     explore: dfcx_session_metadata
     listens_to_filters: [Session Start Date, Flow Display Name, Agent Name]
     field: dfcx_transcript.page_display_name
@@ -180,7 +180,7 @@
     ui_config:
       type: tag_list
       display: popover
-    #model: DCA_PRD_1
+
     explore: dfcx_session_metadata
     listens_to_filters: [Session Start Date, Flow Display Name, Page Display Name]
     field: dfcx_session_metadata.agent_name
