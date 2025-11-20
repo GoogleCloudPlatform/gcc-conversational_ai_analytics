@@ -28,7 +28,8 @@ module "cf_cx_test_cases" {
   service_account = var.service_account_email
 
   function_config = {
-    memory_mb       = 512 #the default value is not enough
+    memory_mb       = 1024
+    cpu             = 1
     timeout_seconds = local.timeout_seconds
   }
 
