@@ -81,7 +81,7 @@
     defaults_version: 1
     listen:
       Project ID: dfcx_session_metadata.project_id
-      Final Interaction Use Case: dfcx_session_metadata.final_interaction_head_intent
+      Final Interaction Head Intent: dfcx_session_metadata.final_interaction_head_intent
       Session Start Date: dfcx_session_metadata.session_start_date
     row: 0
     col: 0
@@ -170,7 +170,7 @@
     defaults_version: 1
     listen:
       Project ID: dfcx_session_metadata.project_id
-      Final Interaction Use Case: dfcx_session_metadata.final_interaction_head_intent
+      Final Interaction Head Intent: dfcx_session_metadata.final_interaction_head_intent
       Session Start Date: dfcx_session_metadata.session_start_date
     row: 19
     col: 0
@@ -252,7 +252,7 @@
     defaults_version: 1
     listen:
       Project ID: dfcx_session_metadata.project_id
-      Final Interaction Use Case: dfcx_session_metadata.final_interaction_head_intent
+      Final Interaction Head Intent: dfcx_session_metadata.final_interaction_head_intent
       Session Start Date: dfcx_session_metadata.session_start_date
     row: 0
     col: 10
@@ -366,7 +366,7 @@
     defaults_version: 1
     listen:
       Project ID: dfcx_session_metadata.project_id
-      Final Interaction Use Case: dfcx_session_metadata.final_interaction_head_intent
+      Final Interaction Head Intent: dfcx_session_metadata.final_interaction_head_intent
       Session Start Date: dfcx_session_metadata.session_start_date
     row: 2
     col: 0
@@ -448,7 +448,7 @@
     defaults_version: 1
     listen:
       Project ID: dfcx_session_metadata.project_id
-      Final Interaction Use Case: dfcx_session_metadata.final_interaction_head_intent
+      Final Interaction Head Intent: dfcx_session_metadata.final_interaction_head_intent
       Session Start Date: dfcx_session_metadata.session_start_date
     row: 0
     col: 5
@@ -530,7 +530,7 @@
     defaults_version: 1
     listen:
       Project ID: dfcx_session_metadata.project_id
-      Final Interaction Use Case: dfcx_session_metadata.final_interaction_head_intent
+      Final Interaction Head Intent: dfcx_session_metadata.final_interaction_head_intent
       Session Start Date: dfcx_session_metadata.session_start_date
     row: 0
     col: 15
@@ -600,7 +600,7 @@
     defaults_version: 1
     listen:
       Project ID: dfcx_session_metadata.project_id
-      Final Interaction Use Case: dfcx_session_metadata.final_interaction_head_intent
+      Final Interaction Head Intent: dfcx_session_metadata.final_interaction_head_intent
       Session Start Date: dfcx_session_metadata.session_start_date
     row: 8
     col: 0
@@ -684,7 +684,7 @@
     hide_row_totals: false
     defaults_version: 1
     listen:
-      Final Interaction Use Case: dfcx_session_metadata.final_interaction_head_intent
+      Final Interaction Head Intent: dfcx_session_metadata.final_interaction_head_intent
       Project ID: dfcx_session_metadata.project_id
     row: 0
     col: 20
@@ -732,7 +732,7 @@
     y_axes: []
     listen:
       Project ID: dfcx_session_metadata.project_id
-      Final Interaction Use Case: dfcx_session_metadata.final_interaction_head_intent
+      Final Interaction Head Intent: dfcx_session_metadata.final_interaction_head_intent
       Session Start Date: dfcx_session_metadata.session_start_date
     row: 14
     col: 0
@@ -766,8 +766,8 @@
     explore: dfcx_session_metadata
     listens_to_filters: []
     field: dfcx_session_metadata.project_id
-  - name: Final Interaction Use Case
-    title: Final Interaction Use Case
+  - name: Final Interaction Head Intent
+    title: Final Interaction Head Intent
     type: field_filter
     default_value: ''
     allow_multiple_values: true

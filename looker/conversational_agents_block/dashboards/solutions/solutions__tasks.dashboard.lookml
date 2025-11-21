@@ -57,8 +57,8 @@
     listen:
       Session Start Date: dfcx_session_metadata.session_start_date
       Project ID: dfcx_session_metadata.project_id
-      Interaction Use Case: dfcx_interaction.interaction_head_intent
-      Action: dfcx_interaction__tasks.task_display_name
+      Interaction Head Intent: dfcx_interaction.interaction_head_intent
+      Tasks: dfcx_interaction__tasks.task_display_name
     row: 10
     col: 0
     width: 12
@@ -124,8 +124,8 @@
     listen:
       Session Start Date: dfcx_session_metadata.session_start_date
       Project ID: dfcx_session_metadata.project_id
-      Interaction Use Case: dfcx_interaction.interaction_head_intent
-      Action: dfcx_interaction__tasks.task_display_name
+      Interaction Head Intent: dfcx_interaction.interaction_head_intent
+      Tasks: dfcx_interaction__tasks.task_display_name
     row: 0
     col: 0
     width: 24
@@ -183,8 +183,8 @@
     listen:
       Session Start Date: dfcx_session_metadata.session_start_date
       Project ID: dfcx_session_metadata.project_id
-      Interaction Use Case: dfcx_interaction.interaction_head_intent
-      Action: dfcx_interaction__tasks.task_display_name
+      Interaction Head Intent: dfcx_interaction.interaction_head_intent
+      Tasks: dfcx_interaction__tasks.task_display_name
     row: 10
     col: 12
     width: 12
@@ -215,10 +215,10 @@
       display: popover
     #model: ccai
     explore: dfcx_session_metadata
-    listens_to_filters: [Session Start Date, Interaction Use Case]
+    listens_to_filters: [Session Start Date, Interaction Head Intent]
     field: dfcx_session_metadata.project_id
-  - name: Interaction Use Case
-    title: Interaction Use Case
+  - name: Interaction Head Intent
+    title: Interaction Head Intent
     type: field_filter
     default_value: ''
     allow_multiple_values: true
@@ -230,16 +230,15 @@
     explore: dfcx_session_metadata
     listens_to_filters: [Session Start Date, Project ID]
     field: dfcx_interaction.interaction_head_intent
-  - name: Action
-    title: Action
+  - name: Tasks
+    title: Tasks
     type: field_filter
     default_value: ''
     allow_multiple_values: false
-    required: true
     ui_config:
       type: dropdown_menu
       display: inline
     #model: ccai
     explore: dfcx_session_metadata
-    listens_to_filters: [Session Start Date, Interaction Use Case, Project ID]
+    listens_to_filters: [Session Start Date, Interaction Head Intent, Project ID]
     field: dfcx_interaction__tasks.task_display_name
