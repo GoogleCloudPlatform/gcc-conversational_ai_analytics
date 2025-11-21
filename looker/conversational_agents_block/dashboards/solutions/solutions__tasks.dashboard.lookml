@@ -6,8 +6,8 @@
   description: ''
   preferred_slug: 8NPvaXwL8LuWF91WBXcPVy
   elements:
-  - title: Actions Not Started
-    name: Actions Not Started
+  - title: Tasks Not Started
+    name: Tasks Not Started
     #model: ccai
     explore: dfcx_session_metadata
     type: looker_grid
@@ -130,8 +130,8 @@
     col: 0
     width: 24
     height: 10
-  - title: Actions Started
-    name: Actions Started
+  - title: Tasks Started
+    name: Tasks Started
     #model: ccai
     explore: dfcx_session_metadata
     type: looker_grid
