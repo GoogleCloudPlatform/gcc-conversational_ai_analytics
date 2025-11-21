@@ -67,14 +67,14 @@ WITH
     AND interaction_position_reverse = 1
 )
 
-, final_action AS (
+, final_task AS (
     SELECT
         dfcx_interaction.session_id,
-        flow.flow_display_name AS action,
-        flow.action_started,
-        flow.action_ended
+        task.task_display_name AS final_task,
+        task.action_started,
+        task.action_ended
     FROM ${ref("dfcx_interaction")} as dfcx_interaction
-    LEFT JOIN UNNEST(dfcx_interaction.flows) AS flow
+    LEFT JOIN UNNEST(dfcx_interaction.tasks) AS task
     WHERE dfcx_interaction.session_start_time >= session_start_time_checkpoint
       AND session_id IN (SELECT session_id FROM sessions_to_update)
     QUALIFY
@@ -82,9 +82,9 @@ WITH
             PARTITION BY
                 dfcx_interaction.session_id
             ORDER BY
-                COALESCE(flow.action_ended_time, CURRENT_TIMESTAMP()) DESC,
-                flow.action_started DESC,
-                flow.flow_display_name DESC
+                COALESCE(task.action_ended_time, CURRENT_TIMESTAMP()) DESC,
+                task.action_started_time DESC,
+                task.task_display_name DESC
         ) = 1
 )
 
@@ -97,9 +97,9 @@ SELECT
   , session_info.location
   , session_info.session_end_time
   , dfcx_interaction.interaction_head_intent AS final_interaction_head_intent
-  , final_action.action AS final_action
-  , final_action.action_started AS final_action_started
-  , final_action.action_ended AS final_action_ended
+  , final_task.final_task
+  , final_task.action_started AS final_task_started
+  , final_task.action_ended AS final_task_ended
   , session_info.final_language_code
   , session_info.final_session_parameters
   , session_info.number_of_turns
@@ -107,7 +107,7 @@ SELECT
   , session_info.latest_insert_time
 FROM session_info
 LEFT JOIN dfcx_interaction USING (session_id)
-LEFT JOIN final_action USING (session_id)
+LEFT JOIN final_task USING (session_id)
 LEFT JOIN ${ref("agents")} as agents 
   ON session_info.agent_id = agents.agent_id
   AND session_info.session_start_time BETWEEN agents.valid_from AND agents.valid_to

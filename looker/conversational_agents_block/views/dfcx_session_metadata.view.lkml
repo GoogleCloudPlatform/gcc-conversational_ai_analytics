@@ -25,22 +25,22 @@ view: dfcx_session_metadata {
     sql: ${TABLE}.agent_name ;;
   }
 
-  dimension: final_action {
+  dimension: final_task {
     type: string
-    description: "The final action of the session"
-    sql: ${TABLE}.final_action ;;
+    description: "The final task of the session"
+    sql: ${TABLE}.final_task ;;
   }
 
-  dimension: final_action_ended {
+  dimension: final_task_ended {
     type: yesno
-    description: "Whether the final action ended"
-    sql: ${TABLE}.final_action_ended ;;
+    description: "Whether the final task ended"
+    sql: ${TABLE}.final_task_ended ;;
   }
 
-  dimension: final_action_started {
+  dimension: final_task_started {
     type: yesno
-    description: "Whether the final action started"
-    sql: ${TABLE}.final_action_started ;;
+    description: "Whether the final task started"
+    sql: ${TABLE}.final_task_started ;;
   }
 
   dimension: final_interaction_head_intent {
@@ -173,10 +173,10 @@ view: dfcx_session_metadata {
     type: count
   }
 
-  measure: count_final_action_started_sessions {
+  measure: count_final_task_started_sessions {
     type: count_distinct
-    sql: CASE WHEN ${final_action_started} THEN ${session_id} ELSE NULL END ;;
-    description: "Count of distinct sessions where final action started is TRUE"
+    sql: CASE WHEN ${final_task_started} THEN ${session_id} ELSE NULL END ;;
+    description: "Count of distinct sessions where final task started is TRUE"
   }
 
   dimension: session_handle_time {
@@ -201,13 +201,13 @@ view: dfcx_session_metadata {
 
   measure: total_ss_success_convs {
     type: count_distinct
-    sql: IF(${TABLE}.final_action_started AND ${TABLE}.final_action_ended, ${TABLE}.session_id , NULL ) ;;
+    sql: IF(${TABLE}.final_task_started AND ${TABLE}.final_task_ended, ${TABLE}.session_id , NULL ) ;;
   }
 
   measure: total_ss_attempt_sessions {
     type: count_distinct
     sql: ${TABLE}.session_id ;;
-    filters: [final_action_started: "Yes"]
+    filters: [final_task_started: "Yes"]
   }
 
   measure: ss_success_percentage {

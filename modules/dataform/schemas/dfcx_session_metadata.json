@@ -49,18 +49,18 @@
       "type": "STRING"
     },
     {
-      "description": "The final action of the session",
-      "name": "final_action",
+      "description": "The final task of the session",
+      "name": "final_task",
       "type": "STRING"
     },
     {
-      "description": "Whether the final action started",
-      "name": "final_action_started",
+      "description": "Whether the final task started",
+      "name": "final_task_started",
       "type": "BOOLEAN"
     },
     {
-      "description": "Whether the final action ended",
-      "name": "final_action_ended",
+      "description": "Whether the final task ended",
+      "name": "final_task_ended",
       "type": "BOOLEAN"
     },
     {

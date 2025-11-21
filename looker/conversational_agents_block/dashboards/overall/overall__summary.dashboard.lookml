@@ -92,7 +92,7 @@
 
     explore: dfcx_session_metadata
     type: looker_grid
-    fields: [dfcx_session_metadata.final_action, dfcx_session_metadata.total_ss_attempt_sessions,
+    fields: [dfcx_session_metadata.final_task, dfcx_session_metadata.total_ss_attempt_sessions,
       dfcx_session_metadata.total_sessions, dfcx_session_metadata.ss_attempt_percentage,
       dfcx_session_metadata.ss_success_percentage, dfcx_session_metadata.total_escalated_sessions,
       dfcx_session_metadata.escalated_percentage]
@@ -124,7 +124,7 @@
     truncate_header: false
     minimum_column_width: 75
     series_labels:
-      dfcx_session_metadata.final_action: Final Action
+      dfcx_session_metadata.final_task: Final Task
       dfcx_session_metadata.total_ss_attempt_sessions: Total SS Attempt Session
       dfcx_session_metadata.total_sessions: Total Sessions
       dfcx_session_metadata.ss_attempt_percentage: SS Attempt Percentage
@@ -696,8 +696,8 @@
     explore: dfcx_session_metadata
     type: looker_grid
     fields: [dfcx_session_metadata.session_id, dfcx_session_metadata.session_start_date,
-      dfcx_session_metadata.final_action, dfcx_session_metadata.final_action_started,
-      dfcx_session_metadata.final_action_ended, dfcx_session_metadata.is_escalated]
+      dfcx_session_metadata.final_task, dfcx_session_metadata.final_task_started,
+      dfcx_session_metadata.final_task_ended, dfcx_session_metadata.is_escalated]
     filters: {}
     sorts: [dfcx_session_metadata.session_start_date desc]
     limit: 500
