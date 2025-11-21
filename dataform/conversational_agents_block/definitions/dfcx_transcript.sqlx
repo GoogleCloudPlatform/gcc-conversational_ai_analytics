@@ -485,7 +485,12 @@ WITH
     SAFE_CAST(JSON_VALUE(action, '$.llmCall.tokenCount.conversationContextTokenCount') AS INT64) AS llm_conversation_context_tokens,
     SAFE_CAST(JSON_VALUE(action, '$.llmCall.tokenCount.exampleTokenCount') AS INT64) AS llm_example_tokens,
     SAFE_CAST(JSON_VALUE(action, '$.llmCall.tokenCount.totalInputTokenCount') AS INT64) AS llm_total_input_tokens,
-    SAFE_CAST(JSON_VALUE(action, '$.llmCall.tokenCount.totalOutputTokenCount') AS INT64) AS llm_total_output_tokens
+    SAFE_CAST(JSON_VALUE(action, '$.llmCall.tokenCount.totalOutputTokenCount') AS INT64) AS llm_total_output_tokens,
+    
+    -- ===== INTENT MATCH =====
+    JSON_VALUE(action, '$.intentMatch.matchedIntents[0].intentId') AS intent_display_id,
+    JSON_VALUE(action, '$.intentMatch.matchedIntents[0].displayName') AS intent_display_name,
+    SAFE_CAST(JSON_VALUE(action, '$.intentMatch.matchedIntents[0].score') AS FLOAT64) AS intent_confidence_score
     
   FROM base_data
     INNER JOIN UNNEST(trace_blocks) AS block WITH OFFSET AS block_step
@@ -551,7 +556,9 @@ WITH
         f.datastore_answer_generation_model,
         f.datastore_rewriter_model,
         -- LLM Metrics
-        f.llm_model, f.llm_conversation_context_tokens, f.llm_example_tokens, f.llm_total_input_tokens, f.llm_total_output_tokens
+        f.llm_model, f.llm_conversation_context_tokens, f.llm_example_tokens, f.llm_total_input_tokens, f.llm_total_output_tokens,
+        -- Intent Match
+        f.intent_display_id, f.intent_display_name, f.intent_confidence_score
     FROM propogate_page_context f
 )
 
@@ -596,7 +603,10 @@ WITH
             f.llm_total_output_tokens,
             f.error_message,
             f.webhook_state,
-            f.webhook_reason
+            f.webhook_reason,
+            f.intent_display_id,
+            f.intent_display_name,
+            f.intent_confidence_score
         ) ORDER BY f.action_step
         ) AS actions
     FROM final_enrichment f
@@ -710,6 +720,24 @@ WITH
     FROM new_trace_sequence
 )
 
+-- CTE 23: primary_trace_intent
+-- Selects the first non-null intent match from the trace data for each session and response.
+, primary_trace_intent AS (
+    SELECT
+        session_id,
+        response_id,
+        ARRAY_AGG(
+            STRUCT(
+                intent_display_id,
+                intent_display_name,
+                intent_confidence_score
+            ) IGNORE NULLS ORDER BY block_step, action_step LIMIT 1
+        )[SAFE_OFFSET(0)] as primary_intent
+    FROM final_enrichment
+    WHERE intent_display_id IS NOT NULL
+    GROUP BY 1, 2
+)
+
 SELECT
     base_data.project_id
   , base_data.location
@@ -730,9 +758,9 @@ SELECT
   , source_and_target_page.flow_display_name
   , source_and_target_page.page_id
   , source_and_target_page.page_display_name
-  , base_data.intent_display_id
-  , base_data.intent_display_name
-  , base_data.intent_confidence_score
+  , COALESCE(primary_trace_intent.primary_intent.intent_display_id, base_data.intent_display_id) AS intent_display_id
+  , COALESCE(primary_trace_intent.primary_intent.intent_display_name, base_data.intent_display_name) AS intent_display_name
+  , COALESCE(primary_trace_intent.primary_intent.intent_confidence_score, base_data.intent_confidence_score) AS intent_confidence_score
   , base_data.match_type
   , base_data.event
   , execution_sequence_agg.execution_sequence_count
@@ -770,6 +798,8 @@ FROM base_data
   LEFT JOIN partial_responses_agg
     USING (session_id, response_id)
   LEFT JOIN tool_calls
+    USING (session_id, response_id)
+  LEFT JOIN primary_trace_intent
     USING (session_id, response_id)
 
 post_operations {

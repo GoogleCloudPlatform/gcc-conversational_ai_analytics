@@ -665,6 +665,21 @@
               "description": "The error reason associated with a particular function call made from the agent.",
               "name": "webhook_reason",
               "type": "STRING"
+            },
+            {
+              "description": "The unique ID of the matched intent from the trace.",
+              "name": "intent_display_id",
+              "type": "STRING"
+            },
+            {
+              "description": "The human readable name of the matched intent from the trace.",
+              "name": "intent_display_name",
+              "type": "STRING"
+            },
+            {
+              "description": "The confidence score of the matched intent from the trace.",
+              "name": "intent_confidence_score",
+              "type": "FLOAT"
             }
           ]
         }
