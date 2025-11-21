@@ -13,9 +13,14 @@ variable "bq_project_id" {
   description = "BigQuery Project Id"
 }
 
-variable "bq_table_id" {
+variable "bq_dataset_name" {
   type        = string
-  description = "BigQuery table ID: {dataset}.{table}"
+  description = "BigQuery dataset name"
+}
+
+variable "bq_dataset_region" {
+  type        = string
+  description = "BigQuery dataset region"
 }
 
 variable "service_account_email" {

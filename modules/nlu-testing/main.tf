@@ -12,6 +12,14 @@ locals {
   timeout_seconds = 540
 }
 
+resource "google_bigquery_table" "dfcx_nlu_testing_results" {
+  project     = var.bq_project_id
+  dataset_id  = var.bq_dataset_name
+  table_id    = "dfcx_nlu_testing_results"
+  description = "Table for storing NLU testing results."
+  schema      = file("${path.module}/schemas/dfcx_nlu_testing_results.json")
+}
+
 module "cf_nlu_testing" {
   source      = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/cloud-function-v2?ref=v34.1.0&depth=1"
   project_id  = var.project_id
@@ -34,8 +42,9 @@ module "cf_nlu_testing" {
   }
 
   environment_variables = {
-    BQ_PROJECT_ID = var.bq_project_id
-    BQ_TABLE_ID   = var.bq_table_id
+    BQ_PROJECT_ID   = var.bq_project_id
+    BQ_TABLE_ID     = "${var.bq_dataset_name}.${google_bigquery_table.dfcx_nlu_testing_results.table_id}"
+    BQ_DATASET_NAME = var.bq_dataset_name
   }
 }
 

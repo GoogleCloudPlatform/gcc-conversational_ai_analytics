@@ -1,0 +1,104 @@
+[
+  {
+    "description": "A unique identifier for the overall test execution run.",
+    "mode": "NULLABLE",
+    "name": "test_run_guid",
+    "type": "STRING"
+  },
+  {
+    "description": "The timestamp when the test run was initiated.",
+    "mode": "NULLABLE",
+    "name": "test_run_timestamp",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "The full resource name of the Dialogflow CX agent.",
+    "mode": "NULLABLE",
+    "name": "agent_name",
+    "type": "STRING"
+  },
+  {
+    "description": "The display name of the flow where the test occurred.",
+    "mode": "NULLABLE",
+    "name": "flow_display_name",
+    "type": "STRING"
+  },
+  {
+    "description": "The display name of the page where the test occurred.",
+    "mode": "NULLABLE",
+    "name": "page_display_name",
+    "type": "STRING"
+  },
+  {
+    "description": "The user input or utterance being tested.",
+    "mode": "NULLABLE",
+    "name": "utterance",
+    "type": "STRING"
+  },
+  {
+    "description": "The intent that was expected to be matched.",
+    "mode": "NULLABLE",
+    "name": "expected_intent",
+    "type": "STRING"
+  },
+  {
+    "description": "The parameters that were expected to be extracted (JSON string).",
+    "mode": "NULLABLE",
+    "name": "expected_parameters",
+    "type": "STRING"
+  },
+  {
+    "description": "The type of match expected (e.g., INTENT, NO_MATCH).",
+    "mode": "NULLABLE",
+    "name": "expected_match_type",
+    "type": "STRING"
+  },
+  {
+    "description": "The expected target page after the turn.",
+    "mode": "NULLABLE",
+    "name": "target_page",
+    "type": "STRING"
+  },
+  {
+    "description": "The actual match type detected by the agent.",
+    "mode": "NULLABLE",
+    "name": "detected_match_type",
+    "type": "STRING"
+  },
+  {
+    "description": "The confidence score of the intent match.",
+    "mode": "NULLABLE",
+    "name": "confidence",
+    "type": "FLOAT"
+  },
+  {
+    "description": "The actual parameters detected by the agent (JSON string).",
+    "mode": "NULLABLE",
+    "name": "detected_parameters",
+    "type": "STRING"
+  },
+  {
+    "description": "The actual intent detected by the agent.",
+    "mode": "NULLABLE",
+    "name": "detected_intent",
+    "type": "STRING"
+  },
+  {
+    "description": "Indicates whether the test case passed (true) or failed (false).",
+    "mode": "NULLABLE",
+    "name": "passed",
+    "type": "BOOLEAN"
+  },
+  {
+    "description": "Additional details or comments about the test result.",
+    "mode": "NULLABLE",
+    "name": "description",
+    "type": "STRING"
+  },
+  {
+    "description": "The source of the input (e.g., AUDIO, TEXT).",
+    "mode": "NULLABLE",
+    "name": "input_source",
+    "type": "STRING"
+  }
+]

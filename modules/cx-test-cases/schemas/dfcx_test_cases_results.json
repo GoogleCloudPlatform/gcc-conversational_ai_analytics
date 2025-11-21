@@ -1,0 +1,68 @@
+[
+  {
+    "description": "A unique identifier for the overall test execution run.",
+    "mode": "NULLABLE",
+    "name": "test_run_guid",
+    "type": "STRING"
+  },
+  {
+    "description": "The timestamp when the test run was initiated.",
+    "mode": "NULLABLE",
+    "name": "test_run_timestamp",
+    "type": "TIMESTAMP"
+  },
+  {
+    "description": "The unique identifier (UUID) of the Dialogflow CX agent.",
+    "mode": "NULLABLE",
+    "name": "agent_id",
+    "type": "STRING"
+  },
+  {
+    "description": "The human-readable display name of the Dialogflow CX agent.",
+    "mode": "NULLABLE",
+    "name": "agent_display_name",
+    "type": "STRING"
+  },
+  {
+    "description": "The unique identifier (UUID) of the specific test case.",
+    "mode": "NULLABLE",
+    "name": "test_case_id",
+    "type": "STRING"
+  },
+  {
+    "description": "The human-readable display name of the test case.",
+    "mode": "NULLABLE",
+    "name": "test_case_display_name",
+    "type": "STRING"
+  },
+  {
+    "description": "The display name of the flow where the test case execution begins.",
+    "mode": "NULLABLE",
+    "name": "start_flow",
+    "type": "STRING"
+  },
+  {
+    "description": "Indicates whether the test case passed (true) or failed (false).",
+    "mode": "NULLABLE",
+    "name": "passed",
+    "type": "BOOLEAN"
+  },
+  {
+    "description": "Indicates whether the test case could not be executed (true) or was runnable (false).",
+    "mode": "NULLABLE",
+    "name": "not_runnable",
+    "type": "BOOLEAN"
+  },
+  {
+    "description": "The specific date and time when this test case was executed.",
+    "mode": "NULLABLE",
+    "name": "test_time",
+    "type": "DATETIME"
+  },
+  {
+    "description": "A list of tags associated with the test case for categorization.",
+    "mode": "REPEATED",
+    "name": "tags",
+    "type": "STRING"
+  }
+]

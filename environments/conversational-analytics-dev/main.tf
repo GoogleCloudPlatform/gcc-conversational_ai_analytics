@@ -163,8 +163,9 @@ module "nlu_testing" {
 
   cf_bucket_name = module.cf_bundle_bucket.name
 
-  bq_project_id = var.project_id
-  bq_table_id   = "${var.bq_testing_dataset_name}.nlu_testing"
+  bq_project_id     = var.project_id
+  bq_dataset_name   = var.bq_testing_dataset_name
+  bq_dataset_region = var.bq_dataset_region
 
   service_account_email = google_service_account.conversational_analytics_sa.email
 
@@ -175,7 +176,8 @@ module "nlu_testing" {
     google_project_service.cloud_build_api,
     google_project_service.cloud_scheduler_api,
     google_project_service.dialogflow_api,
-    google_project_service.bigquery_api
+    google_project_service.bigquery_api,
+    module.bigquery_testing_dataset
   ]
 }
 
@@ -187,8 +189,9 @@ module "cx_test_cases" {
 
   cf_bucket_name = module.cf_bundle_bucket.name
 
-  bq_project_id = var.project_id
-  bq_table_id   = "${var.bq_testing_dataset_name}.cx_test_cases"
+  bq_project_id     = var.project_id
+  bq_dataset_name   = var.bq_testing_dataset_name
+  bq_dataset_region = var.bq_dataset_region
 
   service_account_email = google_service_account.conversational_analytics_sa.email
 
@@ -199,7 +202,8 @@ module "cx_test_cases" {
     google_project_service.cloud_build_api,
     google_project_service.cloud_scheduler_api,
     google_project_service.dialogflow_api,
-    google_project_service.bigquery_api
+    google_project_service.bigquery_api,
+    module.bigquery_testing_dataset
   ]
 }
 
@@ -266,6 +270,13 @@ module "dataform" {
     google_project_service.dataform_api,
     google_project_service.secret_manager_api
   ]
+}
+
+module "bigquery_testing_dataset" {
+  source     = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/bigquery-dataset?ref=v34.1.0&depth=1"
+  project_id = var.project_id
+  id         = var.bq_testing_dataset_name
+  location   = var.bq_dataset_region
 }
 
 module "conversation_generator" {
