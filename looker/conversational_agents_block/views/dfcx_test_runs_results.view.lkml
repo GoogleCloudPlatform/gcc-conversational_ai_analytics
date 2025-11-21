@@ -20,53 +20,63 @@ view: dfcx_test_runs_results {
   }
 
   dimension: agent_display_name {
+    description: "The human-readable display name of the Dialogflow CX agent."
     type: string
     sql: ${TABLE}.agent_display_name ;;
   }
 
   dimension: agent_id {
+    description: "The unique identifier (UUID) of the Dialogflow CX agent."
     type: string
     sql: ${TABLE}.agent_id ;;
   }
 
   dimension: test_run_guid {
+    description: "A unique identifier for the overall test execution run."
     type: string
     sql: ${TABLE}.test_run_guid ;;
   }
 
   dimension_group: test_run {
+    description: "The timestamp when the test run was initiated."
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
     sql: ${TABLE}.test_run_time ;;
   }
 
   dimension: test_cases {
+    description: "The total number of test cases in this run."
     type: number
     sql: ${TABLE}.test_cases ;;
   }
 
   dimension: test_cases_passed {
+    description: "The number of test cases that passed in this run."
     type: number
     sql: ${TABLE}.test_cases_passed ;;
   }
 
   dimension: test_run_filter {
+    description: "Compound key for sorting test runs by time."
     type: string
     sql: CONCAT(${test_run_raw},${test_run_guid}) ;;
     order_by_field: test_run_raw
   }
 
   dimension: test_pass_rate {
+    description: "The percentage of test cases that passed in this run."
     type: number
     sql: SAFE_DIVIDE(${test_cases_passed},${test_cases}) ;;
     value_format_name: percent_1
   }
 
   measure: total_tests_runs {
+    description: "The total number of test runs executed."
     type: count
   }
 
   measure: average_test_pass_rate {
+    description: "The average pass rate across all test runs."
     type: average
     sql: ${test_pass_rate} ;;
   }
