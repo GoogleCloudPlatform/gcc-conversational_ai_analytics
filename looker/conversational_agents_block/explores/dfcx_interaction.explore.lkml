@@ -16,9 +16,9 @@ explore: dfcx_interaction {
     relationship: one_to_one
   }
 
-  join: dfcx_interaction__flows {
-    view_label: "DFCX Interaction: Actions"
-    sql: LEFT JOIN UNNEST(${dfcx_interaction.flows}) as dfcx_interaction__flows ;;
+  join: dfcx_interaction__tasks {
+    view_label: "DFCX Interaction: Tasks"
+    sql: LEFT JOIN UNNEST(${dfcx_interaction.tasks}) as dfcx_interaction__tasks ;;
     relationship: one_to_many
   }
 

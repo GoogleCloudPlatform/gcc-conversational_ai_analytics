@@ -23,9 +23,9 @@ view: dfcx_interaction {
     sql: ${TABLE}.latest_insert_time ;;
   }
 
-  dimension: flows {
+  dimension: tasks {
     hidden: yes
-    sql: ${TABLE}.flows ;;
+    sql: ${TABLE}.tasks ;;
   }
 
   dimension: interaction_head_intent {
@@ -129,7 +129,7 @@ view: dfcx_interaction {
   measure: total_interactions_started {
     type: count
     filters: [
-      dfcx_interaction__flows.action_started: "yes"
+      dfcx_interaction__tasks.action_started: "yes"
     ]
     value_format_name: decimal_0
     drill_fields: [standard_interaction_drill*,total_interactions_started]
@@ -138,8 +138,8 @@ view: dfcx_interaction {
   measure: total_interactions_ended {
     type: count
     filters: [
-      dfcx_interaction__flows.action_started: "yes",
-      dfcx_interaction__flows.action_ended: "yes"
+      dfcx_interaction__tasks.action_started: "yes",
+      dfcx_interaction__tasks.action_ended: "yes"
     ]
     value_format_name: decimal_0
     drill_fields: [standard_interaction_drill*,total_interactions_ended]
@@ -167,30 +167,24 @@ view: dfcx_interaction {
     fields: [
       dfcx_session_metadata.session_id,
       interaction_position,
-      dfcx_interaction__flows.flow_display_name,
-      dfcx_interaction__flows.action_started,
-      dfcx_interaction__flows.action_ended
+      dfcx_interaction__tasks.task_display_name,
+      dfcx_interaction__tasks.action_started,
+      dfcx_interaction__tasks.action_ended
       ]
   }
 
 }
 
-view: dfcx_interaction__flows {
-  dimension: flow_id {
+view: dfcx_interaction__tasks {
+  dimension: task_display_name {
     type: string
-    description: "The unique ID of the flow"
-    sql: ${TABLE}.flow_id ;;
-  }
-
-  dimension: flow_display_name {
-    type: string
-    description: "The human readable name of the flow"
-    sql: ${TABLE}.flow_display_name ;;
+    description: "The human readable name of the task"
+    sql: ${TABLE}.task_display_name ;;
   }
 
   dimension: action_started {
     type: yesno
-    description: "Whether the action started in the flow"
+    description: "Whether the action started in the task"
     sql: ${TABLE}.action_started ;;
   }
 
@@ -211,7 +205,7 @@ view: dfcx_interaction__flows {
 
   dimension: action_ended {
     type: yesno
-    description: "Whether the action ended in the flow"
+    description: "Whether the action ended in the task"
     sql: ${TABLE}.action_ended ;;
   }
 

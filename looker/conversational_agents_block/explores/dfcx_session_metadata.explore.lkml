@@ -49,8 +49,8 @@ explore: dfcx_session_metadata {
     from: dfcx_transcript
   }
 
-  join: dfcx_interaction__flows {
-    view_label: "04 - DFCX Interaction - Flows"
+  join: dfcx_interaction__tasks {
+    view_label: "04 - DFCX Interaction - Tasks"
   }
 
   join: dfcx_transcript {

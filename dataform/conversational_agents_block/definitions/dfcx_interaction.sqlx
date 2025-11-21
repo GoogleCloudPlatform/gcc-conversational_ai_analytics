@@ -24,8 +24,8 @@ defined_head_intents AS (
   SELECT intent_name as head_intent FROM ${ref("intents")} WHERE head_intent = TRUE
 ),
 
-defined_non_self_service_flows AS (
-  SELECT 'Default Start Flow' as flow_display_name
+defined_non_self_service_tasks AS (
+  SELECT 'Default Start Flow' as task_display_name
 ),
 
 base_data AS (
@@ -79,40 +79,46 @@ interaction_base AS (
     GROUP BY 1, 2, 3, 4, 5, 6
 ),
 
--- Flatten all actions to track Flow Start/End events
-flattened_flow_events AS (
+-- Flatten all actions to track Task (Flow/Playbook) Start/End events
+flattened_task_events AS (
     SELECT
         t.session_id,
         t.request_time,
-        action.action_flow_id AS flow_id,
-        action.action_flow_display_name AS flow_display_name,
-        CASE WHEN action.action_page_display_name = 'Start Page' THEN TRUE ELSE FALSE END AS is_flow_start,
-        CASE WHEN action.action_page_display_name = 'Success' THEN TRUE ELSE FALSE END AS is_flow_success,
+        COALESCE(action.playbook_name, action.action_flow_display_name) AS task_display_name,
+        CASE 
+            WHEN action.playbook_name IS NOT NULL THEN TRUE
+            WHEN action.action_page_display_name = 'Start Page' THEN TRUE 
+            ELSE FALSE 
+        END AS is_task_start,
+        CASE 
+            WHEN action.playbook_name IS NOT NULL THEN TRUE
+            WHEN action.action_page_display_name = 'Success' THEN TRUE 
+            ELSE FALSE 
+        END AS is_task_success,
         action.action_start_time
     FROM base_data t,
         UNNEST(blocks) AS block,
         UNNEST(block.actions) AS action
-    WHERE action.action_flow_display_name NOT IN (SELECT flow_display_name FROM defined_non_self_service_flows) -- Exclude non-self-service flows from action tracking
+    WHERE COALESCE(action.playbook_name, action.action_flow_display_name) NOT IN (SELECT task_display_name FROM defined_non_self_service_tasks)
 ),
 
--- Aggregate flow events per interaction
-interaction_flows AS (
+-- Aggregate task events per interaction
+interaction_tasks AS (
     SELECT
         ib.session_id,
         ib.interaction_position,
-        ffe.flow_id,
-        ffe.flow_display_name,
+        fte.task_display_name,
         -- Did it start in this interaction?
-        LOGICAL_OR(ffe.is_flow_start) AS action_started,
-        MIN(CASE WHEN ffe.is_flow_start THEN ffe.action_start_time END) AS action_started_time,
+        LOGICAL_OR(fte.is_task_start) AS action_started,
+        MIN(CASE WHEN fte.is_task_start THEN fte.action_start_time END) AS action_started_time,
         -- Did it end (success) in this interaction?
-        LOGICAL_OR(ffe.is_flow_success) AS action_ended,
-        MAX(CASE WHEN ffe.is_flow_success THEN ffe.action_start_time END) AS action_ended_time
+        LOGICAL_OR(fte.is_task_success) AS action_ended,
+        MAX(CASE WHEN fte.is_task_success THEN fte.action_start_time END) AS action_ended_time
     FROM interaction_base ib
-    JOIN flattened_flow_events ffe
-      ON ib.session_id = ffe.session_id
-     AND ffe.request_time BETWEEN ib.start_interaction_time AND ib.end_interaction_time
-    GROUP BY 1, 2, 3, 4
+    JOIN flattened_task_events fte
+      ON ib.session_id = fte.session_id
+     AND fte.request_time BETWEEN ib.start_interaction_time AND ib.end_interaction_time
+    GROUP BY 1, 2, 3
 ),
 
 session_metadata AS (
@@ -135,19 +141,39 @@ SELECT
     base.interaction_head_intent,
     base.start_interaction_time,
     base.end_interaction_time,
-    -- Construct the nested flows array
-    ARRAY(
-        SELECT AS STRUCT
-            flow.flow_id,
-            flow.flow_display_name,
-            flow.action_started,
-            flow.action_started_time,
-            flow.action_ended,
-            flow.action_ended_time
-        FROM interaction_flows flow
-        WHERE flow.session_id = base.session_id
-          AND flow.interaction_position = base.interaction_position
-    ) AS flows,
+    -- Construct the nested tasks array
+    CASE 
+        WHEN ARRAY_LENGTH(ARRAY(
+            SELECT AS STRUCT
+                task.task_display_name,
+                task.action_started,
+                task.action_started_time,
+                task.action_ended,
+                task.action_ended_time
+            FROM interaction_tasks task
+            WHERE task.session_id = base.session_id
+              AND task.interaction_position = base.interaction_position
+        )) = 0 THEN 
+            [STRUCT(
+                'NO_ATTEMPT' AS task_display_name,
+                FALSE AS action_started,
+                CAST(NULL AS TIMESTAMP) AS action_started_time,
+                FALSE AS action_ended,
+                CAST(NULL AS TIMESTAMP) AS action_ended_time
+            )]
+        ELSE 
+            ARRAY(
+                SELECT AS STRUCT
+                    task.task_display_name,
+                    task.action_started,
+                    task.action_started_time,
+                    task.action_ended,
+                    task.action_ended_time
+                FROM interaction_tasks task
+                WHERE task.session_id = base.session_id
+                  AND task.interaction_position = base.interaction_position
+            )
+    END AS tasks,
     md.latest_insert_time
 FROM interaction_base base
 LEFT JOIN session_metadata md ON base.session_id = md.session_id

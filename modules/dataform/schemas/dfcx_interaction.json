@@ -59,20 +59,14 @@
       "type": "TIMESTAMP"
     },
     {
-      "description": "The flows that were part of the interaction",
       "fields": [
         {
-          "description": "The unique ID of the flow",
-          "name": "flow_id",
+          "description": "The human readable name of the task",
+          "name": "task_display_name",
           "type": "STRING"
         },
         {
-          "description": "The human readable name of the flow",
-          "name": "flow_display_name",
-          "type": "STRING"
-        },
-        {
-          "description": "Whether the action started in the flow",
+          "description": "Whether the action started in the task",
           "name": "action_started",
           "type": "BOOLEAN"
         },
@@ -82,7 +76,7 @@
           "type": "TIMESTAMP"
         },
         {
-          "description": "Whether the action ended in the flow",
+          "description": "Whether the action ended in the task",
           "name": "action_ended",
           "type": "BOOLEAN"
         },
@@ -93,7 +87,7 @@
         }
       ],
       "mode": "REPEATED",
-      "name": "flows",
+      "name": "tasks",
       "type": "RECORD"
     },
     {

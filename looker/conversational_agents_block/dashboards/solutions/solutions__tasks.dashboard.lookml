@@ -1,5 +1,5 @@
-- dashboard: solutions__actions
-  title: Solutions - Actions
+- dashboard: solutions__tasks
+  title: Solutions - Tasks
   layout: newspaper
   preferred_viewer: dashboards-next
   load_configuration: wait
@@ -14,7 +14,7 @@
     fields: [dfcx_interaction_last_turn.flow_display_name, dfcx_interaction_last_turn.page_display_name,
       dfcx_interaction.total_interactions]
     filters:
-      dfcx_interaction__flows.action_started: 'No'
+      dfcx_interaction__tasks.action_started: 'No'
     sorts: [dfcx_interaction_last_turn.flow_display_name, dfcx_interaction_last_turn.page_display_name,
       dfcx_interaction.total_interactions desc]
     subtotals: [dfcx_interaction_last_turn.flow_display_name]
@@ -58,7 +58,7 @@
       Session Start Date: dfcx_session_metadata.session_start_date
       Project ID: dfcx_session_metadata.project_id
       Interaction Use Case: dfcx_interaction.interaction_head_intent
-      Action: dfcx_interaction__flows.flow_display_name
+      Action: dfcx_interaction__tasks.task_display_name
     row: 10
     col: 0
     width: 12
@@ -125,7 +125,7 @@
       Session Start Date: dfcx_session_metadata.session_start_date
       Project ID: dfcx_session_metadata.project_id
       Interaction Use Case: dfcx_interaction.interaction_head_intent
-      Action: dfcx_interaction__flows.flow_display_name
+      Action: dfcx_interaction__tasks.task_display_name
     row: 0
     col: 0
     width: 24
@@ -135,14 +135,14 @@
     #model: ccai
     explore: dfcx_session_metadata
     type: looker_grid
-    fields: [dfcx_interaction__flows.action_ended, dfcx_interaction_last_turn.flow_display_name,
+    fields: [dfcx_interaction__tasks.action_ended, dfcx_interaction_last_turn.flow_display_name,
       dfcx_interaction_last_turn.page_display_name, dfcx_interaction.total_interactions]
     filters:
-      dfcx_interaction__flows.action_started: 'Yes'
-    sorts: [dfcx_interaction__flows.action_ended, dfcx_interaction_last_turn.flow_display_name,
+      dfcx_interaction__tasks.action_started: 'Yes'
+    sorts: [dfcx_interaction__tasks.action_ended, dfcx_interaction_last_turn.flow_display_name,
       dfcx_interaction_last_turn.page_display_name, dfcx_interaction.total_interactions
         desc]
-    subtotals: [dfcx_interaction_last_turn.flow_display_name, dfcx_interaction__flows.action_ended]
+    subtotals: [dfcx_interaction_last_turn.flow_display_name, dfcx_interaction__tasks.action_ended]
     limit: 500
     dynamic_fields: [{category: table_calculation, label: "% of Total", value_format: !!null '',
         value_format_name: percent_0, calculation_type: percent_of_column_sum, table_calculation: of_total,
@@ -171,7 +171,7 @@
     series_column_widths:
       dfcx_interaction.total_interactions: 129
       of_total: 88
-      dfcx_interaction__flows.action_ended: 164
+      dfcx_interaction__tasks.action_ended: 164
       dfcx_interaction_last_turn.flow_display_name: 219
       dfcx_interaction_last_turn.page_display_name: 221
     series_cell_visualizations:
@@ -184,7 +184,7 @@
       Session Start Date: dfcx_session_metadata.session_start_date
       Project ID: dfcx_session_metadata.project_id
       Interaction Use Case: dfcx_interaction.interaction_head_intent
-      Action: dfcx_interaction__flows.flow_display_name
+      Action: dfcx_interaction__tasks.task_display_name
     row: 10
     col: 12
     width: 12
@@ -242,4 +242,4 @@
     #model: ccai
     explore: dfcx_session_metadata
     listens_to_filters: [Session Start Date, Interaction Use Case, Project ID]
-    field: dfcx_interaction__flows.flow_display_name
+    field: dfcx_interaction__tasks.task_display_name
