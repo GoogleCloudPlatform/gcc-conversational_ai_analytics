@@ -4,5 +4,5 @@ dfcx-scrapi==1.12.2
 pandas==2.2.3
 functions-framework==3.5.0
 ratelimit==2.2.1
-requests==2.32.3
+requests==2.32.4
 pandas_gbq==0.23.2
