@@ -24,5 +24,5 @@ google.cloud.logging==3.11.0
 Flask[async]
 pyarrow==17.0.0
 pandas==2.2.3
-fastparquet==2024.5.0
+fastparquet==2024.11.0
 google-api-core==2.23.0
