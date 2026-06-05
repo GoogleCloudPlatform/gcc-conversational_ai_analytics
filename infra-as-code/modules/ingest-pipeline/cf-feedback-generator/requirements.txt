@@ -6,7 +6,7 @@ requests
 vertexai
 google-cloud-storage==2.8.0
 google.cloud.logging==3.11.0
-pyarrow==17.0.0
+pyarrow==23.0.1
 pandas==2.2.3
 fastparquet==2024.5.0
 google-api-core==2.23.0
