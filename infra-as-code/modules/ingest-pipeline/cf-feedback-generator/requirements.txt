@@ -5,7 +5,7 @@ google-cloud-storage
 requests
 vertexai
 google-cloud-storage==2.8.0
-google.cloud.logging==3.11.0
+google.cloud.logging==3.16.3
 pyarrow==17.0.0
 pandas==2.2.3
 fastparquet==2024.5.0
