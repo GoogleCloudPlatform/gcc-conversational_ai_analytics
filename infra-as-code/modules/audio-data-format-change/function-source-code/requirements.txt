@@ -2,7 +2,7 @@ functions-framework==3.*
 google-auth==2.17.0
 google-cloud-storage==2.8.0
 google.cloud.logging==3.11.0
-pyarrow==17.0.0
+pyarrow==23.0.1
 pandas==2.2.3
 fastparquet==2024.5.0
 google-cloud-secret-manager==2.20.2
