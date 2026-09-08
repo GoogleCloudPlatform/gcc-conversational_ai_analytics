@@ -4,7 +4,7 @@ google-auth-oauthlib
 google-cloud-storage
 requests
 vertexai
-google-cloud-storage==2.8.0
+google-cloud-storage==3.14.1
 google.cloud.logging==3.11.0
 pyarrow==17.0.0
 pandas==2.2.3
