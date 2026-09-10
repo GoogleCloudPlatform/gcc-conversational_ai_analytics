@@ -2,6 +2,6 @@ functions-framework==3.*
 pandas
 db-dtypes==1.0.2
 requests==2.32.3
-google-auth==2.38.0
+google-auth==2.58.0
 google-cloud-bigquery==3.29.0
 cloudevents==1.11.0
