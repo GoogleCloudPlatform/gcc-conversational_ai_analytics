@@ -59,7 +59,7 @@ chmod +x convert.sh
 ```
 
 ## [Applicable only if audio files are present in Cloud Storage] 
-Execute the `convert_from_gcs.py` script to convert the WAV files to FLAC.
+Execute the `convert_from_gcs.py` script to convert `.wav` objects in Cloud Storage to `.flac` objects safely (non-`.wav` blobs are skipped, relative object paths are validated against directory traversal, and conversion runs inside isolated `/tmp` directories via `subprocess.run(..., shell=False)`).
 
 - Change the `src_gcs_bucket` and `dest_gcs_bucket` parameters in the script with the source bucket name containing WAV audio files and the bucket name created in the earlier step to hold the converted FLAC audio files.
 
