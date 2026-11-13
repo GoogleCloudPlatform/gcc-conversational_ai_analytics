@@ -1,8 +1,8 @@
-dfcx-scrapi==1.12.2
+dfcx-scrapi==1.13.1
 google-cloud-dialogflow-cx==1.35.0
 google-cloud-bigquery==3.31.0
 google-cloud-logging==3.12.1
-functions-framework==3.5.0
+functions-framework==3.10.2
 pandas==2.2.3
 pandas_gbq==0.28.0
 numpy==2.1.2
