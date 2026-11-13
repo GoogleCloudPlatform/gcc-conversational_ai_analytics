@@ -2,5 +2,36 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "rangeStrategy": "widen",
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "groupName": "Security vulnerability updates"
+  },
+  "packageRules": [
+    {
+      "matchManagers": [
+        "pip_requirements"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "groupName": "Python non-major dependencies",
+      "schedule": [
+        "before 6am on monday"
+      ]
+    },
+    {
+      "matchDatasources": [
+        "terraform-version"
+      ],
+      "matchManagers": [
+        "terraform"
+      ],
+      "rangeStrategy": "widen"
+    }
   ]
 }
