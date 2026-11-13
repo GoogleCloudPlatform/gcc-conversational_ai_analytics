@@ -1,6 +1,6 @@
 google-cloud-storage==3.17.1
 google-cloud-bigquery==3.26.0
-dfcx-scrapi==1.13.1
+dfcx-scrapi==2.0.0
 pandas==2.2.3
 functions-framework==3.10.2
 ratelimit==2.2.1
