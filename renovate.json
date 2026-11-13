@@ -25,6 +25,21 @@
       ]
     },
     {
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "dependencyDashboardApproval": true
+    },
+    {
+      "matchManagers": [
+        "pip_requirements"
+      ],
+      "matchPackageNames": [
+        "cloudevents"
+      ],
+      "allowedVersions": "< 2.0.0"
+    },
+    {
       "matchDatasources": [
         "terraform-version"
       ],
