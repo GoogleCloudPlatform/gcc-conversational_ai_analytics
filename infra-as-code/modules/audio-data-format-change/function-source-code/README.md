@@ -4,9 +4,9 @@ This project provides a tool for formatting any raw audio files format supported
 
 ## Functionality
 
-1. **Download:** Downloads the raw audio file from a Google Cloud Storage (GCS) bucket.
-2. **Format:** Converts the raw audio to FLAC format using FFmpeg, ensuring the desired number of channels.
-3. **Metadata Extraction:** Extracts audio stream metadata (codec, sample rate, etc.) using FFprobe.
+1. **Download:** Validates the raw audio file extension against an allowlist (`wav`, `mp3`, `flac`, `ogg`, `m4a`, `aac`, `amr`, `webm`, `mp4`, `wma`, `mulaw`, `alaw`, `pcm`, `opus`, `aiff`, `3gp`) and downloads the object from Google Cloud Storage (GCS) into `/tmp`.
+2. **Format:** Converts the raw audio to FLAC format using `ffmpeg` via `subprocess.run(..., shell=False)`, enforcing the configured number of channels (`1` to `8`).
+3. **Metadata Extraction:** Extracts audio stream metadata (codec, sample rate, etc.) using `ffprobe` via `subprocess.run(..., shell=False)`.
 4. **File Metadata Extraction:** Extracts metadata from the filename.
 5. **Metadata Creation:** Creates a JSON file containing all extracted metadata.
 6. **Upload:** Uploads the formatted audio and metadata JSON to specified GCS buckets.

@@ -20,6 +20,10 @@ and upload them to different GCS bucket.
 
 import argparse
 import os
+import pathlib
+import re
+import subprocess
+import tempfile
 import google.auth
 from google.auth import impersonated_credentials
 import google.auth.transport.requests
@@ -58,6 +62,28 @@ def _ParseArgs():
   )
 
   return parser.parse_args()
+
+
+def _ValidateSourceBlobName(source_file):
+  """Validates that a GCS blob name is a relative .wav object without traversal."""
+  if not isinstance(source_file, str) or not source_file:
+    raise ValueError('GCS source blob name must be a non-empty string.')
+  if (
+      '\x00' in source_file
+      or '\\' in source_file
+      or source_file.startswith('/')
+      or '//' in source_file
+  ):
+    raise ValueError(f'Unsafe GCS source blob name: {source_file!r}')
+  raw_parts = source_file.split('/')
+  if not raw_parts or any(part in ('', '.', '..') for part in raw_parts):
+    raise ValueError(f'Path traversal detected in GCS blob name: {source_file!r}')
+  parts = pathlib.PurePosixPath(source_file).parts
+  if not parts or any(part in ('', '.', '..') for part in parts):
+    raise ValueError(f'Path traversal detected in GCS blob name: {source_file!r}')
+  if not source_file.lower().endswith('.wav'):
+    raise ValueError(f'Expected a .wav GCS blob name, got: {source_file!r}')
+  return source_file
 
 
 def _GetClientCredentials(impersonated_service_account):
@@ -107,13 +133,18 @@ def _DownloadFileFromGcs(
     project_id: The project ID (not number) to use for redaction.
     impersonated_service_account: The service account to impersonate.
   """
+  tmp_root = os.path.realpath('/tmp')
+  real_dest = os.path.realpath(filename)
+  if not real_dest.startswith(tmp_root + os.sep):
+    raise ValueError(f'Destination path must reside inside /tmp: {filename!r}')
+
   storage_client = storage.Client(
       project=project_id,
       credentials=_GetClientCredentials(impersonated_service_account),
   )
   bucket = storage_client.bucket(bucket_name)
   blob = bucket.blob(source_blob_name)
-  blob.download_to_filename(filename)
+  blob.download_to_filename(real_dest)
 
 
 def _UploadFileToGcs(
@@ -182,22 +213,44 @@ def _GetGcsUri(bucket, object_name):
 
 
 def _ConvertWavToFlac(input_file, sample_rate=8000):
-  """Converts wav file to flac.
-  
+  """Converts wav file to flac without invoking a shell.
+
   Args:
-    input_file: Wav audio file name
+    input_file: Wav audio file name inside /tmp
     sample_rate: Sample rate in hertz
-    
+
   Returns:
     output_file: Flac audio file name
   """
+  if not isinstance(input_file, str) or not input_file or '\x00' in input_file:
+    raise ValueError('Input file must be a non-empty string path.')
 
-  output_file = input_file.replace('.wav', '.flac')
-  os.system(f"""ffmpeg -loglevel quiet -hide_banner -i \
-    {"'"+input_file+"'"} {"'"+output_file+"'"}
-    """)
+  tmp_root = os.path.realpath('/tmp')
+  real_input = os.path.realpath(input_file)
+  if not real_input.startswith(tmp_root + os.sep):
+    raise ValueError(f'Input file must reside inside /tmp: {input_file!r}')
+  if not real_input.lower().endswith('.wav'):
+    raise ValueError(f'Input file must end with .wav: {input_file!r}')
 
-  os.remove(input_file)
+  output_file = re.sub(r'\.wav$', '.flac', real_input, flags=re.IGNORECASE)
+  subprocess.run(
+      [
+          'ffmpeg',
+          '-y',
+          '-loglevel',
+          'quiet',
+          '-hide_banner',
+          '-i',
+          real_input,
+          output_file,
+      ],
+      shell=False,
+      check=True,
+      stdin=subprocess.DEVNULL,
+      timeout=300,
+  )
+
+  os.remove(real_input)
   return output_file
 
 
@@ -209,7 +262,7 @@ def _ConvertWavToFlacRunner(
     impersonated_service_account,
     sample_rate
 ):
-  """Downloads wav file from gcs, convert it to flac and store it to gcs. 
+  """Downloads wav file from gcs, converts it to flac, and stores it to gcs.
 
   Args:
     source_file: Wav audio file name
@@ -219,31 +272,30 @@ def _ConvertWavToFlacRunner(
     impersonated_service_account: The service account to impersonate.
     sample_rate: Sample rate in hertz
   """
-  # download file from GCS in tmp folder
-  filename = f'/tmp/{source_file}'
-  _DownloadFileFromGcs(
-      input_bucket_name,
-      source_file,
-      filename,
-      project_id,
-      impersonated_service_account
+  validated_source = _ValidateSourceBlobName(source_file)
+  destination_blob_name = re.sub(
+      r'\.wav$', '.flac', validated_source, flags=re.IGNORECASE
   )
 
-  # run ffmpeg using os and store the converted file to tmp folder
-  output_file = _ConvertWavToFlac(filename, sample_rate)
-  # print('output_file',output_file)
+  with tempfile.TemporaryDirectory(prefix='wav2flac_', dir='/tmp') as tmp_dir:
+    local_input = os.path.join(tmp_dir, 'input.wav')
+    _DownloadFileFromGcs(
+        input_bucket_name,
+        validated_source,
+        local_input,
+        project_id,
+        impersonated_service_account,
+    )
 
-  # upload the converted file to GCS
-  destination_blob_name = output_file.replace('/tmp/', '')
-  # print('destination_file',destination_blob_name)
+    output_file = _ConvertWavToFlac(local_input, sample_rate)
 
-  _UploadFileToGcs(
-      output_bucket_name,
-      output_file,
-      destination_blob_name,
-      project_id,
-      impersonated_service_account
-  )
+    _UploadFileToGcs(
+        output_bucket_name,
+        output_file,
+        destination_blob_name,
+        project_id,
+        impersonated_service_account,
+    )
 
 
 def _BatchConvertWavToFlacPipeline(
@@ -254,7 +306,7 @@ def _BatchConvertWavToFlacPipeline(
     sample_rate=8000
 ):
   """Pipeline to convert wav to flac.
-  
+
   Args:
     input_bucket_name: Bucket where wav audio files are present
     output_bucket_name: Bucket where flac audio files to be stored
@@ -262,7 +314,6 @@ def _BatchConvertWavToFlacPipeline(
     impersonated_service_account: The service account to impersonate.
     sample_rate: Sample rate in hertz
   """
-  # get all files present in the bucket
   _, files = _GetGcsUris(
       input_bucket_name,
       project_id,
@@ -270,6 +321,8 @@ def _BatchConvertWavToFlacPipeline(
   )
 
   for source_file in files:
+    if not source_file.lower().endswith('.wav'):
+      continue
     _ConvertWavToFlacRunner(
         source_file,
         input_bucket_name,
@@ -278,6 +331,7 @@ def _BatchConvertWavToFlacPipeline(
         impersonated_service_account,
         sample_rate
     )
+
 
 if __name__ == '__main__':
 
