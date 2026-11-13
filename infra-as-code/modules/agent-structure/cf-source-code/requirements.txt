@@ -1,4 +1,4 @@
-dfcx-scrapi==1.13.1
+dfcx-scrapi==2.0.0
 google-cloud-dialogflow-cx==1.35.0
 google-cloud-bigquery==3.31.0
 google-cloud-logging==3.12.1
