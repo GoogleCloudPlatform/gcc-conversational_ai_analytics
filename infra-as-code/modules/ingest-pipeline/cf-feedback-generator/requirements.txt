@@ -6,6 +6,6 @@ vertexai
 google-cloud-storage==3.17.1
 google-cloud-logging==3.17.0
 pyarrow==23.0.1
-pandas==2.2.3
-fastparquet==2024.5.0
+pandas==2.3.3
+fastparquet==2024.11.0
 google-api-core==2.44.0
